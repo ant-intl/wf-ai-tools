@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/wf-api-skills.iml" filepath="$PROJECT_DIR$/.idea/wf-api-skills.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wf-config/wf-config.iml" filepath="$PROJECT_DIR$/wf-config/wf-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wf-http-client/wf-http-client.iml" filepath="$PROJECT_DIR$/wf-http-client/wf-http-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wf-rsa256-signer/wf-rsa256-signer.iml" filepath="$PROJECT_DIR$/wf-rsa256-signer/wf-rsa256-signer.iml" />
+    </modules>
+  </component>
+</project>
