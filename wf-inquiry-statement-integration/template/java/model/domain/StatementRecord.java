@@ -15,46 +15,71 @@ public class StatementRecord {
     /** 交易 ID */
     private String transactionId;
 
-    /** 交易时间，ISO 8601 格式 */
+    /** 交易时间，ISO 8601 格式，如 2024-01-15T10:30:00Z */
     private String transactionTime;
 
-    /** 交易类型，如 TRANSFER、COLLECTION 等 */
+    /** 交易类型，如 TRANSFER、CHARGE、TRANSFER_REFUND、CHARGE_REFUND 等 */
     private String transactionType;
 
-    /** 货币代码（ISO-4217） */
-    private String currency;
+    /** 交易状态，如 SUCCESS、PROCESSING、FAIL、REFUNDED 等 */
+    private String transactionStatus;
 
-    /** 交易金额，正数为收入，负数为支出 */
-    private String amount;
-
-    /** 交易后余额 */
-    private String balance;
-
-    /** 余额类型：NORMAL_BALANCE 等 */
+    /** 余额类型，如 NORMAL_BALANCE、BUDGET_BALANCE 等 */
     private String balanceType;
 
-    /** 对手方名称 */
-    private String counterpartyName;
-
-    /** 对手方账号 */
-    private String counterpartyAccount;
-
-    /** 交易摘要 */
-    private String remark;
-
-    /** 交易状态 */
-    private String status;
+    /** 账户余额（交易后） */
+    private Amount accountBalance;
 
     /** 手续费金额 */
-    private String feeAmount;
+    private Amount feeAmount;
 
-    /** 实际到账金额 */
-    private String actualAmount;
+    /** 净额（扣除手续费后实际转账金额） */
+    private Amount netAmount;
+
+    /** 原始交易金额 */
+    private Amount originalTransactionAmount;
+
+    /** 收款方实际到账金额 */
+    private Amount receiveAmount;
+
+    /** 本次交易变动金额（正为收入，负为支出） */
+    private Amount transactionAmount;
+
+    /** 外部交易流水号（调用方传入的幂等号） */
+    private String extTransactionId;
+
+    /** 核算业务流水号 */
+    private String accountingBizNo;
+
+    /** 汇率报价信息（正向交易使用） */
+    private ForeignExchangeQuote foreignExchangeQuote;
+
+    /** 退款汇率报价信息（退款类型交易使用，如 CHARGE_REFUND、TRANSFER_REFUND） */
+    private ForeignExchangeQuote refundForeignExchangeQuote;
+
+    /** 资金流动详情 */
+    private FundMoveDetail fundMoveDetail;
+
+    /** 发起交易单的操作员信息（仅通过万里汇门户操作时返回） */
+    private OperatorInfo operatorInfo;
+
+    /** 商品名称 */
+    private String goodsName;
+
+    /** 商品金额 */
+    private Amount goodsAmount;
+
+    /** 第三方平台服务费 */
+    private Amount platformFeeAmount;
+
+    /** 优惠前服务费金额 */
+    private Amount originalFeeAmount;
+
+    /** 服务费优惠金额 */
+    private Amount discountFeeAmount;
 
     /**
      * Getter method for property <tt>transactionId</tt>.
-     *
-     * @return property value of transactionId
      */
     public String getTransactionId() {
         return transactionId;
@@ -62,8 +87,6 @@ public class StatementRecord {
 
     /**
      * Setter method for property <tt>transactionId</tt>.
-     *
-     * @param transactionId value to be assigned to property transactionId
      */
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
@@ -71,8 +94,6 @@ public class StatementRecord {
 
     /**
      * Getter method for property <tt>transactionTime</tt>.
-     *
-     * @return property value of transactionTime
      */
     public String getTransactionTime() {
         return transactionTime;
@@ -80,8 +101,6 @@ public class StatementRecord {
 
     /**
      * Setter method for property <tt>transactionTime</tt>.
-     *
-     * @param transactionTime value to be assigned to property transactionTime
      */
     public void setTransactionTime(String transactionTime) {
         this.transactionTime = transactionTime;
@@ -89,8 +108,6 @@ public class StatementRecord {
 
     /**
      * Getter method for property <tt>transactionType</tt>.
-     *
-     * @return property value of transactionType
      */
     public String getTransactionType() {
         return transactionType;
@@ -98,71 +115,27 @@ public class StatementRecord {
 
     /**
      * Setter method for property <tt>transactionType</tt>.
-     *
-     * @param transactionType value to be assigned to property transactionType
      */
     public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
 
     /**
-     * Getter method for property <tt>currency</tt>.
-     *
-     * @return property value of currency
+     * Getter method for property <tt>transactionStatus</tt>.
      */
-    public String getCurrency() {
-        return currency;
+    public String getTransactionStatus() {
+        return transactionStatus;
     }
 
     /**
-     * Setter method for property <tt>currency</tt>.
-     *
-     * @param currency value to be assigned to property currency
+     * Setter method for property <tt>transactionStatus</tt>.
      */
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    /**
-     * Getter method for property <tt>amount</tt>.
-     *
-     * @return property value of amount
-     */
-    public String getAmount() {
-        return amount;
-    }
-
-    /**
-     * Setter method for property <tt>amount</tt>.
-     *
-     * @param amount value to be assigned to property amount
-     */
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    /**
-     * Getter method for property <tt>balance</tt>.
-     *
-     * @return property value of balance
-     */
-    public String getBalance() {
-        return balance;
-    }
-
-    /**
-     * Setter method for property <tt>balance</tt>.
-     *
-     * @param balance value to be assigned to property balance
-     */
-    public void setBalance(String balance) {
-        this.balance = balance;
+    public void setTransactionStatus(String transactionStatus) {
+        this.transactionStatus = transactionStatus;
     }
 
     /**
      * Getter method for property <tt>balanceType</tt>.
-     *
-     * @return property value of balanceType
      */
     public String getBalanceType() {
         return balanceType;
@@ -170,125 +143,252 @@ public class StatementRecord {
 
     /**
      * Setter method for property <tt>balanceType</tt>.
-     *
-     * @param balanceType value to be assigned to property balanceType
      */
     public void setBalanceType(String balanceType) {
         this.balanceType = balanceType;
     }
 
     /**
-     * Getter method for property <tt>counterpartyName</tt>.
-     *
-     * @return property value of counterpartyName
+     * Getter method for property <tt>accountBalance</tt>.
      */
-    public String getCounterpartyName() {
-        return counterpartyName;
+    public Amount getAccountBalance() {
+        return accountBalance;
     }
 
     /**
-     * Setter method for property <tt>counterpartyName</tt>.
-     *
-     * @param counterpartyName value to be assigned to property counterpartyName
+     * Setter method for property <tt>accountBalance</tt>.
      */
-    public void setCounterpartyName(String counterpartyName) {
-        this.counterpartyName = counterpartyName;
-    }
-
-    /**
-     * Getter method for property <tt>counterpartyAccount</tt>.
-     *
-     * @return property value of counterpartyAccount
-     */
-    public String getCounterpartyAccount() {
-        return counterpartyAccount;
-    }
-
-    /**
-     * Setter method for property <tt>counterpartyAccount</tt>.
-     *
-     * @param counterpartyAccount value to be assigned to property counterpartyAccount
-     */
-    public void setCounterpartyAccount(String counterpartyAccount) {
-        this.counterpartyAccount = counterpartyAccount;
-    }
-
-    /**
-     * Getter method for property <tt>remark</tt>.
-     *
-     * @return property value of remark
-     */
-    public String getRemark() {
-        return remark;
-    }
-
-    /**
-     * Setter method for property <tt>remark</tt>.
-     *
-     * @param remark value to be assigned to property remark
-     */
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    /**
-     * Getter method for property <tt>status</tt>.
-     *
-     * @return property value of status
-     */
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * Setter method for property <tt>status</tt>.
-     *
-     * @param status value to be assigned to property status
-     */
-    public void setStatus(String status) {
-        this.status = status;
+    public void setAccountBalance(Amount accountBalance) {
+        this.accountBalance = accountBalance;
     }
 
     /**
      * Getter method for property <tt>feeAmount</tt>.
-     *
-     * @return property value of feeAmount
      */
-    public String getFeeAmount() {
+    public Amount getFeeAmount() {
         return feeAmount;
     }
 
     /**
      * Setter method for property <tt>feeAmount</tt>.
-     *
-     * @param feeAmount value to be assigned to property feeAmount
      */
-    public void setFeeAmount(String feeAmount) {
+    public void setFeeAmount(Amount feeAmount) {
         this.feeAmount = feeAmount;
     }
 
     /**
-     * Getter method for property <tt>actualAmount</tt>.
-     *
-     * @return property value of actualAmount
+     * Getter method for property <tt>netAmount</tt>.
      */
-    public String getActualAmount() {
-        return actualAmount;
+    public Amount getNetAmount() {
+        return netAmount;
     }
 
     /**
-     * Setter method for property <tt>actualAmount</tt>.
-     *
-     * @param actualAmount value to be assigned to property actualAmount
+     * Setter method for property <tt>netAmount</tt>.
      */
-    public void setActualAmount(String actualAmount) {
-        this.actualAmount = actualAmount;
+    public void setNetAmount(Amount netAmount) {
+        this.netAmount = netAmount;
+    }
+
+    /**
+     * Getter method for property <tt>originalTransactionAmount</tt>.
+     */
+    public Amount getOriginalTransactionAmount() {
+        return originalTransactionAmount;
+    }
+
+    /**
+     * Setter method for property <tt>originalTransactionAmount</tt>.
+     */
+    public void setOriginalTransactionAmount(Amount originalTransactionAmount) {
+        this.originalTransactionAmount = originalTransactionAmount;
+    }
+
+    /**
+     * Getter method for property <tt>receiveAmount</tt>.
+     */
+    public Amount getReceiveAmount() {
+        return receiveAmount;
+    }
+
+    /**
+     * Setter method for property <tt>receiveAmount</tt>.
+     */
+    public void setReceiveAmount(Amount receiveAmount) {
+        this.receiveAmount = receiveAmount;
+    }
+
+    /**
+     * Getter method for property <tt>transactionAmount</tt>.
+     */
+    public Amount getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    /**
+     * Setter method for property <tt>transactionAmount</tt>.
+     */
+    public void setTransactionAmount(Amount transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
+
+    /**
+     * Getter method for property <tt>extTransactionId</tt>.
+     */
+    public String getExtTransactionId() {
+        return extTransactionId;
+    }
+
+    /**
+     * Setter method for property <tt>extTransactionId</tt>.
+     */
+    public void setExtTransactionId(String extTransactionId) {
+        this.extTransactionId = extTransactionId;
+    }
+
+    /**
+     * Getter method for property <tt>accountingBizNo</tt>.
+     */
+    public String getAccountingBizNo() {
+        return accountingBizNo;
+    }
+
+    /**
+     * Setter method for property <tt>accountingBizNo</tt>.
+     */
+    public void setAccountingBizNo(String accountingBizNo) {
+        this.accountingBizNo = accountingBizNo;
+    }
+
+    /**
+     * Getter method for property <tt>foreignExchangeQuote</tt>.
+     */
+    public ForeignExchangeQuote getForeignExchangeQuote() {
+        return foreignExchangeQuote;
+    }
+
+    /**
+     * Setter method for property <tt>foreignExchangeQuote</tt>.
+     */
+    public void setForeignExchangeQuote(ForeignExchangeQuote foreignExchangeQuote) {
+        this.foreignExchangeQuote = foreignExchangeQuote;
+    }
+
+    /**
+     * Getter method for property <tt>refundForeignExchangeQuote</tt>.
+     */
+    public ForeignExchangeQuote getRefundForeignExchangeQuote() {
+        return refundForeignExchangeQuote;
+    }
+
+    /**
+     * Setter method for property <tt>refundForeignExchangeQuote</tt>.
+     */
+    public void setRefundForeignExchangeQuote(ForeignExchangeQuote refundForeignExchangeQuote) {
+        this.refundForeignExchangeQuote = refundForeignExchangeQuote;
+    }
+
+    /**
+     * Getter method for property <tt>fundMoveDetail</tt>.
+     */
+    public FundMoveDetail getFundMoveDetail() {
+        return fundMoveDetail;
+    }
+
+    /**
+     * Setter method for property <tt>fundMoveDetail</tt>.
+     */
+    public void setFundMoveDetail(FundMoveDetail fundMoveDetail) {
+        this.fundMoveDetail = fundMoveDetail;
+    }
+
+    /**
+     * Getter method for property <tt>operatorInfo</tt>.
+     */
+    public OperatorInfo getOperatorInfo() {
+        return operatorInfo;
+    }
+
+    /**
+     * Setter method for property <tt>operatorInfo</tt>.
+     */
+    public void setOperatorInfo(OperatorInfo operatorInfo) {
+        this.operatorInfo = operatorInfo;
+    }
+
+    /**
+     * Getter method for property <tt>goodsName</tt>.
+     */
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    /**
+     * Setter method for property <tt>goodsName</tt>.
+     */
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    /**
+     * Getter method for property <tt>goodsAmount</tt>.
+     */
+    public Amount getGoodsAmount() {
+        return goodsAmount;
+    }
+
+    /**
+     * Setter method for property <tt>goodsAmount</tt>.
+     */
+    public void setGoodsAmount(Amount goodsAmount) {
+        this.goodsAmount = goodsAmount;
+    }
+
+    /**
+     * Getter method for property <tt>platformFeeAmount</tt>.
+     */
+    public Amount getPlatformFeeAmount() {
+        return platformFeeAmount;
+    }
+
+    /**
+     * Setter method for property <tt>platformFeeAmount</tt>.
+     */
+    public void setPlatformFeeAmount(Amount platformFeeAmount) {
+        this.platformFeeAmount = platformFeeAmount;
+    }
+
+    /**
+     * Getter method for property <tt>originalFeeAmount</tt>.
+     */
+    public Amount getOriginalFeeAmount() {
+        return originalFeeAmount;
+    }
+
+    /**
+     * Setter method for property <tt>originalFeeAmount</tt>.
+     */
+    public void setOriginalFeeAmount(Amount originalFeeAmount) {
+        this.originalFeeAmount = originalFeeAmount;
+    }
+
+    /**
+     * Getter method for property <tt>discountFeeAmount</tt>.
+     */
+    public Amount getDiscountFeeAmount() {
+        return discountFeeAmount;
+    }
+
+    /**
+     * Setter method for property <tt>discountFeeAmount</tt>.
+     */
+    public void setDiscountFeeAmount(Amount discountFeeAmount) {
+        this.discountFeeAmount = discountFeeAmount;
     }
 
     @Override
     public String toString() {
-        return "StatementRecord{transactionId='" + transactionId + "', transactionTime='" + transactionTime
-            + "', transactionType='" + transactionType + "', currency='" + currency
-            + "', amount='" + amount + "', status='" + status + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

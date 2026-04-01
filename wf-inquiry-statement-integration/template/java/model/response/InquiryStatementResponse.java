@@ -4,6 +4,8 @@
  */
 package {basePackage}.wf.model.response;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import {basePackage}.wf.model.domain.StatementRecord;
 
 import java.util.List;
@@ -165,8 +167,7 @@ public class InquiryStatementResponse {
 
     @Override
     public String toString() {
-        return "InquiryStatementResponse{result=" + result + ", responseId='" + responseId
-            + "', totalCount=" + totalCount + ", totalPageNumber=" + totalPageNumber
-            + ", currentPageNumber=" + currentPageNumber + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

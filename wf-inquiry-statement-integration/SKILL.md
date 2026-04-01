@@ -73,19 +73,68 @@ Generate the following components using their dedicated skills:
 
 #### Statement Record Fields
 
+| Field | Type | Condition | Description |
+|-------|------|-----------|-------------|
+| `transactionId` | String | Always | Transaction ID |
+| `transactionTime` | String | Always | ISO 8601 |
+| `transactionType` | String | Always | TRANSFER, CHARGE, COLLECTION, TRANSFER_REFUND, CHARGE_REFUND, etc. |
+| `transactionStatus` | String | Always | SUCCESS, PROCESSING, FAIL, REFUNDED |
+| `balanceType` | String | Always | NORMAL_BALANCE, BUDGET_BALANCE, etc. |
+| `accountBalance` | Amount | Always | Account balance after transaction |
+| `feeAmount` | Amount | Conditional | Fee amount |
+| `netAmount` | Amount | Conditional | Net amount after fee deduction |
+| `originalTransactionAmount` | Amount | Conditional | Original transaction amount |
+| `receiveAmount` | Amount | Conditional | Actual received amount (may differ currency) |
+| `transactionAmount` | Amount | Always | This transaction amount (positive=income, negative=expense) |
+| `extTransactionId` | String | Conditional | External transaction ID (idempotency key) |
+| `accountingBizNo` | String | Always | WF internal accounting biz number |
+| `goodsName` | String | Conditional | Product name |
+| `goodsAmount` | Amount | Conditional | Product amount |
+| `platformFeeAmount` | Amount | Conditional | Third-party platform service fee |
+| `originalFeeAmount` | Amount | Conditional | Service fee before discount |
+| `discountFeeAmount` | Amount | Conditional | Service fee discount amount |
+| `foreignExchangeQuote` | Object | Conditional | FX rate info for normal transactions |
+| `refundForeignExchangeQuote` | Object | Conditional | FX rate info for refund transactions |
+| `fundMoveDetail` | Object | Conditional | Fund movement details (payer/beneficiary info) |
+| `operatorInfo` | Object | Conditional | Operator info (only when created via WF portal) |
+
+##### ForeignExchangeQuote Fields
+
 | Field | Description |
 |-------|-------------|
-| `transactionId` | Transaction ID |
-| `transactionTime` | ISO 8601 |
-| `transactionType` | TRANSFER, COLLECTION, etc. |
-| `currency` | ISO-4217 code |
-| `amount` | Positive = income, negative = expense |
-| `balance` | Post-transaction balance |
-| `balanceType` | NORMAL_BALANCE, etc. |
-| `counterpartyName` / `counterpartyAccount` | Counterparty info |
-| `remark` | Transaction summary |
-| `status` | Transaction status |
-| `feeAmount` / `actualAmount` | Fee and net amount |
+| `quotePrice` | Exchange rate price |
+| `transferFromCurrency` | Source currency (ISO-4217) |
+| `transferToCurrency` | Target currency (ISO-4217) |
+
+##### FundMoveDetail Fields
+
+| Field | Description |
+|-------|-------------|
+| `payerName` | Payer name (masked) |
+| `payerAccountNo` | Payer account number (masked) |
+| `payerAccountType` | WORLDFIRST, BANK_CARD, VIRTUAL_ACCOUNT, ALIPAY_CN, etc. |
+| `payerBankName` | Payer bank name |
+| `payerUserId` | WF unique payer ID |
+| `beneficiaryName` | Beneficiary name (masked) |
+| `beneficiaryAccountNo` | Beneficiary account number (masked) |
+| `beneficiaryAccountType` | WORLDFIRST, BANK_CARD, VIRTUAL_ACCOUNT, ALIPAY_CN, OVO, etc. |
+| `beneficiaryBankCountry` | Beneficiary bank country (ISO-3166) |
+| `beneficiaryBankName` | Beneficiary bank name (masked) |
+| `beneficiaryStoreName` | Beneficiary store name (COLLECTION only) |
+| `beneficiaryMarketplaceName` | Marketplace registered name (COLLECTION only) |
+| `receiveAccount` | RA or VA account number (COLLECTION only) |
+| `remarks` | Transfer remarks |
+| `description` | Transaction description |
+| `paymentExplanation` | Payment explanation (VENDOR_COLLECTION_PAYMENT only) |
+| `paymentSubject` | Payment subject name (VENDOR_COLLECTION_PAYMENT only) |
+| `paymentVoucherNo` | Payment voucher number (VENDOR_COLLECTION_PAYMENT only) |
+
+##### OperatorInfo Fields
+
+| Field | Description |
+|-------|-------------|
+| `operatorName` | Operator name |
+| `operatorEmail` | Operator email |
 
 ### Error Codes
 
@@ -262,7 +311,10 @@ Pre-built Java implementation is available under `template/java/`. Use this when
 template/java/
 ├── model/
 │   ├── domain/
-│   │   └── StatementRecord.java
+│   │   ├── StatementRecord.java
+│   │   ├── FundMoveDetail.java
+│   │   ├── ForeignExchangeQuote.java
+│   │   └── OperatorInfo.java
 │   ├── request/
 │   │   └── InquiryStatementRequest.java
 │   ├── response/
@@ -295,8 +347,9 @@ This API depends on the following shared infrastructure. Generate them first usi
 template/golang/
 ├── model/
 │   ├── request/inquiry_statement_request.go
-│   ├── response/result.go
-│   ├── response/inquiry_statement_response.go
+│   ├── response/
+│   │   ├── result.go
+│   │   └── inquiry_statement_response.go  (contains StatementRecord, ForeignExchangeQuote, FundMoveDetail, OperatorInfo)
 │   └── exception/
 │       ├── error_code.go
 │       └── wf_exception.go

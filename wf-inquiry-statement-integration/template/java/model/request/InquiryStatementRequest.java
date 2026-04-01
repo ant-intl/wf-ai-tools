@@ -4,6 +4,8 @@
  */
 package {basePackage}.wf.model.request;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.List;
 
 /**
@@ -349,9 +351,7 @@ public class InquiryStatementRequest {
 
     @Override
     public String toString() {
-        return "InquiryStatementRequest{startTime='" + startTime + "', endTime='" + endTime
-            + "', pageSize=" + pageSize + ", pageNumber=" + pageNumber
-            + ", transactionTypeList=" + transactionTypeList + ", currencyList=" + currencyList
-            + ", fuzzyName='" + fuzzyName + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }
