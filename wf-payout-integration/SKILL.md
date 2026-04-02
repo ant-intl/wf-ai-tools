@@ -1,11 +1,11 @@
 ---
 name: wf-payout-integration
-description: Generate Java or Golang integration code for WorldFirst (WF) createPayout and inquiryPayout APIs for payout to third-party bank cards with RSA256 signing. Use when implementing WF fund payout, integrating createPayout API, querying payout status via inquiryPayout, or handling WF transfer to external bank accounts.
+description: Generate Java or Golang integration code for WorldFirst (WF) consultPayout, createPayout and inquiryPayout APIs for payout to third-party bank cards with RSA256 signing. Use when implementing WF fund payout, integrating createPayout API, querying payout status via inquiryPayout, or handling WF transfer to external bank accounts. For cross-currency payouts, use consultPayout first to get exchange rate quote (quoteId).
 ---
 
-# WF createPayout & inquiryPayout API Integration
+# WF consultPayout, createPayout & inquiryPayout API Integration
 
-Generate production-ready Java code for integrating with WorldFirst createPayout and inquiryPayout APIs.
+Generate production-ready Java code for integrating with WorldFirst consultPayout, createPayout and inquiryPayout APIs.
 
 ## Prerequisites
 
@@ -20,6 +20,71 @@ Generate the following components using their dedicated skills:
 - **WfConfig.java** — invoke `wf-config` skill (含向用户询问 clientId / base-url 交互)
 - **WfSigner.java** — invoke `wf-rsa256-signer` skill
 - **WfHttpClientUtil.java** — invoke `wf-http-client` skill
+
+---
+
+## API 0: consultPayout (Cross-Currency Quote)
+
+**Endpoint**: `POST /amsin/api/v1/business/fund/consultPayout`
+
+**Purpose**: Before initiating a cross-currency createPayout, call this API to get exchange rate quote (quoteId).
+
+### Request Parameters
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `transferFromDetail` | Object | **Yes** | Payer transfer detail. Must specify `transferFromAmount.currency`. |
+| `transferToDetail` | Object | **Yes** | Payee transfer detail (contains `transferToAmount`). |
+| `businessSceneCode` | String | Conditional | Required when `transferToAmount.currency` = `CNY`. Values: `THIRD_PARTY_PAYOUT`, `SAME_NAME_PAYOUT` |
+
+> **金额互斥**: `transferFromAmount.value` 与 `transferToAmount.value` 不能同时指定，二选一。
+
+### consultPayout Response Fields
+
+| Field | Type | Condition | Description |
+|-------|------|-----------|-------------|
+| `result` | Object | Always | `resultStatus` (S/F/U), `resultCode`, `resultMessage` |
+| `chargeMode` | String | S | Fee charge mode: `INNER_DEDUCT` or `OUTER_DEDUCT` |
+| `transferFromDetail` | TransferFromDetail | S | Calculated payer amount |
+| `transferToDetail` | TransferToDetail | S | Calculated payee amount with `transferQuote` containing `quoteId` |
+| `availableQuota` | Amount | S (CNY) | Remaining settlement quota (when currency=CNY) |
+
+### Cross-Currency Payout Flow
+
+1. **Call `consultPayout`** with desired currencies to get `quoteId`
+2. **Extract `quoteId`** from response: `response.transferToDetail.transferQuote.quoteId`
+3. **Call `createPayout`** with `transferToDetail.transferQuote.quoteId` = extracted quoteId
+4. **If PROCESSING**, call `inquiryPayout` to poll final status
+
+### consultPayout Error Codes
+
+#### Non-retryable (resultStatus=F)
+
+| Code | Handling |
+|------|----------|
+| `PARAM_ILLEGAL` | Check request parameters |
+| `PROCESS_FAIL` | General business failure, do not retry |
+| `INVALID_API` | API invalid/inactive |
+| `INVALID_CLIENT` | Client ID invalid |
+| `INVALID_SIGNATURE` | Signature invalid |
+| `METHOD_NOT_SUPPORTED` | Ensure HTTP method is POST |
+| `UN_SUPPORT_BUSINESS` | Unsupported business; check currency/params |
+| `USER_NO_PERMISSION` | User has no permission |
+| `CURRENCY_NOT_SUPPORT` | Unsupported currency |
+| `USER_NOT_EXIST` | User not found |
+| `USER_ACCOUNT_ABNORMAL` | Account status abnormal |
+| `USER_STATUS_ABNORMAL` | User status abnormal |
+| `CONTRACT_NOT_EXIST` | Contract does not exist |
+| `CONTRACT_CHECK_FAIL` | Contract check failed |
+| `CARD_INFO_NOT_MATCH` | Card info mismatch, use different card |
+
+#### Retryable (resultStatus=U) — max 7 retries, exponential backoff
+
+| Code | Handling |
+|------|----------|
+| `UNKNOWN_EXCEPTION` | Retry |
+| `REQUEST_TRAFFIC_EXCEED_LIMIT` | Retry |
+| `FEE_EXCEPTION` | Fee issue, check params then retry |
 
 ---
 
@@ -184,9 +249,11 @@ Caller **MUST** use `inquiryPayout` to poll the final status.
 ```
 {basePackage}.wf
 ├── model/
-│   ├── request/    CreatePayoutRequest.java              ← createPayout 生成
+│   ├── request/    ConsultPayoutRequest.java             ← consultPayout 生成
+│   │               CreatePayoutRequest.java              ← createPayout 生成
 │   │               InquiryPayoutRequest.java             ← inquiryPayout 生成
-│   ├── response/   CreatePayoutResponse.java             ← createPayout 生成
+│   ├── response/   ConsultPayoutResponse.java            ← consultPayout 生成
+│   │               CreatePayoutResponse.java             ← createPayout 生成
 │   │               InquiryPayoutResponse.java            ← inquiryPayout 生成
 │   │               Result.java                           ← 共享，仅首次生成，已存在则复用
 │   ├── domain/     Amount.java                           ← 共享
@@ -195,11 +262,11 @@ Caller **MUST** use `inquiryPayout` to poll the final status.
 │   │               TransferToDetail.java                 ← 共享
 │   │               TransferToMethod.java                 ← 共享
 │   │               PaymentMethodMetaData.java            ← 共享
-│   │               TransferQuote.java                    ← 共享
+│   │               TransferQuote.java                    ← 共享（含 quoteId）
 │   │               BeneficiaryInfo.java                  ← 共享
 │   │               TransferResult.java                   ← inquiryPayout 生成（代发单级别结果）
 │   └── exception/  WfException.java, WfErrorCode.java    ← 共享；新接口错误码追加到 WfErrorCode
-├── client/   PayoutClient.java                          ← 统一代发客户端（createPayout + inquiryPayout）
+├── client/   PayoutClient.java                          ← 统一代发客户端（consultPayout + createPayout + inquiryPayout）
 ├── config/   WfConfig.java                              ← 共享，复用
 ├── signer/   WfSigner.java                              ← 共享，复用
 └── util/     WfHttpClientUtil.java                      ← 共享，复用
@@ -215,9 +282,18 @@ Caller **MUST** use `inquiryPayout` to poll the final status.
 
 ## PayoutClient
 
-统一封装 createPayout 和 inquiryPayout 两个接口，通过不同方法区分。Handles business logic only — no direct HTTP code. Delegates to `WfHttpClientUtil`.
+统一封装 consultPayout、createPayout 和 inquiryPayout 三个接口，通过不同方法区分。Handles business logic only — no direct HTTP code. Delegates to `WfHttpClientUtil`.
 
 ### Key behaviors
+
+#### consultPayout()
+
+1. **Validate**:
+   - `transferFromDetail` must not be null; `transferFromAmount.currency` must not be blank
+   - `transferToDetail` must not be null; `transferToAmount.currency` must not be blank
+   - When `transferToAmount.currency=CNY`, `businessSceneCode` must not be blank
+2. **Call** `httpClientUtil.sendPostRequest(url, PATH_CONSULT_PAYOUT, body)`
+3. **Handle resultStatus**: `S` → return response (调用方通过 `getQuoteId()` 获取 quoteId)；`F`/`U` → throw `WfException`
 
 #### createPayout()
 
@@ -303,6 +379,8 @@ app/test/src/test/java/com/ipay/ibizopenprod/common/service/integration/wf/Payou
 
 | 方法 | 说明 |
 |------|------|
+| `testConsultPayoutCrossCurrency` | 跨币种咨询，USD -> CNY，获取 quoteId |
+| `testCrossCurrencyPayoutFlow` | 跨币种代发完整流程：consultPayout -> createPayout |
 | `testCreatePayoutCardDetail` | 卡详情模式，指定 transferToAmount，transferFromAmount 只传 currency |
 | `testCreatePayoutTokenMode` | token 模式，paymentMethodType=BENEFICIARY_TOKEN，paymentMethodId=beneficiaryToken |
 | `testCreatePayoutFromAmount` | 指定 transferFromAmount（含 value），transferToAmount 只传 currency |
@@ -323,6 +401,11 @@ metaData.setBeneficiaryType("THIRD_PARTY_PERSONAL_BANK_ACCOUNT");
 ---
 
 ## Checklist
+
+### consultPayout
+- [ ] Generate ConsultPayoutRequest (`wf.model.request`)
+- [ ] Generate ConsultPayoutResponse (`wf.model.response`)
+- [ ] **Add** `consultPayout()` method to PayoutClient (`wf.client/`)
 
 ### createPayout
 - [ ] Generate WfConfig (use **wf-config** skill)
@@ -351,12 +434,14 @@ metaData.setBeneficiaryType("THIRD_PARTY_PERSONAL_BANK_ACCOUNT");
 
 1. **transferFromDetail 必填**: 必须指定 `transferFromAmount.currency`，告知 WF 从哪个币种扣款
 2. **value 互斥**: `transferFromAmount.value` 与 `transferToAmount.value` 不能同时指定，二选一
-3. **Idempotency**: `transferRequestId` 是幂等键，相同 ID + 不同 body → `REPEAT_REQ_INCONSISTENT`
-4. **PROCESSING status**: createPayout 响应 `resultCode=PROCESSING` 时必须调用 inquiryPayout 轮询最终状态
-5. **CNY businessSceneCode**: 收款币种为 CNY 时必填，三方卡用 `THIRD_PARTY_PAYOUT`
-6. **Amount format**: `value` 为 Long，最小货币单位。2 位小数币种 × 100，0 位小数币种 × 1
-7. **轮询策略**: transferResult.resultCode=PROCESSING 时，最多 7 次，指数退避（5/10/20/40/80/160/320 分钟）
-8. **超时处理**: createPayout 调用超过 2 小时无结果且 inquiryPayout 返回 UNKNOWN，联系 WF 支持
+3. **跨币种代发**: 必须先调用 `consultPayout` 获取 `quoteId`，再在 `createPayout` 中传入 `transferToDetail.transferQuote.quoteId`
+4. **quoteId 有效期**: 汇率报价有过期时间（`quoteExpiryTime`），过期后需重新调用 `consultPayout`
+5. **Idempotency**: `transferRequestId` 是幂等键，相同 ID + 不同 body → `REPEAT_REQ_INCONSISTENT`
+6. **PROCESSING status**: createPayout 响应 `resultCode=PROCESSING` 时必须调用 inquiryPayout 轮询最终状态
+7. **CNY businessSceneCode**: 收款币种为 CNY 时必填，三方卡用 `THIRD_PARTY_PAYOUT`
+8. **Amount format**: `value` 为 Long，最小货币单位。2 位小数币种 × 100，0 位小数币种 × 1
+9. **轮询策略**: transferResult.resultCode=PROCESSING 时，最多 7 次，指数退避（5/10/20/40/80/160/320 分钟）
+10. **超时处理**: createPayout 调用超过 2 小时无结果且 inquiryPayout 返回 UNKNOWN，联系 WF 支持
 
 ---
 
@@ -383,10 +468,12 @@ template/java/
 │   │   ├── BankAccountDetail.java
 │   │   └── TransferResult.java
 │   ├── request/
+│   │   ├── ConsultPayoutRequest.java
 │   │   ├── CreatePayoutRequest.java
 │   │   └── InquiryPayoutRequest.java
 │   ├── response/
 │   │   ├── Result.java
+│   │   ├── ConsultPayoutResponse.java
 │   │   ├── CreatePayoutResponse.java
 │   │   └── InquiryPayoutResponse.java
 │   └── exception/
@@ -416,17 +503,21 @@ This API depends on the following shared infrastructure. Generate them first usi
 template/golang/
 ├── model/
 │   ├── domain/payout.go                      # Amount, TransferFromDetail, TransferToDetail, etc.
-│   ├── request/create_payout_request.go
-│   ├── request/inquiry_payout_request.go
-│   ├── response/result.go
-│   ├── response/create_payout_response.go
-│   ├── response/inquiry_payout_response.go
+│   ├── request/
+│   │   ├── consult_payout_request.go         # consultPayout request (cross-currency quote)
+│   │   ├── create_payout_request.go
+│   │   └── inquiry_payout_request.go
+│   ├── response/
+│   │   ├── result.go
+│   │   ├── consult_payout_response.go        # consultPayout response with GetQuoteID() helper
+│   │   ├── create_payout_response.go
+│   │   └── inquiry_payout_response.go
 │   └── exception/
 │       ├── error_code.go
 │       └── wf_exception.go
 └── client/
-    ├── payout_client.go
-    └── payout_integration_test.go
+    ├── payout_client.go                      # ConsultPayout(), CreatePayout(), InquiryPayout()
+    └── payout_integration_test.go            # Includes cross-currency flow tests
 ```
 
 ### Key Design Points
