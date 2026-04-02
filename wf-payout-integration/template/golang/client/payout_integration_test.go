@@ -23,8 +23,8 @@ func newRealPayoutClient(t *testing.T) *PayoutClient {
 	return NewPayoutClient(util.NewWfHttpClient(cfg, s))
 }
 
-// TestIntegration_CreatePayout_PlaintextCard tests payout with plaintext bank card
-func TestIntegration_CreatePayout_PlaintextCard(t *testing.T) {
+// TestIntegration_CreatePayout_CardDetail tests payout with bank card details
+func TestIntegration_CreatePayout_CardDetail(t *testing.T) {
 	c := newRealPayoutClient(t)
 
 	toValue := int64(100) // USD 1.00

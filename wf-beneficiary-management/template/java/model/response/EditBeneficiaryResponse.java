@@ -40,7 +40,7 @@ public class EditBeneficiaryResponse {
 
     @Override
     public String toString() {
-        return "EditBeneficiaryResponse{result=" + result
-            + ", beneficiaryToken='" + beneficiaryToken + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

@@ -77,7 +77,7 @@ public class Result {
 
     @Override
     public String toString() {
-        return "Result{resultStatus='" + resultStatus + "', resultCode='" + resultCode
-            + "', resultMessage='" + resultMessage + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

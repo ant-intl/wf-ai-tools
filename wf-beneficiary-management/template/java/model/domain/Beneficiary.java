@@ -71,10 +71,7 @@ public class Beneficiary {
 
     @Override
     public String toString() {
-        return "Beneficiary{beneficiaryToken='" + beneficiaryToken
-            + "', beneficiaryNick='" + beneficiaryNick
-            + "', beneficiaryType='" + beneficiaryType
-            + "', status='" + status
-            + "', referenceBeneficiaryId='" + referenceBeneficiaryId + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

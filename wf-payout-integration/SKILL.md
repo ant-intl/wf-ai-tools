@@ -56,77 +56,18 @@ Generate the following components using their dedicated skills:
 > - 当指定收款方金额时，`transferFromAmount` 只传 `currency`，`value` 设为 null，WF 根据手续费/汇率自动计算付款方扣款金额
 > - 当指定付款方金额时，`transferToAmount` 只传 `currency`，`value` 设为 null，WF 自动计算收款方到账金额
 
-#### TransferFromDetail Object
+#### Nested Objects
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `transferFromAmount` | Amount | **Yes** | **必填** Payer amount. 必须指定 `currency` 来确定扣款币种。 |
-| `transferFromMethod` | TransferFromMethod | No | Payer transfer method (returned in response) |
+完整嵌套对象定义见 [field-reference.md](field-reference.md)：
 
-#### TransferFromMethod Object
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `customerId` | String | Customer ID |
-| `paymentMethodType` | String | Payment method type, e.g. `BALANCE` |
-
-#### TransferToDetail Object
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `transferToAmount` | Amount | **Yes** | Payee amount |
-| `transferToMethod` | TransferToMethod | **Yes** | Transfer method (nested object) |
-| `transferQuote` | TransferQuote | No | Quote information (pass `quoteId` for cross-currency) |
-| `purposeCode` | String | **Yes** | Transaction purpose code, e.g. `GDS` (default auto-set to `GDS`) |
-| `transferNotifyUrl` | String | No | Asynchronous notification callback URL |
-| `feeAmount` | Amount | No | Fee amount (returned in response) |
-
-#### Amount Object
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `currency` | String | **Yes** | ISO-4217 currency code, e.g. `USD` |
-| `value` | **Long** | Conditional | **Amount in smallest currency unit (INTEGER)**. Must follow [WF Amount Usage Specification](https://developers.worldfirst.com.cn/docs/alipay-worldfirst/worldfirst_enterprise_solution_zh/amount_usage).<br>• 2-decimal currencies (USD/CNY/EUR/GBP/HKD/SGD/AUD/CAD/etc): `value = face_amount × 100`<br>• 0-decimal currencies (JPY/KRW/VND/CLP): `value = face_amount × 1` |
-
-#### TransferToMethod Object
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `paymentMethodType` | String | **Yes** | `BANK_ACCOUNT_DETAIL` — Plaintext card mode<br>`BENEFICIARY_TOKEN` — Card token mode |
-| `paymentMethodMetaData` | PaymentMethodMetaData | Conditional | Bank account metadata. **Required** when `paymentMethodType=BANK_ACCOUNT_DETAIL` |
-| `paymentMethodId` | String | Conditional | **Plaintext mode**: returned in response.<br>**Token mode**: pass `beneficiaryToken` from `bindBeneficiary` API. **Required** when `paymentMethodType=BENEFICIARY_TOKEN` |
-
-> **Mode Selection**: Two mutually exclusive modes:
-> - **Plaintext Card Mode**: `paymentMethodType=BANK_ACCOUNT_DETAIL` + `paymentMethodMetaData`
-> - **Card Token Mode**: `paymentMethodType=BENEFICIARY_TOKEN` + `paymentMethodId` (beneficiaryToken)
-
-#### PaymentMethodMetaData Object
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `bankAccountName` | String | Conditional | Account name (English) |
-| `bankAccountNo` | String | **Yes** | Bank account number or card number |
-| `bankName` | String | Conditional | Bank name (English) |
-| `bankBIC` | String | Conditional | Bank BIC/SWIFT code (cross-border required) |
-| `bankAccountIBAN` | String | Conditional | IBAN (required for some European countries) |
-| `routingNumber` | String | Conditional | Routing number (required for US, etc.) |
-| `beneficiaryAddress` | String | Conditional | Beneficiary address |
-| `bankCountryCode` | String | Conditional | Beneficiary country code (ISO-3166, 2-letter) |
-| `beneficiaryPhone` | String | Conditional | Beneficiary phone |
-| `bankBranchCode` | String | Conditional | Bank branch code |
-| `bankLocalName` | String | Conditional | Bank name (local language) |
-| `bankAccountLocalName` | String | Conditional | Account name (local language) |
-| `beneficiaryType` | String | No | `THIRD_PARTY_PERSONAL_BANK_ACCOUNT` / `THIRD_PARTY_COMPANY_BANK_ACCOUNT` / `SAME_NAME_BANK_ACCOUNT` |
-
-#### TransferQuote Object
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `quoteId` | String | Conditional | Quote ID (pass in request for cross-currency) |
-| `quoteCurrencyPair` | String | No | Currency pair, e.g. `USD/CNY` (returned in response) |
-| `quotePrice` | String | No | Exchange rate (returned in response) |
-| `quoteStartTime` | String | No | Quote start time, ISO 8601 (returned in response) |
-| `quoteExpiryTime` | String | No | Quote expiry time, ISO 8601 (returned in response) |
+| Object | Description |
+|--------|-------------|
+| `Amount` | 金额对象，含 `currency` 和 `value`（最小货币单位） |
+| `TransferFromDetail` | 付款方详情，含 `transferFromAmount` 和 `transferFromMethod` |
+| `TransferToDetail` | 收款方详情，含 `transferToAmount`、`transferToMethod`、`transferQuote`、`purposeCode` |
+| `TransferToMethod` | 转账方式，区分卡详情模式 (`BANK_ACCOUNT_DETAIL`) 和 token 模式 (`BENEFICIARY_TOKEN`) |
+| `PaymentMethodMetaData` | 银行卡元数据，卡详情模式必填 |
+| `TransferQuote` | 汇率报价，跨币种时使用 |
 
 ### createPayout Response Fields
 
@@ -199,21 +140,13 @@ Caller **MUST** use `inquiryPayout` to poll the final status.
 | Field | Type | Condition | Description |
 |-------|------|-----------|-------------|
 | `result` | Object | Always | API 调用级别结果：`resultStatus` (S/F/U), `resultCode`, `resultMessage` |
-| `transferResult` | Object | result.S | **代发单级别结果**：`resultStatus` (S/F/U), `resultCode`, `resultMessage` |
+| `transferResult` | Object | result.S | **代发单级别结果**：见 [field-reference.md](field-reference.md) |
 | `transferRequestId` | String | result.S | Integrator-defined request ID |
 | `transferId` | String | result.S | WF-generated transfer ID |
 | `transferFinishTime` | String | result.S | Transfer completion time, ISO 8601 |
 | `chargeMode` | String | result.S | Fee charge mode: `INNER_DEDUCT` or `OUTER_DEDUCT` |
 | `transferFromDetail` | TransferFromDetail | result.S | Payer actual deduction details |
 | `transferToDetail` | TransferToDetail | result.S | Payee actual receipt details |
-
-#### TransferResult Object（代发单级别）
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `resultStatus` | String | `S` — 成功或处理中；`F` — 失败；`U` — 可重试 |
-| `resultCode` | String | `SUCCESS` / `PROCESSING` / 失败码 |
-| `resultMessage` | String | 结果描述 |
 
 > **两层结果区分**：
 > - `result.resultStatus=S` → 本次查询 API 调用成功，继续查看 `transferResult`
@@ -293,7 +226,7 @@ Caller **MUST** use `inquiryPayout` to poll the final status.
    - `transferFromDetail` must not be null; `transferFromAmount.currency` must not be blank
    - `transferToDetail` must not be null; `transferToAmount.currency` must not be blank
    - `transferFromAmount.value` 与 `transferToAmount.value` 不能同时指定，二选一
-   - Plaintext mode: `paymentMethodType=BANK_ACCOUNT_DETAIL`，`paymentMethodMetaData.bankAccountNo` 必填
+   - Card detail mode: `paymentMethodType=BANK_ACCOUNT_DETAIL`，`paymentMethodMetaData.bankAccountNo` 必填
    - Token mode: `paymentMethodType=BENEFICIARY_TOKEN`，`paymentMethodId` 必填，不能同时传 `paymentMethodMetaData`
    - When `transferToAmount.currency=CNY`, `businessSceneCode` must not be blank
    - `purposeCode` 必填，默认自动填充 `GDS`
@@ -370,13 +303,13 @@ app/test/src/test/java/com/ipay/ibizopenprod/common/service/integration/wf/Payou
 
 | 方法 | 说明 |
 |------|------|
-| `testCreatePayoutPlaintextCard` | 明文卡模式，指定 transferToAmount，transferFromAmount 只传 currency |
+| `testCreatePayoutCardDetail` | 卡详情模式，指定 transferToAmount，transferFromAmount 只传 currency |
 | `testCreatePayoutTokenMode` | token 模式，paymentMethodType=BENEFICIARY_TOKEN，paymentMethodId=beneficiaryToken |
 | `testCreatePayoutFromAmount` | 指定 transferFromAmount（含 value），transferToAmount 只传 currency |
 | `testInquiryPayoutByRequestId` | 按 transferRequestId 查询，将 createPayout 时用的 transferRequestId 填入 |
 | `testInquiryPayoutByTransferId` | 按 transferId 查询，将 createPayout 响应返回的 transferId 填入 |
 
-#### 默认测试卡信息（明文卡模式）
+#### 默认测试卡信息（卡详情模式）
 
 ```java
 metaData.setBankAccountName("vaL2LTest");

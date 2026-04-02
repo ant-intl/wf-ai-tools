@@ -119,10 +119,7 @@ public class TransferToDetail {
 
     @Override
     public String toString() {
-        return "TransferToDetail{transferToAmount=" + transferToAmount
-            + ", transferToMethod='" + transferToMethod
-            + "', bankAccountDetail=" + bankAccountDetail
-            + ", beneficiaryInfo=" + beneficiaryInfo
-            + ", purpose='" + purpose + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

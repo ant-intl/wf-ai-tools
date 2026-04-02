@@ -4,6 +4,8 @@
  */
 package {basePackage}.wf.model.request;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.List;
 
 /**
@@ -150,9 +152,7 @@ public class InquiryBeneficiaryListRequest {
 
     @Override
     public String toString() {
-        return "InquiryBeneficiaryListRequest{pageSize=" + pageSize
-            + ", pageNumber=" + pageNumber
-            + ", beneficiaryToken='" + beneficiaryToken
-            + "', beneficiaryNick='" + beneficiaryNick + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

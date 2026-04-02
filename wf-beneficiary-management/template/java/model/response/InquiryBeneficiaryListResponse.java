@@ -4,6 +4,8 @@
  */
 package {basePackage}.wf.model.response;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import {basePackage}.wf.model.domain.Beneficiary;
 import java.util.List;
 
@@ -87,11 +89,7 @@ public class InquiryBeneficiaryListResponse {
 
     @Override
     public String toString() {
-        return "InquiryBeneficiaryListResponse{result=" + result
-            + ", responseId='" + responseId + "'"
-            + ", totalCount=" + totalCount
-            + ", totalPageNumber=" + totalPageNumber
-            + ", currentPageNumber=" + currentPageNumber
-            + ", beneficiaries.size=" + (beneficiaries != null ? beneficiaries.size() : 0) + "}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

@@ -86,6 +86,7 @@ public class Amount {
 
     @Override
     public String toString() {
-        return "Amount{currency='" + currency + "', value=" + value + "}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

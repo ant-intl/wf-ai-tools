@@ -4,6 +4,8 @@
  */
 package {basePackage}.wf.model.response;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import {basePackage}.wf.model.domain.TransferFromDetail;
 import {basePackage}.wf.model.domain.TransferToDetail;
 
@@ -163,11 +165,7 @@ public class CreatePayoutResponse {
 
     @Override
     public String toString() {
-        return "CreatePayoutResponse{result=" + result
-            + ", transferRequestId='" + transferRequestId
-            + "', transferId='" + transferId
-            + "', chargeMode='" + chargeMode
-            + "', transferFromDetail=" + transferFromDetail
-            + ", transferToDetail=" + transferToDetail + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

@@ -82,11 +82,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{region='" + region
-            + "', state='" + state
-            + "', city='" + city
-            + "', address1='" + address1
-            + "', address2='" + address2
-            + "', zipCode='" + zipCode + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

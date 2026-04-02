@@ -137,10 +137,7 @@ public class BindBeneficiaryRequest {
 
     @Override
     public String toString() {
-        return "BindBeneficiaryRequest{bindBeneficiaryRequestId='" + bindBeneficiaryRequestId
-            + "', beneficiaryType='" + beneficiaryType
-            + "', countryCode='" + countryCode
-            + "', currency='" + currency
-            + "', beneficiaryNick='" + beneficiaryNick + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

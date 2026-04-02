@@ -1,6 +1,6 @@
 ---
 name: wf-beneficiary-management
-description: "[user] Generate Java or Golang integration code for WorldFirst (WF) beneficiary management APIs including inquiryBeneficiaryTemplate, bindBeneficiary, removeBeneficiary, editBeneficiary, and inquiryBeneficiaryList. All methods share a single BeneficiaryManagementClient. Before generating code, asks whether user needs plaintext card mode (only inquiryBeneficiaryTemplate) or token mode (full suite)."
+description: "[user] Generate Java or Golang integration code for WorldFirst (WF) beneficiary management APIs including inquiryBeneficiaryTemplate, bindBeneficiary, removeBeneficiary, editBeneficiary, and inquiryBeneficiaryList. All methods share a single BeneficiaryManagementClient. Before generating code, asks whether user needs card detail mode (only inquiryBeneficiaryTemplate) or token mode (full suite)."
 ---
 
 # WF Beneficiary Management APIs Integration
@@ -18,14 +18,14 @@ All 5 interfaces share a single `BeneficiaryManagementClient` class for unified 
 
 Before generating any code, you MUST ask the user the following question to determine which APIs to generate:
 
-**Question**: 请问您的 Payout 集成场景是使用明文卡模式还是卡 token 模式？
+**Question**: 请问您的 Payout 集成场景是使用卡详情模式还是卡 token 模式？
 
 | Option | Description |
 |--------|-------------|
-| **明文卡模式** | 每次代发时直接传递银行卡明文信息，不需要提前绑定收款人。只需要集成 `inquiryBeneficiaryTemplate` 接口来查询卡模版字段要求即可。 |
+| **卡详情模式** | 每次代发时直接传递银行卡详情信息，不需要提前绑定收款人。只需要集成 `inquiryBeneficiaryTemplate` 接口来查询卡模版字段要求即可。 |
 | **卡 token 模式** | 先通过 `bindBeneficiary` 绑定收款人获取 `beneficiaryToken`，后续代发时使用 token。需要集成完整的收款人管理接口套件。 |
 
-### If user selects 明文卡模式 (Plaintext Card Mode):
+### If user selects 卡详情模式 (Card Detail Mode):
 
 Only generate the following:
 - `InquiryBeneficiaryTemplateRequest.java`
@@ -63,18 +63,7 @@ Generate the full beneficiary management suite — all 5 APIs, all domain models
 |-------|------|----------|-------------|
 | `countryCode` | String | Conditional | ISO-3166 2-letter, max 2 chars |
 | `currency` | String | Conditional | ISO-4217 3-letter code |
-| `beneficiaryType` | String | Conditional | Account type (see values below) |
-
-#### beneficiaryType Values
-
-| Value | Description |
-|-------|-------------|
-| `THIRD_PARTY_PERSONAL_BANK_ACCOUNT` | 第三方个人银行账户 |
-| `THIRD_PARTY_COMPANY_BANK_ACCOUNT` | 第三方企业银行账户 |
-| `PERSONAL_BANK_ACCOUNT` | 个人银行账户（同名） |
-| `COMPANY_BANK_ACCOUNT` | 企业银行账户（同名） |
-| `RELATED_MERCHANT_COMPANY_BANK_ACCOUNT` | 关联商户企业银行账户 |
-| `RELATED_MERCHANT_ALIPAY_COMPANY_ACCOUNT` | 关联商户支付宝企业账户 |
+| `beneficiaryType` | String | Conditional | 账户类型 (见 [field-reference.md](field-reference.md)) |
 
 ### Response Parameters
 
@@ -82,7 +71,7 @@ Generate the full beneficiary management suite — all 5 APIs, all domain models
 |-------|------|-------------|
 | `result` | Result | API result |
 | `responseId` | String | Unique response ID, max 32 chars |
-| `cardTemplateData` | List\<CardTemplateField\> | 标准卡模版字段列表 |
+| `cardTemplateData` | List\<CardTemplateField\> | 标准卡模版字段列表 (见 [field-reference.md](field-reference.md)) |
 | `localCardTemplateData` | List\<CardTemplateField\> | 本地清算网络模版 |
 | `crossBorderCardTemplateData` | List\<CardTemplateField\> | 跨境清算网络模版 |
 
@@ -99,68 +88,22 @@ Generate the full beneficiary management suite — all 5 APIs, all domain models
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `bindBeneficiaryRequestId` | String | **Yes** | 幂等请求ID, max 64 chars |
-| `beneficiaryType` | String | **Yes** | 账户类型 |
-| `beneficiaryBankAccount` | BeneficiaryBankAccount | Conditional | 银行账户信息，按卡模版字段填写 |
-| `beneficiaryAlipayAccount` | BeneficiaryAlipayAccount | Conditional | 支付宝账户信息 |
-| `thirdPartyIdentity` | ThirdPartyIdentity | Conditional | 三方身份信息（CN/CNY 三方场景必填） |
+| `beneficiaryType` | String | **Yes** | 账户类型 (见 [field-reference.md](field-reference.md)) |
+| `beneficiaryBankAccount` | BeneficiaryBankAccount | Conditional | 银行账户信息 (见 [field-reference.md](field-reference.md)) |
+| `beneficiaryAlipayAccount` | BeneficiaryAlipayAccount | Conditional | 支付宝账户信息 (见 [field-reference.md](field-reference.md)) |
+| `thirdPartyIdentity` | ThirdPartyIdentity | Conditional | 三方身份信息 (见 [field-reference.md](field-reference.md)) |
 | `countryCode` | String | Conditional | ISO-3166 2-letter |
 | `currency` | String | Conditional | ISO-4217 3-letter |
 | `beneficiaryNick` | String | Conditional | 收款人昵称, max 70 chars |
 | `templateCategory` | String | No | 模版类型: `GENERAL_TEMPLATE`(默认), `LOCAL_TEMPLATE`, `CROSS_BORDER_TEMPLATE` |
 | `referenceBeneficiaryId` | String | No | 集成商自定义ID, max 64 chars |
 
-### BeneficiaryBankAccount Object
-
-字段与 `PaymentMethodMetaData` 相同，按 `inquiryBeneficiaryTemplate` 返回的 `cardTemplateData` 填写：
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `bankAccountName` | String | 账户名称（英文） |
-| `bankAccountNo` | String | 银行账号/卡号 |
-| `bankName` | String | 银行名称（英文） |
-| `bankBIC` | String | 银行 BIC/SWIFT |
-| `bankAccountIBAN` | String | IBAN |
-| `routingNumber` | String | 路由号码 |
-| `beneficiaryAddress` | String | 受益人地址 |
-| `beneficiaryCountryCode` | String | 受益人国家代码 |
-| `beneficiaryPhone` | String | 受益人电话 |
-| `bankBranchCode` | String | 银行分支代码 |
-| `bankLocalName` | String | 银行本地名称 |
-| `bankAccountLocalName` | String | 账户名称（本地文字） |
-
-### BeneficiaryAlipayAccount Object
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `alipayAccountName` | String | **Yes** | 支付宝账户名称 |
-| `alipayAccountId` | String | **Yes** | 支付宝账户ID |
-
-### ThirdPartyIdentity Object
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `certificateNo` | String | **Yes** | 证件号（个人身份证/企业营业执照） |
-| `address` | Address | No | 地址信息 |
-| `phoneNumber` | String | No | 电话号码 |
-| `email` | String | No | 邮箱地址 |
-
-### Address Object
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `region` | String | **Yes** | 国家/地区代码 (ISO-3166) |
-| `state` | String | No | 省/州, max 8 chars |
-| `city` | String | No | 城市, max 32 chars |
-| `address1` | String | No | 地址行1, max 128 chars |
-| `address2` | String | No | 地址行2, max 128 chars |
-| `zipCode` | String | No | 邮编, max 32 chars |
-
 ### Response Parameters
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `result` | Result | API result |
-| `beneficiary` | Beneficiary | 绑定的收款人信息（含 `beneficiaryToken`） |
+| `beneficiary` | Beneficiary | 绑定的收款人信息（含 `beneficiaryToken`，见 [field-reference.md](field-reference.md)) |
 
 ---
 
@@ -236,22 +179,10 @@ Generate the full beneficiary management suite — all 5 APIs, all domain models
 |-------|------|-------------|
 | `result` | Result | API result |
 | `responseId` | String | 响应ID |
-| `beneficiaries` | List\<Beneficiary\> | 收款人列表 |
+| `beneficiaries` | List\<Beneficiary\> | 收款人列表 (见 [field-reference.md](field-reference.md)) |
 | `totalCount` | Integer | 总条数 |
 | `totalPageNumber` | Integer | 总页数 |
 | `currentPageNumber` | Integer | 当前页码 |
-
----
-
-## Beneficiary Object (响应通用)
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `beneficiaryToken` | String | 收款人令牌 (Base64加密) |
-| `beneficiaryNick` | String | 收款人昵称 |
-| `beneficiaryType` | String | 账户类型 |
-| `status` | String | 状态 |
-| `referenceBeneficiaryId` | String | 集成商自定义ID |
 
 ---
 
@@ -557,7 +488,7 @@ template/golang/
 - `BindBeneficiaryRequest` uses typed domain structs (`*domain.BeneficiaryBankAccount`, etc.) instead of `interface{}`
 - Integration test includes all 5 methods; RemoveBeneficiary and EditBeneficiary require a real `beneficiaryToken` from BindBeneficiary
 
-### Plaintext Card Mode (明文卡模式)
+### Card Detail Mode (卡详情模式)
 
 Only generate:
 - `domain/beneficiary.go` (CardTemplateField only)
@@ -569,6 +500,6 @@ Only generate:
 ### How to Generate
 
 1. Ask user for: project path, Go module name, clientId, privateKeyPath, publicKeyPath
-2. Ask user: 明文卡模式 or 卡 token 模式?
+2. Ask user: 卡详情模式 or 卡 token 模式?
 3. Generate code based on user's actual project structure and module path
 4. Template files under `template/golang/` are for reference only

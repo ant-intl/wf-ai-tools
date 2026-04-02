@@ -49,7 +49,7 @@ public class RemoveBeneficiaryRequest {
 
     @Override
     public String toString() {
-        return "RemoveBeneficiaryRequest{removeBeneficiaryRequestId='" + removeBeneficiaryRequestId
-            + "', beneficiaryToken='" + beneficiaryToken + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

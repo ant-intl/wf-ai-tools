@@ -35,6 +35,7 @@ public class TransferFromDetail {
 
     @Override
     public String toString() {
-        return "TransferFromDetail{transferFromAmount=" + transferFromAmount + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

@@ -61,8 +61,7 @@ public class TransferResult {
 
     @Override
     public String toString() {
-        return "TransferResult{resultStatus='" + resultStatus
-            + "', resultCode='" + resultCode
-            + "', resultMessage='" + resultMessage + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

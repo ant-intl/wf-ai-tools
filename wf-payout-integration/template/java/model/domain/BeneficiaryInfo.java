@@ -35,6 +35,7 @@ public class BeneficiaryInfo {
 
     @Override
     public String toString() {
-        return "BeneficiaryInfo{beneficiaryName='" + beneficiaryName + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

@@ -38,7 +38,7 @@ public class BeneficiaryAlipayAccount {
 
     @Override
     public String toString() {
-        return "BeneficiaryAlipayAccount{alipayAccountName='" + alipayAccountName
-            + "', alipayAccountId='" + alipayAccountId + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

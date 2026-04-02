@@ -27,7 +27,7 @@ public class InquiryPayoutRequest {
 
     @Override
     public String toString() {
-        return "InquiryPayoutRequest{transferId='" + transferId
-            + "', transferRequestId='" + transferRequestId + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

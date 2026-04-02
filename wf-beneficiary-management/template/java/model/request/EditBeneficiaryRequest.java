@@ -38,7 +38,7 @@ public class EditBeneficiaryRequest {
 
     @Override
     public String toString() {
-        return "EditBeneficiaryRequest{beneficiaryToken='" + beneficiaryToken
-            + "', beneficiaryNick='" + beneficiaryNick + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

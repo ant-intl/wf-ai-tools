@@ -4,6 +4,8 @@
  */
 package {basePackage}.wf.model.response;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import {basePackage}.wf.model.domain.TransferFromDetail;
 import {basePackage}.wf.model.domain.TransferResult;
 import {basePackage}.wf.model.domain.TransferToDetail;
@@ -65,13 +67,7 @@ public class InquiryPayoutResponse {
 
     @Override
     public String toString() {
-        return "InquiryPayoutResponse{result=" + result
-            + ", transferResult=" + transferResult
-            + ", transferRequestId='" + transferRequestId
-            + "', transferId='" + transferId
-            + "', transferFinishTime='" + transferFinishTime
-            + "', chargeMode='" + chargeMode
-            + "', transferFromDetail=" + transferFromDetail
-            + ", transferToDetail=" + transferToDetail + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }

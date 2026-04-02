@@ -12,7 +12,7 @@ package {basePackage}.wf.model.domain;
  *
  * <p>支持两种收款方式（互斥）：
  * <ul>
- *   <li><b>明文卡模式</b>：设置 {@code paymentMethodMetaData} 传递银行卡明文信息</li>
+ *   <li><b>卡详情模式</b>：设置 {@code paymentMethodMetaData} 传递银行卡详情信息</li>
  *   <li><b>卡 token 模式</b>：将 {@code beneficiaryToken} 作为 {@code paymentMethodId} 传入</li>
  * </ul>
  *
@@ -33,7 +33,7 @@ public class TransferToMethod {
     /**
      * 支付方式 ID。
      * <ul>
-     *   <li><b>明文卡模式</b>：响应中返回</li>
+     *   <li><b>卡详情模式</b>：响应中返回</li>
      *   <li><b>卡 token 模式</b>：请求中传入 {@code beneficiaryToken} 作为 paymentMethodId</li>
      * </ul>
      */
@@ -87,7 +87,7 @@ public class TransferToMethod {
     /**
      * 设置支付方式 ID。
      *
-     * @param paymentMethodId 支付方式 ID（明文模式）或 beneficiaryToken（token 模式）
+     * @param paymentMethodId 支付方式 ID（卡详情模式）或 beneficiaryToken（token 模式）
      */
     public void setPaymentMethodId(String paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
@@ -95,9 +95,8 @@ public class TransferToMethod {
 
     @Override
     public String toString() {
-        return "TransferToMethod{paymentMethodType='" + paymentMethodType
-            + "', paymentMethodMetaData=" + paymentMethodMetaData
-            + ", paymentMethodId='" + maskId(paymentMethodId) + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 
     private static String maskId(String id) {

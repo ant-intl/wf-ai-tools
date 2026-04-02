@@ -42,7 +42,7 @@ public class PayoutClientTest {
     // =========================================================================
 
     @Test
-    public void testCreatePayoutPlaintextCard() {
+    public void testCreatePayoutCardDetail() {
         Amount transferFromAmount = new Amount();
         transferFromAmount.setCurrency("USD");
 
@@ -71,11 +71,11 @@ public class PayoutClientTest {
         toDetail.setPurposeCode("GDS");
 
         CreatePayoutRequest request = new CreatePayoutRequest();
-        request.setTransferRequestId("PAYOUT_PLAIN_" + System.currentTimeMillis());
+        request.setTransferRequestId("PAYOUT_CARD_" + System.currentTimeMillis());
         request.setTransferFromDetail(fromDetail);
         request.setTransferToDetail(toDetail);
 
-        System.out.println("====== testCreatePayoutPlaintextCard ======");
+        System.out.println("====== testCreatePayoutCardDetail ======");
         try {
             CreatePayoutResponse response = client.createPayout(request);
             printCreatePayoutResponse(response);

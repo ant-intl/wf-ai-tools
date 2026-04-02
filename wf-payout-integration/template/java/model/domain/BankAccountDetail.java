@@ -98,10 +98,8 @@ public class BankAccountDetail {
 
     @Override
     public String toString() {
-        return "BankAccountDetail{bankAccountNo='" + maskAccountNo(bankAccountNo)
-            + "', bankBranchName='" + bankBranchName
-            + "', swiftCode='" + swiftCode
-            + "', bankRegion='" + bankRegion + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 
     /**

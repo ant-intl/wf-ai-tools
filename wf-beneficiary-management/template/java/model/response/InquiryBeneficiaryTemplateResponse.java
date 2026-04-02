@@ -1,5 +1,7 @@
 package {basePackage}.wf.model.response;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import {basePackage}.wf.model.domain.CardTemplateField;
 import lombok.Data;
 
@@ -36,4 +38,9 @@ public class InquiryBeneficiaryTemplateResponse {
      * Cross-border clearing network template fields
      */
     private List<CardTemplateField> crossBorderCardTemplateData;
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

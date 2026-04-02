@@ -60,6 +60,7 @@ public class WfException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "WfException{errorCode=" + errorCode + ", message=" + getMessage() + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
     }
 }
