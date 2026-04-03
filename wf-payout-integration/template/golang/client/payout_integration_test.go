@@ -23,6 +23,148 @@ func newRealPayoutClient(t *testing.T) *PayoutClient {
 	return NewPayoutClient(util.NewWfHttpClient(cfg, s))
 }
 
+// TestIntegration_ConsultPayout_CrossCurrency tests exchange rate consultation for cross-currency payout
+func TestIntegration_ConsultPayout_CrossCurrency(t *testing.T) {
+	c := newRealPayoutClient(t)
+
+	fromValue := int64(10000) // USD 100.00
+	req := &request.ConsultPayoutRequest{
+		TransferFromDetail: &domain.TransferFromDetail{
+			TransferFromAmount: &domain.Amount{Currency: "USD", Value: &fromValue},
+		},
+		TransferToDetail: &domain.TransferToDetail{
+			TransferToAmount: &domain.Amount{Currency: "CNY"}, // WF calculates CNY amount
+			TransferToMethod: &domain.TransferToMethod{
+				PaymentMethodType: "BANK_ACCOUNT_DETAIL",
+				PaymentMethodMetaData: &domain.PaymentMethodMetaData{
+					BankAccountName: "vaL2LTest",
+					BankAccountNo:   "100100004623",
+					BankName:        "STARK bankName",
+					BankBIC:         "CITIHKHX",
+					BankCountryCode: "CN",
+					BeneficiaryType: "THIRD_PARTY_PERSONAL_BANK_ACCOUNT",
+				},
+			},
+		},
+		BusinessSceneCode: "THIRD_PARTY_PAYOUT", // Required for CNY
+	}
+
+	resp, err := c.ConsultPayout(req)
+	if err != nil {
+		if wfErr, ok := err.(*exception.WfException); ok {
+			fmt.Printf("[FAIL] Code: %s | Message: %s\n", wfErr.Code, wfErr.Message)
+		} else {
+			fmt.Printf("[FAIL] Error: %v\n", err)
+		}
+		t.FailNow()
+	}
+
+	fmt.Printf("[PASS] ConsultPayout\n")
+	fmt.Printf("  QuoteID: %s\n", resp.GetQuoteID())
+	fmt.Printf("  QuoteCurrencyPair: %s\n", resp.GetQuoteCurrencyPair())
+	fmt.Printf("  QuotePrice: %s\n", resp.GetQuotePrice())
+	fmt.Printf("  QuoteExpiryTime: %s\n", resp.GetQuoteExpiryTime())
+	fmt.Printf("  ChargeMode: %s\n", resp.ChargeMode)
+	if resp.AvailableQuota != nil {
+		fmt.Printf("  AvailableQuota: %d %s\n", *resp.AvailableQuota.Value, resp.AvailableQuota.Currency)
+	}
+}
+
+// TestIntegration_CrossCurrencyPayoutFlow tests the complete cross-currency payout flow:
+// ConsultPayout -> CreatePayout
+func TestIntegration_CrossCurrencyPayoutFlow(t *testing.T) {
+	c := newRealPayoutClient(t)
+
+	// Step 1: ConsultPayout to get quoteId
+	fromValue := int64(10000) // USD 100.00
+	consultReq := &request.ConsultPayoutRequest{
+		TransferFromDetail: &domain.TransferFromDetail{
+			TransferFromAmount: &domain.Amount{Currency: "USD", Value: &fromValue},
+		},
+		TransferToDetail: &domain.TransferToDetail{
+			TransferToAmount: &domain.Amount{Currency: "CNY"},
+			TransferToMethod: &domain.TransferToMethod{
+				PaymentMethodType: "BANK_ACCOUNT_DETAIL",
+				PaymentMethodMetaData: &domain.PaymentMethodMetaData{
+					BankAccountName: "vaL2LTest",
+					BankAccountNo:   "100100004623",
+					BankName:        "STARK bankName",
+					BankBIC:         "CITIHKHX",
+					BankCountryCode: "CN",
+					BeneficiaryType: "THIRD_PARTY_PERSONAL_BANK_ACCOUNT",
+				},
+			},
+		},
+		BusinessSceneCode: "THIRD_PARTY_PAYOUT",
+	}
+
+	fmt.Println("====== Cross-Currency Payout Flow ======")
+	fmt.Println("Step 1: ConsultPayout")
+
+	consultResp, err := c.ConsultPayout(consultReq)
+	if err != nil {
+		if wfErr, ok := err.(*exception.WfException); ok {
+			fmt.Printf("[FAIL] ConsultPayout Code: %s | Message: %s\n", wfErr.Code, wfErr.Message)
+		} else {
+			fmt.Printf("[FAIL] ConsultPayout Error: %v\n", err)
+		}
+		t.FailNow()
+	}
+
+	quoteID := consultResp.GetQuoteID()
+	fmt.Printf("[PASS] ConsultPayout - QuoteID: %s, QuotePrice: %s\n", quoteID, consultResp.GetQuotePrice())
+
+	if quoteID == "" {
+		fmt.Println("[SKIP] QuoteID is empty, skipping CreatePayout")
+		return
+	}
+
+	// Step 2: CreatePayout with quoteId
+	fmt.Println("Step 2: CreatePayout with QuoteID")
+
+	createReq := &request.CreatePayoutRequest{
+		TransferRequestID: fmt.Sprintf("cross-currency-%d", time.Now().UnixMilli()),
+		TransferFromDetail: &domain.TransferFromDetail{
+			TransferFromAmount: &domain.Amount{Currency: "USD", Value: &fromValue},
+		},
+		TransferToDetail: &domain.TransferToDetail{
+			TransferToAmount: &domain.Amount{Currency: "CNY"},
+			TransferToMethod: &domain.TransferToMethod{
+				PaymentMethodType: "BANK_ACCOUNT_DETAIL",
+				PaymentMethodMetaData: &domain.PaymentMethodMetaData{
+					BankAccountName: "vaL2LTest",
+					BankAccountNo:   "100100004623",
+					BankName:        "STARK bankName",
+					BankBIC:         "CITIHKHX",
+					BankCountryCode: "CN",
+					BeneficiaryType: "THIRD_PARTY_PERSONAL_BANK_ACCOUNT",
+				},
+			},
+			TransferQuote: &domain.TransferQuote{QuoteID: quoteID},
+		},
+		BusinessSceneCode: "THIRD_PARTY_PAYOUT",
+	}
+
+	createResp, err := c.CreatePayout(createReq)
+	if err != nil {
+		if wfErr, ok := err.(*exception.WfException); ok {
+			fmt.Printf("[FAIL] CreatePayout Code: %s | Message: %s\n", wfErr.Code, wfErr.Message)
+		} else {
+			fmt.Printf("[FAIL] CreatePayout Error: %v\n", err)
+		}
+		t.FailNow()
+	}
+
+	fmt.Printf("[PASS] CreatePayout\n")
+	fmt.Printf("  TransferRequestID: %s\n", createResp.TransferRequestID)
+	fmt.Printf("  TransferID: %s\n", createResp.TransferID)
+	fmt.Printf("  ResultCode: %s\n", createResp.Result.ResultCode)
+	if createResp.IsProcessing() {
+		fmt.Println("  Status: PROCESSING — use InquiryPayout to poll final status")
+	}
+	fmt.Println("=========================================")
+}
+
 // TestIntegration_CreatePayout_CardDetail tests payout with bank card details
 func TestIntegration_CreatePayout_CardDetail(t *testing.T) {
 	c := newRealPayoutClient(t)

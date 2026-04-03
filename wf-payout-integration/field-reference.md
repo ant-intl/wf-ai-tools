@@ -107,3 +107,4 @@
 3. **When specifying payee amount**: `transferFromAmount` only passes `currency`, `value` = null; WF calculates payer deduction
 4. **When specifying payer amount**: `transferToAmount` only passes `currency`, `value` = null; WF calculates payee receipt
 5. **CNY requires businessSceneCode**: When `transferToAmount.currency=CNY`, must pass `businessSceneCode`
+6. **Cross-currency payout requires consultPayout**: Call `consultPayout` first to get `quoteId`, then pass it in `createPayout` via `transferToDetail.transferQuote.quoteId`. Quote has expiry time (`quoteExpiryTime`)
