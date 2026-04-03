@@ -77,6 +77,17 @@
 
 `UNKNOWN_EXCEPTION`, `REQUEST_TRAFFIC_EXCEED_LIMIT`, `FEE_EXCEPTION`
 
+## 跨币种代发流程
+
+跨币种代发需要先调用 consultPayout 获取汇率报价（quoteId），再传入 createPayout：
+
+1. **调用 consultPayout** 获取 quoteId（参见 `../consult-payout/GUIDE.md`）
+2. **从响应中提取 quoteId**：`response.transferToDetail.transferQuote.quoteId`
+3. **调用 createPayout** 时传入 `transferToDetail.transferQuote.quoteId = quoteId`
+4. **若返回 PROCESSING**，调用 inquiryPayout 轮询最终状态
+
+> 注意：quoteId 有过期时间（quoteExpiryTime），过期后需重新调用 consultPayout 获取新报价。
+
 ## 示例代码
 
 参考同目录下 `java/` 和 `golang/` 中的模板代码。
@@ -86,12 +97,13 @@
 ```
 java/
 ├── client/
-│   ├── PayoutClient.java           ← 统一客户端（createPayout + inquiryPayout）
+│   ├── PayoutClient.java           ← 统一客户端（consultPayout + createPayout + inquiryPayout）
 │   └── PayoutClientTest.java
 └── model/
     ├── domain/
     │   ├── Amount.java, TransferFromDetail.java, TransferToDetail.java
     │   ├── TransferToMethod.java, PaymentMethodMetaData.java
+    │   ├── TransferQuote.java       ← 汇率报价信息（跨币种代发）
     │   ├── BankAccountDetail.java, BeneficiaryInfo.java
     ├── request/CreatePayoutRequest.java
     └── response/CreatePayoutResponse.java
@@ -101,7 +113,9 @@ java/
 
 | 方法 | 说明 |
 |------|------|
-| `testCreatePayoutPlaintextCard` | 明文卡模式 |
+| `testConsultPayoutCrossCurrency` | 跨币种咨询（USD -> CNY），获取 quoteId |
+| `testCrossCurrencyPayoutFlow` | 跨币种代发完整流程：consultPayout -> createPayout |
+| `testCreatePayoutPlaintextCard` | 明文卡模式（同币种） |
 | `testCreatePayoutTokenMode` | token 模式 |
 | `testCreatePayoutFromAmount` | 指定付款方金额 |
 

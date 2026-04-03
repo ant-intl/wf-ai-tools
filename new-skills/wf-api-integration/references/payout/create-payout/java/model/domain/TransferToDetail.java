@@ -4,6 +4,9 @@
  */
 package {basePackage}.wf.model.domain;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 收款方转账详情（代发到三方卡场景）
  *
@@ -15,17 +18,25 @@ public class TransferToDetail {
     /** 收款金额 */
     private Amount transferToAmount;
 
-    /** 转账方式，固定为 BANK_ACCOUNT_DETAIL */
-    private String transferToMethod;
+    /** 转账方式（嵌套对象） */
+    private TransferToMethod transferToMethod;
 
-    /** 银行账户详情 */
-    private BankAccountDetail bankAccountDetail;
+    /**
+     * 汇率报价信息。
+     *
+     * <p>跨币种代发时，需要先通过 consultPayout 获取 quoteId，
+     * 然后在 createPayout 请求中传入 transferQuote.quoteId。
+     */
+    private TransferQuote transferQuote;
 
-    /** 收款人信息 */
-    private BeneficiaryInfo beneficiaryInfo;
+    /** 转账用途代码，默认 GDS */
+    private String purposeCode;
 
-    /** 转账用途/备注 */
-    private String purpose;
+    /** 异步通知回调 URL */
+    private String transferNotifyUrl;
+
+    /** 手续费金额（响应中返回） */
+    private Amount feeAmount;
 
     /**
      * Getter method for property <tt>transferToAmount</tt>.
@@ -50,7 +61,7 @@ public class TransferToDetail {
      *
      * @return property value of transferToMethod
      */
-    public String getTransferToMethod() {
+    public TransferToMethod getTransferToMethod() {
         return transferToMethod;
     }
 
@@ -59,70 +70,84 @@ public class TransferToDetail {
      *
      * @param transferToMethod value to be assigned to property transferToMethod
      */
-    public void setTransferToMethod(String transferToMethod) {
+    public void setTransferToMethod(TransferToMethod transferToMethod) {
         this.transferToMethod = transferToMethod;
     }
 
     /**
-     * Getter method for property <tt>bankAccountDetail</tt>.
+     * Getter method for property <tt>transferQuote</tt>.
      *
-     * @return property value of bankAccountDetail
+     * @return property value of transferQuote
      */
-    public BankAccountDetail getBankAccountDetail() {
-        return bankAccountDetail;
+    public TransferQuote getTransferQuote() {
+        return transferQuote;
     }
 
     /**
-     * Setter method for property <tt>bankAccountDetail</tt>.
+     * Setter method for property <tt>transferQuote</tt>.
      *
-     * @param bankAccountDetail value to be assigned to property bankAccountDetail
+     * @param transferQuote value to be assigned to property transferQuote
      */
-    public void setBankAccountDetail(BankAccountDetail bankAccountDetail) {
-        this.bankAccountDetail = bankAccountDetail;
+    public void setTransferQuote(TransferQuote transferQuote) {
+        this.transferQuote = transferQuote;
     }
 
     /**
-     * Getter method for property <tt>beneficiaryInfo</tt>.
+     * Getter method for property <tt>purposeCode</tt>.
      *
-     * @return property value of beneficiaryInfo
+     * @return property value of purposeCode
      */
-    public BeneficiaryInfo getBeneficiaryInfo() {
-        return beneficiaryInfo;
+    public String getPurposeCode() {
+        return purposeCode;
     }
 
     /**
-     * Setter method for property <tt>beneficiaryInfo</tt>.
+     * Setter method for property <tt>purposeCode</tt>.
      *
-     * @param beneficiaryInfo value to be assigned to property beneficiaryInfo
+     * @param purposeCode value to be assigned to property purposeCode
      */
-    public void setBeneficiaryInfo(BeneficiaryInfo beneficiaryInfo) {
-        this.beneficiaryInfo = beneficiaryInfo;
+    public void setPurposeCode(String purposeCode) {
+        this.purposeCode = purposeCode;
     }
 
     /**
-     * Getter method for property <tt>purpose</tt>.
+     * Getter method for property <tt>transferNotifyUrl</tt>.
      *
-     * @return property value of purpose
+     * @return property value of transferNotifyUrl
      */
-    public String getPurpose() {
-        return purpose;
+    public String getTransferNotifyUrl() {
+        return transferNotifyUrl;
     }
 
     /**
-     * Setter method for property <tt>purpose</tt>.
+     * Setter method for property <tt>transferNotifyUrl</tt>.
      *
-     * @param purpose value to be assigned to property purpose
+     * @param transferNotifyUrl value to be assigned to property transferNotifyUrl
      */
-    public void setPurpose(String purpose) {
-        this.purpose = purpose;
+    public void setTransferNotifyUrl(String transferNotifyUrl) {
+        this.transferNotifyUrl = transferNotifyUrl;
+    }
+
+    /**
+     * Getter method for property <tt>feeAmount</tt>.
+     *
+     * @return property value of feeAmount
+     */
+    public Amount getFeeAmount() {
+        return feeAmount;
+    }
+
+    /**
+     * Setter method for property <tt>feeAmount</tt>.
+     *
+     * @param feeAmount value to be assigned to property feeAmount
+     */
+    public void setFeeAmount(Amount feeAmount) {
+        this.feeAmount = feeAmount;
     }
 
     @Override
     public String toString() {
-        return "TransferToDetail{transferToAmount=" + transferToAmount
-            + ", transferToMethod='" + transferToMethod
-            + "', bankAccountDetail=" + bankAccountDetail
-            + ", beneficiaryInfo=" + beneficiaryInfo
-            + ", purpose='" + purpose + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

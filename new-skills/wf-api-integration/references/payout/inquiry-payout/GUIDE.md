@@ -49,7 +49,7 @@
 
 参考同目录下 `java/` 和 `golang/` 中的模板代码。
 
-注意：inquiryPayout 的方法集成在 PayoutClient 中（与 createPayout 共用一个客户端类），PayoutClient 代码位于 `../create-payout/java/client/PayoutClient.java`。
+注意：inquiryPayout 的方法集成在 PayoutClient 中（与 consultPayout、createPayout 共用一个客户端类），PayoutClient 代码位于 `../create-payout/java/client/PayoutClient.java`。
 
 ### Java 模板结构
 

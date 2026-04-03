@@ -7,15 +7,92 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 
 帮助用户对接万里汇(WorldFirst) API，支持 Java 和 Golang 两种语言，涵盖转账、代发、收款人管理、余额查询、账单查询等模块。
 
-## 模块索引
+## 接口索引
 
-| 模块 | 目录 | 说明 |
-|------|------|------|
-| 转账 | `references/transfer/` | 户到户转账（createTransfer） |
-| 单据支付 | `references/payout/` | 代发到三方卡（createPayout、inquiryPayout） |
-| 收款人管理 | `references/beneficiary/` | 卡模版查询、绑定/删除/编辑/查询收款人（5 个接口） |
-| 余额查询 | `references/balance-inquiry/` | 查询账户余额（inquiryBalance） |
-| 账单查询 | `references/statement-inquiry/` | 查询账户流水（inquiryStatementList） |
+<table>
+  <thead>
+    <tr>
+      <th>模块</th>
+      <th>模块目录</th>
+      <th>模块说明</th>
+      <th>接口</th>
+      <th>接口目录</th>
+      <th>接口说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>转账</td>
+      <td><code>references/transfer/</code></td>
+      <td>户到户转账</td>
+      <td>户到户转账</td>
+      <td><code>references/transfer/create-transfer/</code></td>
+      <td>调用 createTransfer 接口，在万里汇账户之间转账</td>
+    </tr>
+    <tr>
+      <td rowspan="3">单据支付</td>
+      <td rowspan="3"><code>references/payout/</code></td>
+      <td rowspan="3">代发到三方卡</td>
+      <td>咨询代发汇率</td>
+      <td><code>references/payout/consult-payout/</code></td>
+      <td>调用 consultPayout 接口，获取跨币种代发汇率报价（quoteId）</td>
+    </tr>
+    <tr>
+      <td>创建代发</td>
+      <td><code>references/payout/create-payout/</code></td>
+      <td>调用 createPayout 接口，代发到第三方银行卡</td>
+    </tr>
+    <tr>
+      <td>查询代发结果</td>
+      <td><code>references/payout/inquiry-payout/</code></td>
+      <td>调用 inquiryPayout 接口，查询代发单状态</td>
+    </tr>
+    <tr>
+      <td rowspan="5">收款人管理</td>
+      <td rowspan="5"><code>references/beneficiary/</code></td>
+      <td rowspan="5">卡模版查询、绑定/删除/编辑/查询收款人</td>
+      <td>查询卡模版</td>
+      <td><code>references/beneficiary/inquiry-template/</code></td>
+      <td>查询指定国家/币种/账户类型的卡模版字段要求</td>
+    </tr>
+    <tr>
+      <td>绑定收款人</td>
+      <td><code>references/beneficiary/bind/</code></td>
+      <td>绑定收款人到 WF 账户，获取 beneficiaryToken</td>
+    </tr>
+    <tr>
+      <td>删除收款人</td>
+      <td><code>references/beneficiary/remove/</code></td>
+      <td>删除已绑定的收款人</td>
+    </tr>
+    <tr>
+      <td>编辑收款人</td>
+      <td><code>references/beneficiary/edit/</code></td>
+      <td>修改收款人昵称</td>
+    </tr>
+    <tr>
+      <td>查询收款人列表</td>
+      <td><code>references/beneficiary/inquiry-list/</code></td>
+      <td>分页查询已绑定的收款人</td>
+    </tr>
+    <tr>
+      <td>余额查询</td>
+      <td><code>references/balance-inquiry/</code></td>
+      <td>查询账户余额</td>
+      <td>查询余额</td>
+      <td><code>references/balance-inquiry/inquiry-balance/</code></td>
+      <td>查询 WF 账户余额，支持按币种和余额类型过滤</td>
+    </tr>
+    <tr>
+      <td>账单查询</td>
+      <td><code>references/statement-inquiry/</code></td>
+      <td>查询账户流水</td>
+      <td>查询账单流水</td>
+      <td><code>references/statement-inquiry/inquiry-statement-list/</code></td>
+      <td>分页查询 WF 账户交易流水</td>
+    </tr>
+  </tbody>
+</table>
 
 ## 使用流程
 
