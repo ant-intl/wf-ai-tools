@@ -46,11 +46,11 @@ func TestIntegration_ConsultPayout_CrossCurrency(t *testing.T) {
 			TransferToMethod: &domain.TransferToMethod{
 				PaymentMethodType: "BANK_ACCOUNT_DETAIL",
 				PaymentMethodMetaData: &domain.PaymentMethodMetaData{
-					BankAccountName: "vaL2LTest",
-					BankAccountNo:   "100100004623",
+					BankAccountName: "STARK bankAccountName",
+					BankAccountNo:   "777777777",
 					BankName:        "STARK bankName",
-					BankBIC:         "CITIHKHX",
-					BankCountryCode: "CN",
+					BankBIC:         "HSBCHKXXXXX",
+					BankCountryCode: "HK",
 					BeneficiaryType: "THIRD_PARTY_PERSONAL_BANK_ACCOUNT",
 				},
 			},
@@ -95,11 +95,11 @@ func TestIntegration_CrossCurrencyPayoutFlow(t *testing.T) {
 			TransferToMethod: &domain.TransferToMethod{
 				PaymentMethodType: "BANK_ACCOUNT_DETAIL",
 				PaymentMethodMetaData: &domain.PaymentMethodMetaData{
-					BankAccountName: "vaL2LTest",
-					BankAccountNo:   "100100004623",
+					BankAccountName: "STARK bankAccountName",
+					BankAccountNo:   "777777777",
 					BankName:        "STARK bankName",
-					BankBIC:         "CITIHKHX",
-					BankCountryCode: "CN",
+					BankBIC:         "HSBCHKXXXXX",
+					BankCountryCode: "HK",
 					BeneficiaryType: "THIRD_PARTY_PERSONAL_BANK_ACCOUNT",
 				},
 			},
@@ -141,11 +141,11 @@ func TestIntegration_CrossCurrencyPayoutFlow(t *testing.T) {
 			TransferToMethod: &domain.TransferToMethod{
 				PaymentMethodType: "BANK_ACCOUNT_DETAIL",
 				PaymentMethodMetaData: &domain.PaymentMethodMetaData{
-					BankAccountName: "vaL2LTest",
-					BankAccountNo:   "100100004623",
+					BankAccountName: "STARK bankAccountName",
+					BankAccountNo:   "777777777",
 					BankName:        "STARK bankName",
-					BankBIC:         "CITIHKHX",
-					BankCountryCode: "CN",
+					BankBIC:         "HSBCHKXXXXX",
+					BankCountryCode: "HK",
 					BeneficiaryType: "THIRD_PARTY_PERSONAL_BANK_ACCOUNT",
 				},
 			},
@@ -189,10 +189,10 @@ func TestIntegration_CreatePayout_CardDetail(t *testing.T) {
 			TransferToMethod: &domain.TransferToMethod{
 				PaymentMethodType: "BANK_ACCOUNT_DETAIL",
 				PaymentMethodMetaData: &domain.PaymentMethodMetaData{
-					BankAccountName: "vaL2LTest",
-					BankAccountNo:   "100100004623",
+					BankAccountName: "STARK bankAccountName",
+					BankAccountNo:   "777777777",
 					BankName:        "STARK bankName",
-					BankBIC:         "CITIHKHX",
+					BankBIC:         "HSBCHKXXXXX",
 					BankCountryCode: "HK",
 					BeneficiaryType: "THIRD_PARTY_PERSONAL_BANK_ACCOUNT",
 				},
