@@ -7,6 +7,9 @@ package {basePackage}.wf.model.response;
 import {basePackage}.wf.model.domain.Beneficiary;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst inquiryBeneficiaryList 响应对象。
  *
@@ -87,11 +90,6 @@ public class InquiryBeneficiaryListResponse {
 
     @Override
     public String toString() {
-        return "InquiryBeneficiaryListResponse{result=" + result
-            + ", responseId='" + responseId + "'"
-            + ", totalCount=" + totalCount
-            + ", totalPageNumber=" + totalPageNumber
-            + ", currentPageNumber=" + currentPageNumber
-            + ", beneficiaries.size=" + (beneficiaries != null ? beneficiaries.size() : 0) + "}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

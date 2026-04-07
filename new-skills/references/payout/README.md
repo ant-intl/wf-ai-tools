@@ -1,4 +1,4 @@
-# 单据支付模块 (Payout)
+# 全球分发模块 (Payout)
 
 ## 接口列表
 
@@ -28,7 +28,7 @@
 
 ## 注意事项
 
-- 支持两种收款模式（互斥）：明文卡模式（BANK_ACCOUNT_DETAIL）和卡 token 模式（BENEFICIARY_TOKEN）
+- 支持两种收款模式（互斥）：卡详情模式（BANK_ACCOUNT_DETAIL）和卡 token 模式（BENEFICIARY_TOKEN）
 - `transferFromAmount.value` 与 `transferToAmount.value` 不能同时指定，二选一
 - 收款币种为 CNY 时，`businessSceneCode` 必填
 - 跨币种代发必须先调用 consultPayout 获取 quoteId，quoteId 有过期时间（quoteExpiryTime）

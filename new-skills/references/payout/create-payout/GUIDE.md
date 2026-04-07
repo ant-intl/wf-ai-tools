@@ -2,7 +2,7 @@
 
 ## 接口说明
 
-调用此接口进行代发到第三方银行卡。支持明文卡模式和卡 token 模式。
+调用此接口进行代发到第三方银行卡。支持卡详情模式和卡 token 模式。
 
 ## 请求地址
 
@@ -39,8 +39,8 @@
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `paymentMethodType` | String | **Yes** | `BANK_ACCOUNT_DETAIL`（明文卡）或 `BENEFICIARY_TOKEN`（token） |
-| `paymentMethodMetaData` | Object | Conditional | 明文卡模式必填 |
+| `paymentMethodType` | String | **Yes** | `BANK_ACCOUNT_DETAIL`（卡详情）或 `BENEFICIARY_TOKEN`（token） |
+| `paymentMethodMetaData` | Object | Conditional | 卡详情模式必填 |
 | `paymentMethodId` | String | Conditional | token 模式必填（传 beneficiaryToken） |
 
 ### PaymentMethodMetaData Object
@@ -115,7 +115,7 @@ java/
 |------|------|
 | `testConsultPayoutCrossCurrency` | 跨币种咨询（USD -> CNY），获取 quoteId |
 | `testCrossCurrencyPayoutFlow` | 跨币种代发完整流程：consultPayout -> createPayout |
-| `testCreatePayoutPlaintextCard` | 明文卡模式（同币种） |
+| `testCreatePayoutCardDetail` | 卡详情模式（同币种） |
 | `testCreatePayoutTokenMode` | token 模式 |
 | `testCreatePayoutFromAmount` | 指定付款方金额 |
 

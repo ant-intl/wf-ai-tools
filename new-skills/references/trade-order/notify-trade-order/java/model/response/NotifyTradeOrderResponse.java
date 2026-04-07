@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.response;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst notifyTradeOrder 回调响应对象。
  *
@@ -38,6 +42,6 @@ public class NotifyTradeOrderResponse {
 
     @Override
     public String toString() {
-        return "NotifyTradeOrderResponse{result=" + result + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

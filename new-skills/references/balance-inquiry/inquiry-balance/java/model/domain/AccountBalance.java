@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst 账户余额信息
  *
@@ -161,9 +165,6 @@ public class AccountBalance {
 
     @Override
     public String toString() {
-        return "AccountBalance{accountId='" + accountId + "', accountAlias='" + accountAlias
-            + "', currency='" + currency + "', balance='" + balance
-            + "', availableBalance='" + availableBalance + "', balanceType='" + balanceType
-            + "', budgetAccountId='" + budgetAccountId + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

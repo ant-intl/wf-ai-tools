@@ -7,6 +7,9 @@ package {basePackage}.wf.model.response;
 import {basePackage}.wf.model.domain.TransferFromDetail;
 import {basePackage}.wf.model.domain.TransferToDetail;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst createPayout 响应对象
  *
@@ -163,11 +166,6 @@ public class CreatePayoutResponse {
 
     @Override
     public String toString() {
-        return "CreatePayoutResponse{result=" + result
-            + ", transferRequestId='" + transferRequestId
-            + "', transferId='" + transferId
-            + "', chargeMode='" + chargeMode
-            + "', transferFromDetail=" + transferFromDetail
-            + ", transferToDetail=" + transferToDetail + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

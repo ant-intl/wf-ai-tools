@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 支付宝账户信息。
  *
@@ -38,7 +42,6 @@ public class BeneficiaryAlipayAccount {
 
     @Override
     public String toString() {
-        return "BeneficiaryAlipayAccount{alipayAccountName='" + alipayAccountName
-            + "', alipayAccountId='" + alipayAccountId + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

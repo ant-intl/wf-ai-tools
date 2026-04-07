@@ -6,6 +6,9 @@ package {basePackage}.wf.model.response;
 
 import {basePackage}.wf.model.domain.Beneficiary;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst bindBeneficiary 响应对象。
  *
@@ -42,7 +45,6 @@ public class BindBeneficiaryResponse {
 
     @Override
     public String toString() {
-        return "BindBeneficiaryResponse{result=" + result
-            + ", beneficiary=" + beneficiary + "}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

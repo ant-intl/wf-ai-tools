@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 物流公司信息。
  *
@@ -58,7 +62,6 @@ public class LogisticsCompany {
 
     @Override
     public String toString() {
-        return "LogisticsCompany{providerKey='" + providerKey
-            + "', providerValue='" + providerValue + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

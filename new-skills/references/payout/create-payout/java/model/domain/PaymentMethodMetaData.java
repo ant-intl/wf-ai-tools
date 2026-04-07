@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 收款方银行账户元数据（嵌套在 {@link TransferToMethod} 中）。
  *
@@ -60,6 +64,9 @@ public class PaymentMethodMetaData {
      * </ul>
      */
     private String beneficiaryType;
+
+    /** 银行国家/地区代码（ISO-3166，2 位字母） */
+    private String bankCountryCode;
 
     // -------------------------------------------------------------------------
     // Getters and Setters
@@ -169,6 +176,14 @@ public class PaymentMethodMetaData {
         this.beneficiaryType = beneficiaryType;
     }
 
+    public String getBankCountryCode() {
+        return bankCountryCode;
+    }
+
+    public void setBankCountryCode(String bankCountryCode) {
+        this.bankCountryCode = bankCountryCode;
+    }
+
     // -------------------------------------------------------------------------
     // Convenience methods - 向后兼容
     // -------------------------------------------------------------------------
@@ -211,19 +226,7 @@ public class PaymentMethodMetaData {
 
     @Override
     public String toString() {
-        return "PaymentMethodMetaData{bankAccountName='" + bankAccountName
-            + "', bankAccountNo='" + maskAccountNo(bankAccountNo)
-            + "', bankName='" + bankName
-            + "', bankBIC='" + bankBIC
-            + "', bankAccountIBAN='" + bankAccountIBAN
-            + "', routingNumber='" + routingNumber
-            + "', beneficiaryAddress='" + beneficiaryAddress
-            + "', beneficiaryCountryCode='" + beneficiaryCountryCode
-            + "', beneficiaryPhone='" + beneficiaryPhone
-            + "', bankBranchCode='" + bankBranchCode
-            + "', bankLocalName='" + bankLocalName
-            + "', bankAccountLocalName='" + bankAccountLocalName
-            + "', beneficiaryType='" + beneficiaryType + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
     private static String maskAccountNo(String accountNo) {

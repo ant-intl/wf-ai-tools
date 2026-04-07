@@ -7,6 +7,9 @@ package {basePackage}.wf.model.response;
 import {basePackage}.wf.model.domain.TransferFromDetail;
 import {basePackage}.wf.model.domain.TransferToDetail;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst createTransfer 响应对象
  *
@@ -169,12 +172,7 @@ public class CreateTransferResponse {
 
     @Override
     public String toString() {
-        return "CreateTransferResponse{result=" + result
-            + ", transferRequestId='" + transferRequestId
-            + "', transferId='" + transferId
-            + "', businessSceneCode='" + businessSceneCode
-            + "', transferFromDetail=" + transferFromDetail
-            + ", transferToDetail=" + transferToDetail + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
 

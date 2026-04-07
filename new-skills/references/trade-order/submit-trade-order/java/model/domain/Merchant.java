@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * B2C 商户信息。
  *
@@ -58,6 +62,6 @@ public class Merchant {
 
     @Override
     public String toString() {
-        return "Merchant{store=" + store + ", merchantId='" + merchantId + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

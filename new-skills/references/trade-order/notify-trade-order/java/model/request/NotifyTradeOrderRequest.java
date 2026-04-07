@@ -8,6 +8,9 @@ import java.util.List;
 
 import {basePackage}.wf.model.domain.TradeOrderResult;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst notifyTradeOrder 回调请求对象（仅 PAY_INTO_CHINA 场景）。
  *
@@ -63,7 +66,6 @@ public class NotifyTradeOrderRequest {
 
     @Override
     public String toString() {
-        return "NotifyTradeOrderRequest{requestId='" + requestId
-            + "', tradeOrderResults=" + tradeOrderResults + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

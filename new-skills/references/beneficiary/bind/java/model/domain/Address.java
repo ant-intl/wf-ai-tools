@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 地址信息对象。
  *
@@ -82,11 +86,6 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{region='" + region
-            + "', state='" + state
-            + "', city='" + city
-            + "', address1='" + address1
-            + "', address2='" + address2
-            + "', zipCode='" + zipCode + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

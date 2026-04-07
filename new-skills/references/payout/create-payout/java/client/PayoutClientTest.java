@@ -61,11 +61,11 @@ public class PayoutClientTest {
         // value 留空，WF 自动根据汇率计算
 
         PaymentMethodMetaData metaData = new PaymentMethodMetaData();
-        metaData.setBankAccountName("vaL2LTest");
-        metaData.setBankAccountNo("100100004623");
+        metaData.setBankAccountName("STARK bankAccountName");
+        metaData.setBankAccountNo("777777777");
         metaData.setBankName("STARK bankName");
-        metaData.setBankBIC("CITIHKHX");
-        metaData.setBankCountryCode("CN");
+        metaData.setBankBIC("HSBCHKXXXXX");
+        metaData.setBankCountryCode("HK");
         metaData.setBeneficiaryType("THIRD_PARTY_PERSONAL_BANK_ACCOUNT");
 
         TransferToMethod toMethod = new TransferToMethod();
@@ -108,11 +108,11 @@ public class PayoutClientTest {
         toAmountConsult.setCurrency("CNY");
 
         PaymentMethodMetaData metaData = new PaymentMethodMetaData();
-        metaData.setBankAccountName("vaL2LTest");
-        metaData.setBankAccountNo("100100004623");
+        metaData.setBankAccountName("STARK bankAccountName");
+        metaData.setBankAccountNo("777777777");
         metaData.setBankName("STARK bankName");
-        metaData.setBankBIC("CITIHKHX");
-        metaData.setBankCountryCode("CN");
+        metaData.setBankBIC("HSBCHKXXXXX");
+        metaData.setBankCountryCode("HK");
         metaData.setBeneficiaryType("THIRD_PARTY_PERSONAL_BANK_ACCOUNT");
 
         TransferToMethod toMethodConsult = new TransferToMethod();
@@ -190,7 +190,7 @@ public class PayoutClientTest {
     // =========================================================================
 
     @Test
-    public void testCreatePayoutPlaintextCard() {
+    public void testCreatePayoutCardDetail() {
         Amount transferFromAmount = new Amount();
         transferFromAmount.setCurrency("USD");
 
@@ -202,10 +202,10 @@ public class PayoutClientTest {
         transferToAmount.setValue(10000L); // 100.00 USD
 
         PaymentMethodMetaData metaData = new PaymentMethodMetaData();
-        metaData.setBankAccountName("vaL2LTest");
-        metaData.setBankAccountNo("100100004623");
+        metaData.setBankAccountName("STARK bankAccountName");
+        metaData.setBankAccountNo("777777777");
         metaData.setBankName("STARK bankName");
-        metaData.setBankBIC("CITIHKHX");
+        metaData.setBankBIC("HSBCHKXXXXX");
         metaData.setBankCountryCode("HK");
         metaData.setBeneficiaryType("THIRD_PARTY_PERSONAL_BANK_ACCOUNT");
 
@@ -223,7 +223,7 @@ public class PayoutClientTest {
         request.setTransferFromDetail(fromDetail);
         request.setTransferToDetail(toDetail);
 
-        System.out.println("====== testCreatePayoutPlaintextCard ======");
+        System.out.println("====== testCreatePayoutCardDetail ======");
         try {
             CreatePayoutResponse response = client.createPayout(request);
             printCreatePayoutResponse(response);
@@ -282,10 +282,10 @@ public class PayoutClientTest {
         transferToAmount.setCurrency("USD");
 
         PaymentMethodMetaData metaData = new PaymentMethodMetaData();
-        metaData.setBankAccountName("vaL2LTest");
-        metaData.setBankAccountNo("100100004623");
+        metaData.setBankAccountName("STARK bankAccountName");
+        metaData.setBankAccountNo("777777777");
         metaData.setBankName("STARK bankName");
-        metaData.setBankBIC("CITIHKHX");
+        metaData.setBankBIC("HSBCHKXXXXX");
         metaData.setBankCountryCode("HK");
         metaData.setBeneficiaryType("THIRD_PARTY_PERSONAL_BANK_ACCOUNT");
 

@@ -2,7 +2,6 @@
 name: wf-api-integration
 description: Generate Java or Golang integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, balance inquiry, statement inquiry, and trade order management. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
 ---
-
 # WF API Integration Skill
 
 帮助用户对接万里汇(WorldFirst) API，支持 Java 和 Golang 两种语言，涵盖转账、代发、收款人管理、余额查询、账单查询、交易订单管理等模块。
@@ -30,7 +29,7 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
       <td>调用 createTransfer 接口，在万里汇账户之间转账</td>
     </tr>
     <tr>
-      <td rowspan="3">单据支付</td>
+      <td rowspan="3">全球分发</td>
       <td rowspan="3"><code>references/payout/</code></td>
       <td rowspan="3">代发到三方卡</td>
       <td>咨询代发汇率</td>
@@ -136,25 +135,27 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 
 ### Java (`references/common/java/`)
 
-| 组件 | 路径 | 说明 |
-|------|------|------|
-| WfConfig | `config/WfConfig.java` | 配置管理（clientId、baseUrl、密钥路径、超时） |
-| WfSigner | `signer/WfSigner.java` | RSA256 签名/验签 |
-| WfHttpClientUtil | `util/WfHttpClientUtil.java` | HTTP 客户端封装（签名注入、响应验签） |
-| Result | `model/response/Result.java` | 统一响应结果对象 |
-| WfErrorCode | `model/exception/WfErrorCode.java` | 错误码枚举 |
-| WfException | `model/exception/WfException.java` | 业务异常类 |
+
+| 组件             | 路径                               | 说明                                          |
+| ---------------- | ---------------------------------- | --------------------------------------------- |
+| WfConfig         | `config/WfConfig.java`             | 配置管理（clientId、baseUrl、密钥路径、超时） |
+| WfSigner         | `signer/WfSigner.java`             | RSA256 签名/验签                              |
+| WfHttpClientUtil | `util/WfHttpClientUtil.java`       | HTTP 客户端封装（签名注入、响应验签）         |
+| Result           | `model/response/Result.java`       | 统一响应结果对象                              |
+| WfErrorCode      | `model/exception/WfErrorCode.java` | 错误码枚举                                    |
+| WfException      | `model/exception/WfException.java` | 业务异常类                                    |
 
 ### Golang (`references/common/golang/`)
 
-| 组件 | 路径 | 说明 |
-|------|------|------|
-| WfConfig | `config/config.go` | 配置管理 |
-| WfSigner | `signer/signer.go` | RSA256 签名/验签（Signer 接口 + 实现） |
-| WfHttpClient | `util/wf_http_client.go` | HTTP 客户端封装 |
-| Result | `model/response/result.go` | 统一响应结果 |
-| WfErrorCode | `model/exception/error_code.go` | 错误码定义 |
-| WfException | `model/exception/wf_exception.go` | 异常定义 |
+
+| 组件         | 路径                              | 说明                                   |
+| ------------ | --------------------------------- | -------------------------------------- |
+| WfConfig     | `config/config.go`                | 配置管理                               |
+| WfSigner     | `signer/signer.go`                | RSA256 签名/验签（Signer 接口 + 实现） |
+| WfHttpClient | `util/wf_http_client.go`          | HTTP 客户端封装                        |
+| Result       | `model/response/result.go`        | 统一响应结果                           |
+| WfErrorCode  | `model/exception/error_code.go`   | 错误码定义                             |
+| WfException  | `model/exception/wf_exception.go` | 异常定义                               |
 
 ## 公共代码生成规则
 
@@ -166,12 +167,14 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 ## 代码规范
 
 ### Java
+
 - Java 8（禁止使用 Java 9+ 专有语法）
 - CamelCase 类名，lowerCamelCase 变量名，UPPER_SNAKE_CASE 常量名
 - 同行左花括号，4 空格缩进，每行最多 120 字符
 - 所有 public 方法必须有 Javadoc，使用 SLF4J 日志
 
 ### Golang
+
 - 标准库优先，按包分文件
 - 依赖注入模式（构造函数注入）
 - `{moduleName}` 占位符替换为用户实际 go.mod 中的 module path
@@ -190,8 +193,8 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 
 生成测试代码前，**必须**询问签名模式：
 
-| 模式 | 说明 |
-|------|------|
-| Mock 签名 | Mock WfSigner 固定返回 `"TESTING_SIGNATURE"`，跳过真实签名，适用于快速验证请求格式 |
-| 真实签名 | 使用用户提供的私钥/公钥文件路径，可完整跑通接口 |
 
+| 模式      | 说明                                                                              |
+| --------- | --------------------------------------------------------------------------------- |
+| Mock 签名 | Mock WfSigner 固定返回`"TESTING_SIGNATURE"`，跳过真实签名，适用于快速验证请求格式 |
+| 真实签名  | 使用用户提供的私钥/公钥文件路径，可完整跑通接口                                   |

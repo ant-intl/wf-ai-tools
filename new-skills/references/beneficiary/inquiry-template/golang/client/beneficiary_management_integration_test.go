@@ -13,9 +13,18 @@ import (
 	"{moduleName}/wf/util"
 )
 
+// Fill in your WF sandbox/production credentials before running
+const (
+	wfClientID   = "{clientId}"
+	wfUserID     = "{userId}"
+	wfBaseURL    = "{baseUrl}" // sandbox: https://iopengw-sggz95m.alipay.com
+	wfPrivateKey = "{privateKeyPath}"
+	wfPublicKey  = "{publicKeyPath}"
+)
+
 func newRealBeneficiaryClient(t *testing.T) *BeneficiaryManagementClient {
 	t.Helper()
-	cfg := config.NewWfConfig(wfClientID, wfBaseURL, wfPrivateKey, wfPublicKey)
+	cfg := config.NewWfConfig(wfClientID, wfUserID, wfBaseURL, wfPrivateKey, wfPublicKey)
 	s, err := signer.NewWfSigner(wfPrivateKey, wfPublicKey)
 	if err != nil {
 		t.Fatalf("Failed to create signer: %v", err)
@@ -63,11 +72,11 @@ func TestIntegration_BindBeneficiary(t *testing.T) {
 		Currency:                 "USD",
 		BeneficiaryNick:          "TestBeneficiary",
 		BeneficiaryBankAccount: &domain.BeneficiaryBankAccount{
-			BankAccountName:        "vaL2LTest",
+			BankAccountName:        "test ",
 			BankAccountNo:          "100100004623",
 			BankName:               "STARK bankName",
 			BankBIC:                "CITIHKHX",
-			BeneficiaryCountryCode: "HK",
+			BankCountryCode:        "HK",
 		},
 	}
 

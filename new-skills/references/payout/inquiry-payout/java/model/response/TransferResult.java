@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst inquiryPayout 代发单级别结果。
  *
@@ -61,8 +65,6 @@ public class TransferResult {
 
     @Override
     public String toString() {
-        return "TransferResult{resultStatus='" + resultStatus
-            + "', resultCode='" + resultCode
-            + "', resultMessage='" + resultMessage + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -54,6 +54,7 @@ common/
 | Question | Default |
 |----------|---------|
 | WF Client ID | `YOUR_CLIENT_ID` |
+| WF User ID（登录 userId） | `YOUR_USER_ID` |
 | API base URL | `https://iopengw-sggz95m.alipay.com` |
 | Private key file path (PKCS#8) | `/path/to/private_key.pem` |
 | WF public key file path | `/path/to/wf_public_key.pem` |
@@ -73,6 +74,7 @@ Holds all WF API configuration: client ID, base URL, key paths, and timeout sett
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `clientId` | `String` | *(user input)* | WF client identifier |
+| `userId` | `String` | *(user input)* | WF user identifier（登录 userId） |
 | `baseUrl` | `String` | *(user input)* | API base URL |
 | `privateKeyPath` | `String` | *(user input)* | PKCS#8 private key file path |
 | `publicKeyPath` | `String` | *(user input)* | WF public key file path |
@@ -93,6 +95,9 @@ public class WfConfig {
     /** WF client identifier */
     private String clientId = "{USER_CLIENT_ID}";
 
+    /** WF user identifier（登录 userId） */
+    private String userId = "{USER_USER_ID}";
+
     /** WF API base URL */
     private String baseUrl = "{USER_BASE_URL}";
 
@@ -112,8 +117,7 @@ public class WfConfig {
 
     @Override
     public String toString() {
-        return "WfConfig{clientId='" + clientId + "', baseUrl='" + baseUrl
-            + "', connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
 ```
@@ -125,14 +129,16 @@ package config
 
 type WfConfig struct {
     ClientID       string
+    UserID         string
     BaseURL        string
     PrivateKeyPath string
     PublicKeyPath  string
 }
 
-func NewWfConfig(clientID, baseURL, privateKeyPath, publicKeyPath string) *WfConfig {
+func NewWfConfig(clientID, userID, baseURL, privateKeyPath, publicKeyPath string) *WfConfig {
     return &WfConfig{
         ClientID:       clientID,
+        UserID:         userID,
         BaseURL:        baseURL,
         PrivateKeyPath: privateKeyPath,
         PublicKeyPath:  publicKeyPath,
@@ -370,8 +376,7 @@ public class Result {
 
     @Override
     public String toString() {
-        return "Result{resultStatus='" + resultStatus + "', resultCode='" + resultCode
-            + "', resultMessage='" + resultMessage + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
 ```
@@ -409,7 +414,7 @@ func (r *Result) IsUnknown() bool { return r.ResultStatus == "U" }
 1. Ask user for: project path, language (Java/Golang)
 2. If Golang: read `go.mod` to get module name, replace `{moduleName}`
 3. If Java: ask for base package, replace `{basePackage}`
-4. Ask for credentials (clientID, baseURL, key paths)
+4. Ask for credentials (clientID, userId, baseURL, key paths)
 5. Generate all 6 components in order: WfConfig → WfSigner → WfHttpClientUtil → WfErrorCode → WfException → Result
 6. Template files under `java/` and `golang/` are reference implementations
 

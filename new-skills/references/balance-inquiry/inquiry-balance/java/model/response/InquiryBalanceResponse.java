@@ -8,6 +8,9 @@ import {basePackage}.wf.model.domain.AccountBalance;
 
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst inquiryBalance 响应对象
  *
@@ -81,7 +84,6 @@ public class InquiryBalanceResponse {
 
     @Override
     public String toString() {
-        return "InquiryBalanceResponse{result=" + result
-            + ", responseId='" + responseId + "', accountBalances=" + accountBalances + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

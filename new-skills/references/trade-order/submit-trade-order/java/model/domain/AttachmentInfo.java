@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 附件信息。
  *
@@ -59,6 +63,6 @@ public class AttachmentInfo {
 
     @Override
     public String toString() {
-        return "AttachmentInfo{fileName='" + fileName + "', fileKey='" + fileKey + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

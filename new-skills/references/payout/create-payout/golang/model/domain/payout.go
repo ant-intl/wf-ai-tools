@@ -38,7 +38,7 @@ type TransferToMethod struct {
 	PaymentMethodID       string                 `json:"paymentMethodId,omitempty"`
 }
 
-// PaymentMethodMetaData contains bank account details for plaintext card mode
+// PaymentMethodMetaData contains bank account details for card detail mode
 type PaymentMethodMetaData struct {
 	BankAccountName      string `json:"bankAccountName,omitempty"`
 	BankAccountNo        string `json:"bankAccountNo,omitempty"`
