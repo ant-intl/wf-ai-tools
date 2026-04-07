@@ -1,11 +1,11 @@
 ---
 name: wf-api-integration
-description: Generate Java or Golang integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, balance inquiry, and statement inquiry. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
+description: Generate Java or Golang integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, balance inquiry, statement inquiry, and trade order management. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
 ---
 
 # WF API Integration Skill
 
-帮助用户对接万里汇(WorldFirst) API，支持 Java 和 Golang 两种语言，涵盖转账、代发、收款人管理、余额查询、账单查询等模块。
+帮助用户对接万里汇(WorldFirst) API，支持 Java 和 Golang 两种语言，涵盖转账、代发、收款人管理、余额查询、账单查询、交易订单管理等模块。
 
 ## 接口索引
 
@@ -90,6 +90,24 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
       <td>查询账单流水</td>
       <td><code>references/statement-inquiry/inquiry-statement-list/</code></td>
       <td>分页查询 WF 账户交易流水</td>
+    </tr>
+    <tr>
+      <td rowspan="3">交易订单管理</td>
+      <td rowspan="3"><code>references/trade-order/</code></td>
+      <td rowspan="3">上传交易订单（B2C 结汇 / B2B 订单关联）</td>
+      <td>提交交易订单</td>
+      <td><code>references/trade-order/submit-trade-order/</code></td>
+      <td>调用 submitTradeOrder 接口，上传交易订单（PAY_INTO_CHINA / CREATE_B2B_ORDERS）</td>
+    </tr>
+    <tr>
+      <td>查询订单结果</td>
+      <td><code>references/trade-order/inquiry-trade-order/</code></td>
+      <td>调用 inquiryTradeOrder 接口，查询上传结果（仅 PAY_INTO_CHINA）</td>
+    </tr>
+    <tr>
+      <td>订单回调通知</td>
+      <td><code>references/trade-order/notify-trade-order/</code></td>
+      <td>处理 WF notifyTradeOrder 异步回调通知（仅 PAY_INTO_CHINA）</td>
     </tr>
   </tbody>
 </table>
