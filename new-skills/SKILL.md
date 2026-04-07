@@ -21,9 +21,14 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
   </thead>
   <tbody>
     <tr>
-      <td>转账</td>
-      <td><code>references/transfer/</code></td>
-      <td>户到户转账</td>
+      <td rowspan="2">转账</td>
+      <td rowspan="2"><code>references/transfer/</code></td>
+      <td rowspan="2">户到户转账</td>
+      <td>咨询转账</td>
+      <td><code>references/transfer/consult-transfer/</code></td>
+      <td>调用 consultTransfer 接口，在转账前获取汇率、手续费等信息</td>
+    </tr>
+    <tr>
       <td>户到户转账</td>
       <td><code>references/transfer/create-transfer/</code></td>
       <td>调用 createTransfer 接口，在万里汇账户之间转账</td>

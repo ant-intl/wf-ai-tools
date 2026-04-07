@@ -4,13 +4,15 @@
 
 | 接口 | 目录 | 说明 |
 |------|------|------|
+| 咨询转账 | `consult-transfer/` | 调用 consultTransfer 接口，在转账前获取汇率、手续费等信息 |
 | 户到户转账 | `create-transfer/` | 调用 createTransfer 接口，在万里汇账户之间转账 |
 
 ## 对接流程
 
-1. 调用 createTransfer 发起转账
-2. 响应 `resultCode=PROCESSING` 时，需调用 inquiryTransfer 轮询最终状态
-3. 转账结果也会通过 notifyTransfer 异步通知
+1. （可选）调用 consultTransfer 咨询转账信息（跨币种场景建议先咨询汇率）
+2. 调用 createTransfer 发起转账
+3. 响应 `resultCode=PROCESSING` 时，需调用 inquiryTransfer 轮询最终状态
+4. 转账结果也会通过 notifyTransfer 异步通知
 
 ## 注意事项
 
