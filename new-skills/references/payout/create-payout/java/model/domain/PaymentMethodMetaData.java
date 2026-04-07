@@ -65,6 +65,9 @@ public class PaymentMethodMetaData {
      */
     private String beneficiaryType;
 
+    /** 银行国家/地区代码（ISO-3166，2 位字母） */
+    private String bankCountryCode;
+
     // -------------------------------------------------------------------------
     // Getters and Setters
     // -------------------------------------------------------------------------
@@ -171,6 +174,14 @@ public class PaymentMethodMetaData {
 
     public void setBeneficiaryType(String beneficiaryType) {
         this.beneficiaryType = beneficiaryType;
+    }
+
+    public String getBankCountryCode() {
+        return bankCountryCode;
+    }
+
+    public void setBankCountryCode(String bankCountryCode) {
+        this.bankCountryCode = bankCountryCode;
     }
 
     // -------------------------------------------------------------------------

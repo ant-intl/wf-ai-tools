@@ -72,11 +72,11 @@ func TestIntegration_BindBeneficiary(t *testing.T) {
 		Currency:                 "USD",
 		BeneficiaryNick:          "TestBeneficiary",
 		BeneficiaryBankAccount: &domain.BeneficiaryBankAccount{
-			BankAccountName:        "vaL2LTest",
+			BankAccountName:        "test ",
 			BankAccountNo:          "100100004623",
 			BankName:               "STARK bankName",
 			BankBIC:                "CITIHKHX",
-			BeneficiaryCountryCode: "HK",
+			BankCountryCode:        "HK",
 		},
 	}
 

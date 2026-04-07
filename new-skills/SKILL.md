@@ -29,7 +29,7 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
       <td>调用 createTransfer 接口，在万里汇账户之间转账</td>
     </tr>
     <tr>
-      <td rowspan="3">单据支付</td>
+      <td rowspan="3">全球分发</td>
       <td rowspan="3"><code>references/payout/</code></td>
       <td rowspan="3">代发到三方卡</td>
       <td>咨询代发汇率</td>

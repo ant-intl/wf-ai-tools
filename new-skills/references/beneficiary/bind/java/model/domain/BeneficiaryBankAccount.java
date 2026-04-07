@@ -50,6 +50,11 @@ public class BeneficiaryBankAccount {
     private String beneficiaryCountryCode;
 
     /**
+     * Bank country code (ISO-3166, 2-letter)
+     */
+    private String bankCountryCode;
+
+    /**
      * Beneficiary phone
      */
     private String beneficiaryPhone;
