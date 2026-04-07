@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 买家姓名信息。
  *
@@ -101,9 +105,6 @@ public class BuyerName {
 
     @Override
     public String toString() {
-        return "BuyerName{firstName='" + firstName
-            + "', middleName='" + middleName
-            + "', lastName='" + lastName
-            + "', fullName='" + fullName + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -6,6 +6,9 @@ package {basePackage}.wf.model.request;
 
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst inquiryBeneficiaryList 请求对象。
  *
@@ -150,9 +153,6 @@ public class InquiryBeneficiaryListRequest {
 
     @Override
     public String toString() {
-        return "InquiryBeneficiaryListRequest{pageSize=" + pageSize
-            + ", pageNumber=" + pageNumber
-            + ", beneficiaryToken='" + beneficiaryToken
-            + "', beneficiaryNick='" + beneficiaryNick + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

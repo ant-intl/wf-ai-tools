@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 三方身份信息。
  *
@@ -67,9 +71,6 @@ public class ThirdPartyIdentity {
 
     @Override
     public String toString() {
-        return "ThirdPartyIdentity{certificateNo='" + certificateNo
-            + "', address=" + address
-            + "', phoneNumber='" + phoneNumber
-            + "', email='" + email + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

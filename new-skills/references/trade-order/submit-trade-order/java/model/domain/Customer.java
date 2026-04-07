@@ -163,8 +163,7 @@ public class Customer {
 
         @Override
         public String toString() {
-            return "Certificate{certificateNo='" + certificateNo
-                + "', certificateType='" + certificateType + "'}";
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
         }
     }
 }

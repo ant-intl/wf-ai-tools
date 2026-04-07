@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.request;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst editBeneficiary 请求对象。
  *
@@ -38,7 +42,6 @@ public class EditBeneficiaryRequest {
 
     @Override
     public String toString() {
-        return "EditBeneficiaryRequest{beneficiaryToken='" + beneficiaryToken
-            + "', beneficiaryNick='" + beneficiaryNick + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

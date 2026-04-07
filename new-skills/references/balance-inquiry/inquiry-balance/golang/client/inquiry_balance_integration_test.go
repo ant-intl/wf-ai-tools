@@ -13,15 +13,16 @@ import (
 
 // Fill in your WF sandbox/production credentials before running
 const (
-	wfClientID   = "{clientID}"
-	wfBaseURL    = "{baseURL}" // sandbox: https://iopengw-sggz95m.alipay.com
+	wfClientID   = "{clientId}"
+	wfUserID     = "{userId}"
+	wfBaseURL    = "{baseUrl}" // sandbox: https://iopengw-sggz95m.alipay.com
 	wfPrivateKey = "{privateKeyPath}"
 	wfPublicKey  = "{publicKeyPath}"
 )
 
 func newRealClient(t *testing.T) *InquiryBalanceClient {
 	t.Helper()
-	cfg := config.NewWfConfig(wfClientID, wfBaseURL, wfPrivateKey, wfPublicKey)
+	cfg := config.NewWfConfig(wfClientID, wfUserID, wfBaseURL, wfPrivateKey, wfPublicKey)
 	s, err := signer.NewWfSigner(wfPrivateKey, wfPublicKey)
 	if err != nil {
 		t.Fatalf("Failed to create signer: %v", err)

@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 收款人信息
  *
@@ -35,6 +39,6 @@ public class BeneficiaryInfo {
 
     @Override
     public String toString() {
-        return "BeneficiaryInfo{beneficiaryName='" + beneficiaryName + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

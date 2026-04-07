@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.exception;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst API 业务异常
  *
@@ -60,7 +64,7 @@ public class WfException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "WfException{errorCode=" + errorCode + ", message=" + getMessage() + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
 

@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst createPayout 转账方式对象。
  *
@@ -95,9 +99,7 @@ public class TransferToMethod {
 
     @Override
     public String toString() {
-        return "TransferToMethod{paymentMethodType='" + paymentMethodType
-            + "', paymentMethodMetaData=" + paymentMethodMetaData
-            + ", paymentMethodId='" + maskId(paymentMethodId) + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
     private static String maskId(String id) {

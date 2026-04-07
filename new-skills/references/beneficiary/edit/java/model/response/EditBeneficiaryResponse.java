@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.response;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst editBeneficiary 响应对象。
  *
@@ -40,7 +44,6 @@ public class EditBeneficiaryResponse {
 
     @Override
     public String toString() {
-        return "EditBeneficiaryResponse{result=" + result
-            + ", beneficiaryToken='" + beneficiaryToken + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

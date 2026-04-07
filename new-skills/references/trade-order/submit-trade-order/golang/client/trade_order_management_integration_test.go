@@ -13,9 +13,18 @@ import (
 	"{moduleName}/wf/util"
 )
 
+// Fill in your WF sandbox/production credentials before running
+const (
+	wfClientID   = "{clientId}"
+	wfUserID     = "{userId}"
+	wfBaseURL    = "{baseUrl}" // sandbox: https://iopengw-sggz95m.alipay.com
+	wfPrivateKey = "{privateKeyPath}"
+	wfPublicKey  = "{publicKeyPath}"
+)
+
 func newRealTradeOrderClient(t *testing.T) *TradeOrderManagementClient {
 	t.Helper()
-	cfg := config.NewWfConfig(wfClientID, wfBaseURL, wfPrivateKey, wfPublicKey)
+	cfg := config.NewWfConfig(wfClientID, wfUserID, wfBaseURL, wfPrivateKey, wfPublicKey)
 	s, err := signer.NewWfSigner(wfPrivateKey, wfPublicKey)
 	if err != nil {
 		t.Fatalf("Failed to create signer: %v", err)

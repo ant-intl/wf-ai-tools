@@ -8,6 +8,9 @@ import java.util.List;
 
 import {basePackage}.wf.model.domain.TradeOrder;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst submitTradeOrder 请求对象。
  *
@@ -199,13 +202,6 @@ public class SubmitTradeOrderRequest {
 
     @Override
     public String toString() {
-        return "SubmitTradeOrderRequest{requestId='" + requestId
-            + "', sceneCode='" + sceneCode
-            + "', quotaAccumulationMethod='" + quotaAccumulationMethod
-            + "', quotaAccumulationId='" + quotaAccumulationId
-            + "', tradeOrders=" + tradeOrders
-            + ", notifyUrl='" + notifyUrl
-            + "', platform='" + platform
-            + "', extendInfo='" + extendInfo + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

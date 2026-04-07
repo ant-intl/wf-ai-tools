@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 收款方转账详情（createTransfer 户到户转账场景）
  *
@@ -35,7 +39,7 @@ public class TransferToDetail {
 
     @Override
     public String toString() {
-        return "TransferToDetail{transferToAmount=" + transferToAmount + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
 

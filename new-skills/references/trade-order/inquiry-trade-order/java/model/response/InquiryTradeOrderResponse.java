@@ -8,6 +8,9 @@ import java.util.List;
 
 import {basePackage}.wf.model.domain.TradeOrderResult;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst inquiryTradeOrder 响应对象。
  *
@@ -128,9 +131,6 @@ public class InquiryTradeOrderResponse {
 
     @Override
     public String toString() {
-        return "InquiryTradeOrderResponse{result=" + result
-            + ", requestId='" + requestId
-            + "', batchStatus='" + batchStatus
-            + "', tradeOrderResults=" + tradeOrderResults + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

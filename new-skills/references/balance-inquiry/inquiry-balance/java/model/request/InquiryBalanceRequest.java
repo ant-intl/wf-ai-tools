@@ -6,6 +6,9 @@ package {basePackage}.wf.model.request;
 
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst inquiryBalance 请求对象
  *
@@ -84,8 +87,6 @@ public class InquiryBalanceRequest {
 
     @Override
     public String toString() {
-        return "InquiryBalanceRequest{currencyList=" + currencyList
-            + ", balanceTypes=" + balanceTypes
-            + ", budgetAccountId='" + budgetAccountId + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

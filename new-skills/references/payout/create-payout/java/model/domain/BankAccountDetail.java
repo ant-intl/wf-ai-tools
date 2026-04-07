@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 银行账户详情
  *
@@ -98,10 +102,7 @@ public class BankAccountDetail {
 
     @Override
     public String toString() {
-        return "BankAccountDetail{bankAccountNo='" + maskAccountNo(bankAccountNo)
-            + "', bankBranchName='" + bankBranchName
-            + "', swiftCode='" + swiftCode
-            + "', bankRegion='" + bankRegion + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
     /**

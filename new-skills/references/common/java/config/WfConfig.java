@@ -4,6 +4,10 @@
  */
 package com.ipay.iissuecard.common.service.integration.wf.config;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst API 配置类
  *
@@ -12,17 +16,20 @@ package com.ipay.iissuecard.common.service.integration.wf.config;
  */
 public class WfConfig {
 
-    /** WF client identifier */
-    private String clientId = "3K5Y966G2Y5G5309739";
+    /** WF client identifier（由 WF 分配，如 "3K5Y966G2Y5G5309739"） */
+    private String clientId = "{clientId}";
 
-    /** WF API base URL */
-    private String baseUrl = "https://iopengw-sggz95m.alipay.com";
+    /** WF user identifier（即登录 WF 的 userId） */
+    private String userId = "{userId}";
 
-    /** RSA private key file path (PKCS#8) */
-    private String privateKeyPath;
+    /** WF API base URL（沙箱: https://iopengw-sggz95m.alipay.com, 生产: https://iopengw.alipay.com） */
+    private String baseUrl = "{baseUrl}";
 
-    /** WF RSA public key file path */
-    private String publicKeyPath;
+    /** RSA private key file path (PKCS#8 PEM)（客户私钥文件路径） */
+    private String privateKeyPath = "{privateKeyPath}";
+
+    /** WF RSA public key file path（万里汇公钥文件路径） */
+    private String publicKeyPath = "{publicKeyPath}";
 
     /** HTTP connect timeout in milliseconds */
     private int connectTimeout = 10000;
@@ -46,6 +53,24 @@ public class WfConfig {
      */
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    /**
+     * Getter method for property <tt>userId</tt>.
+     *
+     * @return property value of userId
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * Setter method for property <tt>userId</tt>.
+     *
+     * @param userId value to be assigned to property userId
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     /**
@@ -140,7 +165,6 @@ public class WfConfig {
 
     @Override
     public String toString() {
-        return "WfConfig{clientId='" + clientId + "', baseUrl='" + baseUrl
-            + "', connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout + '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.request;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst bindBeneficiary 请求对象。
  *
@@ -137,10 +141,6 @@ public class BindBeneficiaryRequest {
 
     @Override
     public String toString() {
-        return "BindBeneficiaryRequest{bindBeneficiaryRequestId='" + bindBeneficiaryRequestId
-            + "', beneficiaryType='" + beneficiaryType
-            + "', countryCode='" + countryCode
-            + "', currency='" + currency
-            + "', beneficiaryNick='" + beneficiaryNick + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

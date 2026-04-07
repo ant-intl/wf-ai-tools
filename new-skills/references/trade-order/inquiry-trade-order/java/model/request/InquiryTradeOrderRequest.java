@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.request;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * WorldFirst inquiryTradeOrder 请求对象。
  *
@@ -121,10 +125,6 @@ public class InquiryTradeOrderRequest {
 
     @Override
     public String toString() {
-        return "InquiryTradeOrderRequest{requestId='" + requestId
-            + "', sceneCode='" + sceneCode
-            + "', quotaAccumulationMethod='" + quotaAccumulationMethod
-            + "', quotaAccumulationId='" + quotaAccumulationId
-            + "', tradeType='" + tradeType + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

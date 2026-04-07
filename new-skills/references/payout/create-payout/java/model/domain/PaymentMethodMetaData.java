@@ -4,6 +4,10 @@
  */
 package {basePackage}.wf.model.domain;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 收款方银行账户元数据（嵌套在 {@link TransferToMethod} 中）。
  *
@@ -211,19 +215,7 @@ public class PaymentMethodMetaData {
 
     @Override
     public String toString() {
-        return "PaymentMethodMetaData{bankAccountName='" + bankAccountName
-            + "', bankAccountNo='" + maskAccountNo(bankAccountNo)
-            + "', bankName='" + bankName
-            + "', bankBIC='" + bankBIC
-            + "', bankAccountIBAN='" + bankAccountIBAN
-            + "', routingNumber='" + routingNumber
-            + "', beneficiaryAddress='" + beneficiaryAddress
-            + "', beneficiaryCountryCode='" + beneficiaryCountryCode
-            + "', beneficiaryPhone='" + beneficiaryPhone
-            + "', bankBranchCode='" + bankBranchCode
-            + "', bankLocalName='" + bankLocalName
-            + "', bankAccountLocalName='" + bankAccountLocalName
-            + "', beneficiaryType='" + beneficiaryType + "'}";
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
     private static String maskAccountNo(String accountNo) {
