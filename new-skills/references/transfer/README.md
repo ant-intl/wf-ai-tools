@@ -6,6 +6,7 @@
 |------|------|------|
 | 咨询转账 | `consult-transfer/` | 调用 consultTransfer 接口，在转账前获取汇率、手续费等信息 |
 | 户到户转账 | `create-transfer/` | 调用 createTransfer 接口，在万里汇账户之间转账 |
+| 查询转账结果 | `inquiry-transfer/` | 调用 inquiryTransfer 接口，查询转账结果 |
 
 ## 对接流程
 
