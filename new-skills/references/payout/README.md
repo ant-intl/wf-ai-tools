@@ -2,11 +2,12 @@
 
 ## 接口列表
 
-| 接口 | 目录 | 说明 |
-|------|------|------|
-| 咨询代发汇率 | `consult-payout/` | 调用 consultPayout 接口，获取跨币种代发汇率报价（quoteId） |
-| 创建代发 | `create-payout/` | 调用 createPayout 接口，代发到第三方银行卡 |
-| 查询代发结果 | `inquiry-payout/` | 调用 inquiryPayout 接口，查询代发单状态 |
+
+| 接口         | 目录              | 说明                                                             |
+| ------------ | ----------------- | ---------------------------------------------------------------- |
+| 咨询代发汇率 | `consult-payout/` | 调用 consultPayout 接口,咨询费用、校验卡模版、获取跨币种汇率报价 |
+| 创建代发     | `create-payout/`  | 调用 createPayout 接口，代发到银行卡或电子钱包                   |
+| 查询代发结果 | `inquiry-payout/` | 调用 inquiryPayout 接口，查询代发单状态                          |
 
 ## 对接流程
 
@@ -34,4 +35,3 @@
 - 跨币种代发必须先调用 consultPayout 获取 quoteId，quoteId 有过期时间（quoteExpiryTime）
 - inquiryPayout 有两层结果：`result`（API 调用级别）和 `transferResult`（代发单级别）
 - 轮询策略：最多 7 次，指数退避（5/10/20/40/80/160/320 分钟）
-

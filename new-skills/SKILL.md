@@ -85,12 +85,17 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
       <td>分页查询已绑定的收款人</td>
     </tr>
     <tr>
-      <td>余额查询</td>
-      <td><code>references/balance-inquiry/</code></td>
-      <td>查询账户余额</td>
+      <td rowspan="2">账户查询</td>
+      <td rowspan="2"><code>references/account-inquiry/</code></td>
+      <td rowspan="2">查询账户余额、结汇额度</td>
       <td>查询余额</td>
-      <td><code>references/balance-inquiry/inquiry-balance/</code></td>
+      <td><code>references/account-inquiry/inquiry-balance/</code></td>
       <td>查询 WF 账户余额，支持按币种和余额类型过滤</td>
+    </tr>
+    <tr>
+      <td>查询结汇额度</td>
+      <td><code>references/account-inquiry/inquiry-available-quota/</code></td>
+      <td>调用 inquiryAvailableQuota 接口，查询可申报的结汇额度</td>
     </tr>
     <tr>
       <td>账单查询</td>
