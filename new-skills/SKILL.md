@@ -93,12 +93,17 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
       <td>查询 WF 账户余额，支持按币种和余额类型过滤</td>
     </tr>
     <tr>
-      <td>账单查询</td>
-      <td><code>references/statement-inquiry/</code></td>
-      <td>查询账户流水</td>
+      <td rowspan="2">账单查询</td>
+      <td rowspan="2"><code>references/statement-inquiry/</code></td>
+      <td rowspan="2">查询账户流水及详情</td>
       <td>查询账单流水</td>
       <td><code>references/statement-inquiry/inquiry-statement-list/</code></td>
       <td>分页查询 WF 账户交易流水</td>
+    </tr>
+    <tr>
+      <td>查询账单详情</td>
+      <td><code>references/statement-inquiry/inquiry-statement-detail/</code></td>
+      <td>调用 inquiryStatementDetail 接口，查询指定账单流水的详细信息</td>
     </tr>
     <tr>
       <td rowspan="3">交易订单管理</td>
@@ -120,6 +125,69 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
     </tr>
   </tbody>
 </table>
+
+## 快速决策树
+
+```
+用户咨询 WF API 对接
+        |
+        +-- 在 WF 账户之间划转资金？ --> 万里汇转账
+        |
+        +-- 付款到第三方银行卡（发工资、供应商付款）？ --> 全球分发（代发）
+        |
+        +-- 管理收款人银行卡（增删改查、卡模版）？ --> 收款人管理
+        |
+        +-- 查看账户有多少钱？ --> 余额查询
+        |
+        +-- 查看账户交易流水或对账？ --> 账单查询
+        |
+        +-- 上传交易订单（跨境结汇 / B2B 订单关联）？ --> 交易订单管理
+```
+
+## 场景关键词匹配
+
+| 关键词 | 路由模块 |
+| --- | --- |
+| 转账、汇款、WF账户转账、内部转账、账户间转账、户到户、transfer、consultTransfer、createTransfer、inquiryTransfer、转账汇率、转账手续费、转账咨询、发起转账、转账状态、转账结果 | 万里汇转账 |
+| 代发、payout、发工资、付款到银行卡、付款到第三方、全球分发、跨境代发、批量付款、代发汇率、代发报价、quoteId、consultPayout、createPayout、inquiryPayout、代发状态、代发结果 | 全球分发（代发） |
+| 收款人、beneficiary、银行卡管理、绑卡、收款方、收款账户、卡模版、银行卡字段、inquiryTemplate、bindBeneficiary、editBeneficiary、removeBeneficiary、inquiryBeneficiaryList、添加收款人、删除收款人、修改收款人、收款人列表 | 收款人管理 |
+| 余额、账户余额、balance、查余额、inquiryBalance、账户可用余额、币种余额 | 余额查询 |
+| 账单、流水、交易记录、statement、对账、账户流水、inquiryStatementList、inquiryStatementDetail、流水列表、流水详情、账单详情 | 账单查询 |
+| 交易订单、trade order、结汇、B2B订单、订单上传、PAY_INTO_CHINA、CREATE_B2B_ORDERS、submitTradeOrder、inquiryTradeOrder、notifyTradeOrder、订单回调、异步通知、webhook | 交易订单管理 |
+
+## 澄清话术
+
+当用户描述模糊时：
+
+```
+请确认您需要对接的万里汇（WorldFirst）业务模块：
+
+1. 万里汇转账
+   在 WF 账户之间划转资金，支持转账前汇率咨询、发起转账、查询转账结果
+   适用：WF 账户间资金划转
+
+2. 全球分发（代发）
+   代发资金到第三方银行卡，支持跨币种汇率咨询、发起代发、查询代发结果
+   适用：发工资、供应商付款、跨境分发等场景
+
+3. 收款人管理
+   管理代发目标银行卡，支持卡模版查询、绑定/编辑/删除/查询收款人
+   适用：维护代发收款方的银行卡信息
+
+4. 余额查询
+   查询 WF 账户余额，支持按币种和余额类型过滤
+   适用：实时查看账户可用余额
+
+5. 账单查询
+   查询账户交易流水列表及流水详情
+   适用：对账、交易记录查询
+
+6. 交易订单管理
+   上传交易订单、查询处理结果、处理异步回调通知
+   适用：跨境电商 B2C 结汇、B2B 订单关联
+
+请告诉我您需要对接哪个模块？
+```
 
 ## 使用流程
 
@@ -208,3 +276,18 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 | --------- | --------------------------------------------------------------------------------- |
 | Mock 签名 | Mock WfSigner 固定返回`"TESTING_SIGNATURE"`，跳过真实签名，适用于快速验证请求格式 |
 | 真实签名  | 使用用户提供的私钥/公钥文件路径，可完整跑通接口                                   |
+
+## 安全红线
+
+> ⛔ 以下规则为万里汇 API 对接的**安全红线**，违反可能导致资金损失或安全事故，必须严格遵守。
+
++   **私钥禁止硬编码**：RSA 私钥必须通过文件路径或密钥管理服务加载，严禁将私钥内容硬编码在源代码中。
++   **私钥禁止记日志**：私钥内容不得出现在任何日志输出中，包括 debug 级别日志。
++   **私钥禁止传公共仓库**：私钥文件不得上传到 GitHub、GitLab 等公共代码仓库，必须加入 `.gitignore`。
++   **clientId / secretKey 禁止明文存储**：clientId 和密钥配置必须通过环境变量、配置中心或加密文件管理，禁止明文写入代码或配置文件提交到版本库。
++   **响应必须验签**：收到 WF API 响应后必须使用 WF 公钥验签，确认响应来自万里汇，防止中间人篡改。
++   **异步通知必须验签**：收到 notifyTradeOrder 等异步回调通知后，必须先验签再处理业务逻辑，防止伪造通知。
++   **幂等性保障**：转账（createTransfer）和代发（createPayout）等资金类接口必须使用唯一的 transferRequestId / payoutRequestId，防止因重试导致重复扣款。
++   **HTTPS 强制**：所有 API 请求必须通过 HTTPS 发送，禁止使用 HTTP 明文传输。
++   **转账/代发结果不可假定**：发起转账或代发后，必须通过查询接口（inquiryTransfer / inquiryPayout）或异步通知确认最终状态，禁止仅凭请求响应的 status 判定最终结果。
++   **生产密钥与测试密钥隔离**：生产环境和测试环境必须使用不同的 clientId 和密钥对，严禁混用。
