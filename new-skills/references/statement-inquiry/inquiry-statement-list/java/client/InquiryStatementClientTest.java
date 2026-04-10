@@ -71,10 +71,11 @@ public class InquiryStatementClientTest {
      */
     @Test
     public void testInquiryStatementList() {
-        InquiryStatementRequest request = new InquiryStatementRequest();
-        request.setStartTime("2026-03-01T00:00:00+08:00");
-        request.setEndTime("2026-03-27T23:59:59+08:00");
-        request.setPageNumber(1);
+        InquiryStatementRequest request = InquiryStatementRequest.builder()
+            .startTime("2026-03-01T00:00:00+08:00")
+            .endTime("2026-03-27T23:59:59+08:00")
+            .pageNumber(1)
+            .build();
 
         System.out.println("====== testInquiryStatementList ======");
         System.out.println("Request: startTime=" + request.getStartTime()
