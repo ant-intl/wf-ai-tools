@@ -72,8 +72,9 @@ public class InquiryStatementDetailClientTest {
      */
     @Test
     public void testInquiryStatementDetail() {
-        InquiryStatementDetailRequest request = new InquiryStatementDetailRequest();
-        request.setAccountingBizNo("YOUR_ACCOUNTING_BIZ_NO");
+        InquiryStatementDetailRequest request = InquiryStatementDetailRequest.builder()
+            .accountingBizNo("YOUR_ACCOUNTING_BIZ_NO")
+            .build();
 
         System.out.println("====== testInquiryStatementDetail ======");
         System.out.println("Request: accountingBizNo=" + request.getAccountingBizNo());

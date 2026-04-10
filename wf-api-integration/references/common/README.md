@@ -1,8 +1,3 @@
----
-name: wf-api-common
-description: Generate common/shared foundation code for all WorldFirst (WF) API integrations, including WfConfig, WfSigner, WfHttpClientUtil, WfErrorCode, WfException, and Result classes. Use when initializing a new WF API integration project or when any WF API client needs the shared infrastructure layer (config, signing, HTTP client, error handling, response model).
----
-
 # WF API Common Module
 
 Generates the shared foundation layer used by **all** WF API integration clients. This module provides configuration, RSA256 signing, HTTP communication, error handling, and common response models.
