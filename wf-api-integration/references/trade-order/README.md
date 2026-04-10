@@ -1,4 +1,4 @@
-# 交易订单管理模块 (Trade Order Management)
+# 交易信息管理模块 (Trade Order Management)
 
 ## Pre-Generation Question (MUST ASK)
 

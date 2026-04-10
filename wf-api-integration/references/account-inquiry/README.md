@@ -1,4 +1,4 @@
-# 余额查询模块 (Balance Inquiry)
+# 账户管理模块 (Balance Inquiry)
 
 ## 接口列表
 

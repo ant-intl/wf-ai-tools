@@ -1,4 +1,4 @@
-# 账单查询模块 (Statement Inquiry)
+# 账单管理模块 (Statement Inquiry)
 
 ## 接口列表
 
