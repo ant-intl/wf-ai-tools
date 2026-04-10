@@ -191,21 +191,79 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 
 ## 使用流程
 
-1. **确认模块**：确认用户需要对接的模块，读取对应模块的 `README.md` 了解接口列表
-2. **确认接口**：确认用户需要对接的具体接口，读取对应接口的 `GUIDE.md` 了解接口规范
-3. **加载公共代码**：读取 `references/common/` 下的公共代码模板
-4. **加载接口代码**：读取对应接口目录下的代码模板
-5. **生成代码**：根据用户项目结构生成代码，替换 `{basePackage}`（Java）或 `{moduleName}`（Golang）占位符
+### Step 1: 逐个询问配置参数（MUST — 严格按顺序执行，禁止跳过或合并）
 
-## Pre-Generation Questions (MUST ASK)
+在生成任何代码前，**必须严格按照以下 7 个子步骤逐个询问参数**。
 
-在生成代码前，**必须**询问用户以下问题：
+> **⚠️ 强制规则：**
+> - 每个子步骤**必须单独调用一次** `AskUserQuestion` 工具，每次调用**只包含一个 question 对象**
+> - **禁止将多个参数合并到同一次 `AskUserQuestion` 调用中**
+> - **禁止跳过任何子步骤**，即使参数有默认值也必须询问用户确认
+> - 必须等待用户回答当前问题后，才能进入下一个子步骤
+> - 如果用户选择"使用默认值"，则使用表格中标注的默认值
 
-1. **项目路径**：请问你的项目路径是什么？
-2. **语言选择**：你需要生成 Java 还是 Golang 的代码？
-3. **Base Package / Module Name**：
-   - Java：请提供 base package（如 `com.example.project`）
-   - Golang：请提供 Go module name（如 `github.com/example/project`）
+#### Step 1.1: 询问 WF Client ID
+
+调用 `AskUserQuestion`，询问：**请提供 WF Client ID？**
+- 提供选项：让用户输入自定义值，或选择"使用默认占位符 `YOUR_CLIENT_ID`"
+- 默认值：`YOUR_CLIENT_ID`
+
+#### Step 1.2: 询问 WF User ID
+
+调用 `AskUserQuestion`，询问：**请提供 WF User ID（登录 userId）？**
+- 提供选项：让用户输入自定义值，或选择"使用默认占位符 `YOUR_USER_ID`"
+- 默认值：`YOUR_USER_ID`
+
+#### Step 1.3: 询问 API Base URL
+
+调用 `AskUserQuestion`，询问：**请提供 API Base URL？**
+- 提供选项：让用户输入自定义值，或选择"使用默认值 `https://iopengw-sggz95m.alipay.com`"
+- 默认值：`https://iopengw-sggz95m.alipay.com`
+
+#### Step 1.4: 询问 Private Key 文件路径
+
+调用 `AskUserQuestion`，询问：**请提供 RSA 私钥文件路径（PKCS#8 格式）？**
+- 提供选项：让用户输入自定义路径，或选择"使用默认占位符 `/path/to/private_key.pem`"
+- 默认值：`/path/to/private_key.pem`
+
+#### Step 1.5: 询问 WF Public Key 文件路径
+
+调用 `AskUserQuestion`，询问：**请提供 WF 公钥文件路径？**
+- 提供选项：让用户输入自定义路径，或选择"使用默认占位符 `/path/to/wf_public_key.pem`"
+- 默认值：`/path/to/wf_public_key.pem`
+
+#### Step 1.6: 询问编程语言
+
+调用 `AskUserQuestion`，询问：**使用哪种编程语言？**
+- 提供选项：`Java (Recommended)` 和 `Golang`
+- 默认值：`Java`
+
+#### Step 1.7: 询问 Base Package / Module Name
+
+调用 `AskUserQuestion`，询问：
+- 如果用户在 Step 1.6 选择了 Java：**请提供 Base Package 名称（Java 的包路径，例如 `com.example.wf`）？**
+- 如果用户在 Step 1.6 选择了 Golang：**请提供 Go Module Name（例如 `github.com/example/wf`）？**
+- 无默认值，必须由用户提供
+
+### Step 2: 确认模块
+
+确认用户需要对接的模块，读取对应模块的 `README.md` 了解接口列表
+
+### Step 3: 确认接口
+
+确认用户需要对接的具体接口，读取对应接口的 `GUIDE.md` 了解接口规范，如果用户没说对应接口，则对接该模块下全部接口
+
+### Step 4: 加载公共代码
+
+读取 `references/common/` 下的公共代码模板
+
+### Step 5: 加载接口代码
+
+读取对应接口目录下的代码模板
+
+### Step 6: 生成代码
+
+根据用户项目结构生成代码，替换 `{basePackage}`（Java）或 `{moduleName}`（Golang）占位符
 
 ## 公共依赖
 
@@ -237,9 +295,20 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 
 ## 公共代码生成规则
 
-- **WfConfig**：生成前必须通过交互询问 clientId、baseUrl、privateKeyPath、publicKeyPath
+### WfConfig 生成步骤
+
+1. **必须先询问配置参数**：在生成 `WfConfig` 前，必须严格按照 Step 1.1 ~ 1.7 逐个询问所有必需参数（见"使用流程 - Step 1"），每个参数单独调用一次 `AskUserQuestion`
+2. **替换占位符**：将用户提供的参数替换到模板中：
+    - `{USER_CLIENT_ID}` → 用户提供的 clientId
+    - `{USER_USER_ID}` → 用户提供的 userId
+    - `{USER_BASE_URL}` → 用户提供的 baseUrl
+    - `{USER_PRIVATE_KEY_PATH}` → 用户提供的 privateKeyPath
+    - `{USER_PUBLIC_KEY_PATH}` → 用户提供的 publicKeyPath
+
+### 其他组件规则
+
 - **Result.java / result.go**：共享，仅首次生成，已存在则复用
-- **WfErrorCode**：共享，新接口的错误码追加到已有文件，不重复生成
+- **WfErrorCode**：共享，新接口的错误码追加到已有文件，不重复生成整个枚举
 - **WfException**：共享，已存在则复用
 
 ## 代码规范
