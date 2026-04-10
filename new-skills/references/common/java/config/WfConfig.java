@@ -22,7 +22,7 @@ public class WfConfig {
     /** WF user identifier（即登录 WF 的 userId） */
     private String userId = "{userId}";
 
-    /** WF API base URL（沙箱: https://iopengw-sggz95m.alipay.com, 生产: https://iopengw.alipay.com） */
+    /** WF API base URL（沙箱: https://open-sitprod-sg.alipay.com, 生产: https://iopengw.alipay.com） */
     private String baseUrl = "{baseUrl}";
 
     /** RSA private key file path (PKCS#8 PEM)（客户私钥文件路径） */

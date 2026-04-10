@@ -15,7 +15,7 @@ import (
 const (
 	wfDetailClientID   = "{clientId}"
 	wfDetailUserID     = "{userId}"
-	wfDetailBaseURL    = "{baseUrl}" // sandbox: https://iopengw-sggz95m.alipay.com
+	wfDetailBaseURL    = "{baseUrl}" // sandbox: https://open-sitprod-sg.alipay.com
 	wfDetailPrivateKey = "{privateKeyPath}"
 	wfDetailPublicKey  = "{publicKeyPath}"
 )

@@ -55,7 +55,7 @@ common/
 |----------|---------|
 | WF Client ID | `YOUR_CLIENT_ID` |
 | WF User ID（登录 userId） | `YOUR_USER_ID` |
-| API base URL | `https://iopengw-sggz95m.alipay.com` |
+| API base URL | `https://open-sitprod-sg.alipay.com` |
 | Private key file path (PKCS#8) | `/path/to/private_key.pem` |
 | WF public key file path | `/path/to/wf_public_key.pem` |
 | Language (Java/Golang) | Java |

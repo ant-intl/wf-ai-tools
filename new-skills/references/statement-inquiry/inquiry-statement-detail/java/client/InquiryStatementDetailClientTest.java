@@ -31,7 +31,7 @@ import org.mockito.Mockito;
 public class InquiryStatementDetailClientTest {
 
     private static final String CLIENT_ID = "YOUR_CLIENT_ID";
-    private static final String BASE_URL = "https://iopengw-sggz95m.alipay.com";
+    private static final String BASE_URL = "https://open-sitprod-sg.alipay.com";
 
     private InquiryStatementDetailClient client;
     private WfConfig mockConfig;

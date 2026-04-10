@@ -204,13 +204,27 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 
 ## Pre-Generation Questions (MUST ASK)
 
-在生成代码前，**必须**询问用户以下问题：
+在生成代码前，**必须**通过 AskUserQuestion 工具询问用户以下所有问题。所有问题必须在开始生成任何代码之前全部收集完毕。
+
+### 基础信息
 
 1. **项目路径**：请问你的项目路径是什么？
 2. **语言选择**：你需要生成 Java 还是 Golang 的代码？
 3. **Base Package / Module Name**：
    - Java：请提供 base package（如 `com.example.project`）
    - Golang：请提供 Go module name（如 `github.com/example/project`）
+
+### WfConfig 配置属性（用于生成 WfConfig 类，禁止使用占位符）
+
+以下属性**必须**在生成 WfConfig 前向用户收集真实值，**严禁**在代码中生成 `YOUR_CLIENT_ID` 等占位符让用户自行替换。
+
+4. **WF Client ID**：请提供您的万里汇 Client ID
+5. **WF User ID**：请提供您的万里汇登录 User ID
+6. **API Base URL**：请提供 API 网关地址（默认 `https://open-sitprod-sg.alipay.com`）
+7. **私钥文件路径**：请提供 RSA 私钥文件路径（PKCS#8 格式），如 `/home/admin/keys/private_key.pem`
+8. **公钥文件路径**：请提供万里汇 RSA 公钥文件路径，如 `/home/admin/keys/wf_public_key.pem`
+
+> **重要**：用户提供的值直接填入生成的 WfConfig 代码中。如果用户表示暂时不确定某个值，应使用 Spring XML property placeholder（如 `${wf.clientId}`）或 Go 环境变量读取（如 `os.Getenv("WF_CLIENT_ID")`）而非硬编码占位符字符串。
 
 ## 公共依赖
 
@@ -242,7 +256,7 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 
 ## 公共代码生成规则
 
-- **WfConfig**：生成前必须通过交互询问 clientId、baseUrl、privateKeyPath、publicKeyPath
+- **WfConfig**：使用 Pre-Generation Questions 中收集到的用户真实值（第 4-8 项）填充字段默认值，**禁止使用占位符**
 - **Result.java / result.go**：共享，仅首次生成，已存在则复用
 - **WfErrorCode**：共享，新接口的错误码追加到已有文件，不重复生成
 - **WfException**：共享，已存在则复用
