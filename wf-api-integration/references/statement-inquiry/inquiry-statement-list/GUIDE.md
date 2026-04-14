@@ -79,8 +79,8 @@
 ```
 java/
 ├── client/
-│   ├── InquiryStatementClient.java
-│   └── InquiryStatementClientTest.java
+│   ├── StatementClient.java              # 统一客户端，包含 list + detail 两个方法
+│   └── StatementClientTest.java
 └── model/
     ├── domain/
     │   ├── StatementRecord.java
@@ -91,19 +91,22 @@ java/
     └── response/InquiryStatementResponse.java
 ```
 
+> 注意：`StatementClient` 同时包含 `inquiryStatementList` 和 `inquiryStatementDetail` 两个方法，
+> `inquiry-statement-detail` 模块下仅有 model 类，无需单独的 Client。
+
 ### Golang 模板结构
 
 ```
 golang/
 ├── client/
-│   ├── inquiry_statement_client.go
-│   └── inquiry_statement_integration_test.go
+│   ├── statement_client.go               # 统一客户端，包含 list + detail 两个方法
+│   └── statement_client_integration_test.go
 └── model/
     ├── request/inquiry_statement_request.go
     └── response/inquiry_statement_response.go
 ```
 
-## InquiryStatementClient 关键行为
+## StatementClient.inquiryStatementList 关键行为
 
 1. **参数校验**：startTime、endTime 必填；pageNumber 范围 1-50；fuzzyName 为空时校验时间跨度 ≤ 100 天
 2. **pageSize 固定**：始终覆盖为 10

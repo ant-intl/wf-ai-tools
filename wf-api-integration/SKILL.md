@@ -178,14 +178,14 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 
 ## 测试代码生成
 
-每个 Client 类只需生成一个单元测试类，包含一个成功的测试方法即可。
+每个 Client 类生成一个集成测试类，真实调用 WF API。
 
 ### 测试代码规范
 
 1. **仅生成 Client 类的测试**：只为 `*Client.java` 生成对应的 `*ClientTest.java`
 2. **仅保留一个成功测试方法**：每个测试类只包含 `testXXX_Success()` 一个测试方法
-3. **真实调用WF测试环境**：调用结果不mock，真实调用到WF测试环境，不过需要询问用户是用跳签模式，还是真实验签模式；
-4. **验证响应数据**：断言返回结果的关键字段
+3. **真实HTTP调用**：不Mock HTTP响应，通过 `client.init()` 初始化真实调用WF API
+4. **配置使用占位符**：clientId、密钥路径等使用 `${wf.xxx}` 占位符，由用户自行配置
 
 ## 代码生成后检查清单 (POST-GENERATION CHECKLIST)
 
@@ -242,8 +242,13 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 ✅ 代码生成后检查完成
 
 1. Model 类字段一致性检查：
-   - [x] model包下所有类 - 与模板一致
-   
+   - [x] FundMoveDetail.java - 18个字段，与模板一致
+   - [x] StatementRecord.java - 24个字段，与模板一致
+   - [x] ForeignExchangeQuote.java - 3个字段，与模板一致
+   - [x] OperatorInfo.java - 2个字段，与模板一致
+   - [x] Amount.java - 2个字段，与模板一致
+   - [x] RelatedStatement.java - 3个字段，与模板一致
+
 2. 单元测试运行检查：
    - [x] 编译成功
    - [x] 单元测试可正常运行

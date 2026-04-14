@@ -12,7 +12,9 @@ import {basePackage}.wf.config.WfConfig;
 import {basePackage}.wf.model.exception.WfErrorCode;
 import {basePackage}.wf.model.exception.WfException;
 import {basePackage}.wf.model.request.InquiryStatementRequest;
+import {basePackage}.wf.model.request.InquiryStatementDetailRequest;
 import {basePackage}.wf.model.response.InquiryStatementResponse;
+import {basePackage}.wf.model.response.InquiryStatementDetailResponse;
 import {basePackage}.wf.model.response.Result;
 import {basePackage}.wf.signer.WfSigner;
 import {basePackage}.wf.util.WfHttpClientUtil;
@@ -23,19 +25,27 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * WorldFirst inquiryStatementList 接口客户端
+ * WorldFirst 账单流水查询统一客户端。
  *
- * <p>pageSize 固定为 10，pageNumber 范围 1-50。
- * 当 fuzzyName 为空时，startTime 与 endTime 的间隔不超过 100 天。
+ * <p>包含 2 个接口方法：
+ * <ul>
+ *   <li>{@link #inquiryStatementList} — 分页查询账户交易流水</li>
+ *   <li>{@link #inquiryStatementDetail} — 查询指定账单流水详情</li>
+ * </ul>
+ *
+ * <p>典型调用流程：先调用 inquiryStatementList 获取 accountingBizNo，
+ * 再以此为入参调用 inquiryStatementDetail。
  *
  * @author Qoder
- * @version InquiryStatementClient.java, v 0.1 2026-03-24
+ * @version StatementClient.java, v 0.1 2026-04-14
  */
-public class InquiryStatementClient {
+public class StatementClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InquiryStatementClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatementClient.class);
 
-    private static final String API_PATH = "/amsin/api/v1/business/account/inquiryStatementList";
+    // API paths
+    private static final String PATH_LIST   = "/amsin/api/v1/business/account/inquiryStatementList";
+    private static final String PATH_DETAIL = "/amsin/api/v1/business/account/inquiryStatementDetail";
 
     /** pageSize 固定值 */
     private static final int FIXED_PAGE_SIZE = 10;
@@ -61,15 +71,20 @@ public class InquiryStatementClient {
         this.signer = httpClientUtil.getSigner();
     }
 
+    // ==================== inquiryStatementList ====================
+
     /**
      * 查询 WF 账户流水列表
+     *
+     * <p>pageSize 固定为 10，pageNumber 范围 1-50。
+     * 当 fuzzyName 为空时，startTime 与 endTime 的间隔不超过 100 天。
      *
      * @param request 查询请求，startTime、endTime、pageNumber 必填
      * @return 账单流水响应
      * @throws WfException 参数校验失败或调用失败时抛出
      */
     public InquiryStatementResponse inquiryStatementList(InquiryStatementRequest request) {
-        validate(request);
+        validateListRequest(request);
 
         // 强制覆盖 pageSize 为固定值 10
         request.setPageSize(FIXED_PAGE_SIZE);
@@ -79,24 +94,52 @@ public class InquiryStatementClient {
             request.setPageNumber(1);
         }
 
-        String requestBody = buildRequestBody(request);
-        String url = config.getBaseUrl() + API_PATH;
+        String requestBody = buildListRequestBody(request);
+        String url = config.getBaseUrl() + PATH_LIST;
 
-        LOGGER.info("InquiryStatementClient invoking inquiryStatementList, url=" + url
+        LOGGER.info("StatementClient invoking inquiryStatementList, url=" + url
             + ", pageNumber=" + request.getPageNumber());
 
-        String responseBody = httpClientUtil.sendPostRequest(url, API_PATH, requestBody);
+        String responseBody = httpClientUtil.sendPostRequest(url, PATH_LIST, requestBody);
 
-        return parseResponse(responseBody);
+        return parseListResponse(responseBody);
     }
 
+    // ==================== inquiryStatementDetail ====================
+
     /**
-     * 参数校验
+     * 查询账单流水详情
+     *
+     * <p>查询指定账单流水的详细信息。需先调用 {@link #inquiryStatementList} 获取 accountingBizNo，
+     * 再以此为入参调用本方法。
+     *
+     * @param request 查询请求，accountingBizNo 必填
+     * @return 账单流水详情响应
+     * @throws WfException 参数校验失败或调用失败时抛出
+     */
+    public InquiryStatementDetailResponse inquiryStatementDetail(InquiryStatementDetailRequest request) {
+        validateDetailRequest(request);
+
+        String requestBody = buildDetailRequestBody(request);
+        String url = config.getBaseUrl() + PATH_DETAIL;
+
+        LOGGER.info("StatementClient invoking inquiryStatementDetail, url=" + url
+            + ", accountingBizNo=" + request.getAccountingBizNo());
+
+        String responseBody = httpClientUtil.sendPostRequest(url, PATH_DETAIL, requestBody);
+
+        return parseDetailResponse(responseBody);
+    }
+
+    // ==================== List 私有方法 ====================
+
+    /**
+     * 校验列表查询请求参数
      *
      * @param request 请求对象
      * @throws WfException 校验失败时抛出
      */
-    private void validate(InquiryStatementRequest request) {
+    private void validateListRequest(InquiryStatementRequest request) {
         if (request == null) {
             throw new WfException(WfErrorCode.PARAM_ILLEGAL, "InquiryStatementRequest must not be null");
         }
@@ -169,12 +212,12 @@ public class InquiryStatementClient {
     }
 
     /**
-     * 构建请求体 JSON 字符串，仅包含非空字段
+     * 构建列表查询请求体 JSON 字符串，仅包含非空字段
      *
      * @param request 请求对象
      * @return JSON 字符串
      */
-    private String buildRequestBody(InquiryStatementRequest request) {
+    private String buildListRequestBody(InquiryStatementRequest request) {
         JSONObject body = new JSONObject();
         body.put("startTime", request.getStartTime());
         body.put("endTime", request.getEndTime());
@@ -200,18 +243,18 @@ public class InquiryStatementClient {
     }
 
     /**
-     * 解析响应体
+     * 解析列表查询响应体
      *
      * @param responseBody 响应体 JSON 字符串
      * @return 解析后的响应对象
      * @throws WfException 响应格式非法或业务失败时抛出
      */
-    private InquiryStatementResponse parseResponse(String responseBody) {
+    private InquiryStatementResponse parseListResponse(String responseBody) {
         InquiryStatementResponse response;
         try {
             response = JSON.parseObject(responseBody, InquiryStatementResponse.class);
         } catch (Exception e) {
-            LOGGER.error("InquiryStatementClient failed to parse response, body=" + responseBody, e);
+            LOGGER.error("StatementClient failed to parse inquiryStatementList response, body=" + responseBody, e);
             throw new WfException(WfErrorCode.INVALID_RESPONSE_FORMAT,
                 "Failed to parse inquiryStatementList response: " + e.getMessage(), e);
         }
@@ -224,22 +267,96 @@ public class InquiryStatementClient {
 
         String resultStatus = result.getResultStatus();
         if (RESULT_STATUS_SUCCESS.equals(resultStatus)) {
-            LOGGER.info("InquiryStatementClient inquiryStatementList success, responseId=" + response.getResponseId()
+            LOGGER.info("StatementClient inquiryStatementList success, responseId=" + response.getResponseId()
                 + ", totalCount=" + response.getTotalCount());
             return response;
         } else if (RESULT_STATUS_FAIL.equals(resultStatus)) {
             WfErrorCode errorCode = WfErrorCode.fromCode(result.getResultCode());
-            LOGGER.warn("InquiryStatementClient inquiryStatementList failed, resultCode=" + result.getResultCode()
+            LOGGER.warn("StatementClient inquiryStatementList failed, resultCode=" + result.getResultCode()
                 + ", resultMessage=" + result.getResultMessage());
             throw new WfException(errorCode, result.getResultMessage());
         } else {
             // resultStatus=U 或未知状态，交由调用方重试
             WfErrorCode errorCode = WfErrorCode.fromCode(result.getResultCode());
-            LOGGER.warn("InquiryStatementClient inquiryStatementList unknown/retryable status, resultStatus="
+            LOGGER.warn("StatementClient inquiryStatementList unknown/retryable status, resultStatus="
                 + resultStatus + ", resultCode=" + result.getResultCode());
             throw new WfException(errorCode, result.getResultMessage());
         }
     }
+
+    // ==================== Detail 私有方法 ====================
+
+    /**
+     * 校验详情查询请求参数
+     *
+     * @param request 请求对象
+     * @throws WfException 校验失败时抛出
+     */
+    private void validateDetailRequest(InquiryStatementDetailRequest request) {
+        if (request == null) {
+            throw new WfException(WfErrorCode.PARAM_ILLEGAL, "InquiryStatementDetailRequest must not be null");
+        }
+        if (request.getAccountingBizNo() == null || request.getAccountingBizNo().trim().isEmpty()) {
+            throw new WfException(WfErrorCode.PARAM_ILLEGAL, "accountingBizNo is required");
+        }
+    }
+
+    /**
+     * 构建详情查询请求体 JSON 字符串
+     *
+     * @param request 请求对象
+     * @return JSON 字符串
+     */
+    private String buildDetailRequestBody(InquiryStatementDetailRequest request) {
+        JSONObject body = new JSONObject();
+        body.put("accountingBizNo", request.getAccountingBizNo());
+        return body.toJSONString();
+    }
+
+    /**
+     * 解析详情查询响应体
+     *
+     * @param responseBody 响应体 JSON 字符串
+     * @return 解析后的响应对象
+     * @throws WfException 响应格式非法或业务失败时抛出
+     */
+    private InquiryStatementDetailResponse parseDetailResponse(String responseBody) {
+        InquiryStatementDetailResponse response;
+        try {
+            response = JSON.parseObject(responseBody, InquiryStatementDetailResponse.class);
+        } catch (Exception e) {
+            LOGGER.error("StatementClient failed to parse inquiryStatementDetail response, body=" + responseBody, e);
+            throw new WfException(WfErrorCode.INVALID_RESPONSE_FORMAT,
+                "Failed to parse inquiryStatementDetail response: " + e.getMessage(), e);
+        }
+
+        Result result = response.getResult();
+        if (result == null) {
+            throw new WfException(WfErrorCode.INVALID_RESPONSE_FORMAT,
+                "inquiryStatementDetail response result is null");
+        }
+
+        String resultStatus = result.getResultStatus();
+        if (RESULT_STATUS_SUCCESS.equals(resultStatus)) {
+            LOGGER.info("StatementClient inquiryStatementDetail success, responseId=" + response.getResponseId()
+                + ", transactionId=" + response.getTransactionId()
+                + ", transactionStatus=" + response.getTransactionStatus());
+            return response;
+        } else if (RESULT_STATUS_FAIL.equals(resultStatus)) {
+            WfErrorCode errorCode = WfErrorCode.fromCode(result.getResultCode());
+            LOGGER.warn("StatementClient inquiryStatementDetail failed, resultCode=" + result.getResultCode()
+                + ", resultMessage=" + result.getResultMessage());
+            throw new WfException(errorCode, result.getResultMessage());
+        } else {
+            // resultStatus=U 或未知状态，交由调用方重试
+            WfErrorCode errorCode = WfErrorCode.fromCode(result.getResultCode());
+            LOGGER.warn("StatementClient inquiryStatementDetail unknown/retryable status, resultStatus="
+                + resultStatus + ", resultCode=" + result.getResultCode());
+            throw new WfException(errorCode, result.getResultMessage());
+        }
+    }
+
+    // ==================== Getter/Setter ====================
 
     /**
      * 测试专用：注入 WfHttpClientUtil（跳过 init()，同时同步 signer）。
