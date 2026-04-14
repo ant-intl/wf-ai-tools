@@ -8,14 +8,15 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 
 ## 模块索引
 
-| 模块           | 模块目录                      | 模块说明                                   |
-| -------------- | ----------------------------- | ------------------------------------------ |
-| 万里汇转账     | `references/transfer/`        | 转账至WF账户                               |
-| 全球分发       | `references/payout/`          | 代发到三方卡                               |
-| 收款人管理     | `references/beneficiary/`     | 卡模版查询、绑定/删除/编辑/查询收款人          |
-| 账户管理       | `references/balance-inquiry/` | 查询账户余额                               |
-| 账单管理       | `references/statement-inquiry/` | 查询账户流水及详情                        |
-| 交易信息管理   | `references/trade-order/`     | 上传交易订单（B2C 结汇 / B2B 订单关联）       |
+
+| 模块         | 模块目录                        | 模块说明                                |
+| ------------ | ------------------------------- | --------------------------------------- |
+| 万里汇转账   | `references/transfer/`          | 转账至WF账户                            |
+| 全球分发     | `references/payout/`            | 代发到三方卡                            |
+| 收款人管理   | `references/beneficiary/`       | 卡模版查询、绑定/删除/编辑/查询收款人   |
+| 账户管理     | `references/balance-inquiry/`   | 查询账户余额                            |
+| 账单管理     | `references/statement-inquiry/` | 查询账户流水及详情                      |
+| 交易信息管理 | `references/trade-order/`       | 上传交易订单（B2C 结汇 / B2B 订单关联） |
 
 ## 快速决策树
 
@@ -37,14 +38,15 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 
 ## 场景关键词匹配
 
-| 关键词 | 路由模块 |
-| --- | --- |
-| 转账、汇款、WF账户转账、内部转账、账户间转账、户到户、transfer、consultTransfer、createTransfer、inquiryTransfer、转账汇率、转账手续费、转账咨询、发起转账、转账状态、转账结果 | 万里汇转账 |
-| 代发、payout、发工资、付款到银行卡、付款到第三方、全球分发、跨境代发、批量付款、代发汇率、代发报价、quoteId、consultPayout、createPayout、inquiryPayout、代发状态、代发结果 | 全球分发（代发） |
-| 收款人、beneficiary、银行卡管理、绑卡、收款方、收款账户、卡模版、银行卡字段、inquiryTemplate、bindBeneficiary、editBeneficiary、removeBeneficiary、inquiryBeneficiaryList、添加收款人、删除收款人、修改收款人、收款人列表 | 收款人管理 |
-| 余额、账户余额、balance、查余额、inquiryBalance、账户可用余额、币种余额 | 余额查询 |
-| 账单、流水、交易记录、statement、对账、账户流水、inquiryStatementList、inquiryStatementDetail、流水列表、流水详情、账单详情 | 账单查询 |
-| 交易订单、trade order、结汇、B2B订单、订单上传、PAY_INTO_CHINA、CREATE_B2B_ORDERS、submitTradeOrder、inquiryTradeOrder、notifyTradeOrder、订单回调、异步通知、webhook | 交易订单管理 |
+
+| 关键词                                                                                                                                                                                                                    | 路由模块         |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| 转账、汇款、WF账户转账、内部转账、账户间转账、户到户、transfer、consultTransfer、createTransfer、inquiryTransfer、转账汇率、转账手续费、转账咨询、发起转账、转账状态、转账结果                                            | 万里汇转账       |
+| 代发、payout、发工资、付款到银行卡、付款到第三方、全球分发、跨境代发、批量付款、代发汇率、代发报价、quoteId、consultPayout、createPayout、inquiryPayout、代发状态、代发结果                                               | 全球分发（代发） |
+| 收款人、beneficiary、银行卡管理、绑卡、收款方、收款账户、卡模版、银行卡字段、inquiryTemplate、bindBeneficiary、editBeneficiary、removeBeneficiary、inquiryBeneficiaryList、添加收款人、删除收款人、修改收款人、收款人列表 | 收款人管理       |
+| 余额、账户余额、balance、查余额、inquiryBalance、账户可用余额、币种余额                                                                                                                                                   | 余额查询         |
+| 账单、流水、交易记录、statement、对账、账户流水、inquiryStatementList、inquiryStatementDetail、流水列表、流水详情、账单详情                                                                                               | 账单查询         |
+| 交易订单、trade order、结汇、B2B订单、订单上传、PAY_INTO_CHINA、CREATE_B2B_ORDERS、submitTradeOrder、inquiryTradeOrder、notifyTradeOrder、订单回调、异步通知、webhook                                                     | 交易订单管理     |
 
 ## 澄清话术
 
@@ -87,6 +89,8 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 3. **加载公共代码**：读取 `references/common/` 下的公共代码模板
 4. **加载接口代码**：读取对应接口目录下的代码模板
 5. **生成代码**：根据用户项目结构生成代码，替换 `{basePackage}`（Java）或 `{moduleName}`（Golang）占位符
+6. **代码检查**：执行「代码生成后检查清单」中的各项检查
+7. **测试验证**：运行单元测试，确保代码可正常编译和运行
 
 ## Pre-Generation Questions (MUST ASK)
 
@@ -174,25 +178,95 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 
 ## 测试代码生成
 
-生成测试代码前，**必须**询问签名模式：
+每个 Client 类只需生成一个单元测试类，包含一个成功的测试方法即可。
 
+### 测试代码规范
 
-| 模式      | 说明                                                                              |
-| --------- | --------------------------------------------------------------------------------- |
-| Mock 签名 | Mock WfSigner 固定返回`"TESTING_SIGNATURE"`，跳过真实签名，适用于快速验证请求格式 |
-| 真实签名  | 使用用户提供的私钥/公钥文件路径，可完整跑通接口                                   |
+1. **仅生成 Client 类的测试**：只为 `*Client.java` 生成对应的 `*ClientTest.java`
+2. **仅保留一个成功测试方法**：每个测试类只包含 `testXXX_Success()` 一个测试方法
+3. **真实调用WF测试环境**：调用结果不mock，真实调用到WF测试环境，不过需要询问用户是用跳签模式，还是真实验签模式；
+4. **验证响应数据**：断言返回结果的关键字段
+
+## 代码生成后检查清单 (POST-GENERATION CHECKLIST)
+
+> ⚠️ **重要**：每次生成代码后，**必须**执行以下检查，确保代码质量和完整性。
+
+### 1. Model 类字段一致性检查
+
+**目的**：确保生成的 Model 类字段与模板文件完全一致，避免字段遗漏。
+
+**检查步骤**：
+
+1. 遍历生成的所有 Model 类（位于 `model/domain/`、`model/request/`、`model/response/`）
+2. 对比每个生成的类与对应模板文件（`references/{module}/{interface}/java/model/`）
+3. 检查字段数量、字段名称、字段类型是否一致
+4. 检查 Getter/Setter 方法是否完整
+
+**检查命令示例**：
+
+```bash
+# 对比生成的 FundMoveDetail.java 与模板
+diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statement-list/java/model/domain/FundMoveDetail.java
+```
+
+### 2. 单元测试运行检查
+
+**目的**：确保生成的代码可以正常编译和运行，没有语法错误。
+
+**检查步骤**：
+
+1. 进入用户项目目录
+2. 运行编译命令，确保无编译错误
+3. 运行生成的单元测试，确保测试用例可正常执行
+
+**预期结果**：
+
+- 编译成功，无错误
+- 单元测试可正常运行（即使测试用例失败，也要确保代码能跑起来）
+
+### 3. 包名和导入检查
+
+**目的**：确保生成的代码包名正确，导入语句无冲突。
+
+**检查要点**：
+
+- [ ]  包名与用户提供的路径一致
+- [ ]  无缺失的 import 语句
+- [ ]  无循环依赖
+
+### 检查清单执行记录
+
+每次生成代码后，在回复中必须包含以下检查记录：
+
+```
+✅ 代码生成后检查完成
+
+1. Model 类字段一致性检查：
+   - [x] model包下所有类 - 与模板一致
+   
+2. 单元测试运行检查：
+   - [x] 编译成功
+   - [x] 单元测试可正常运行
+
+3. 包名和导入检查：
+   - [x] 包名正确
+   - [x] 导入语句完整
+
+```
+
+---
 
 ## 安全红线
 
 > ⛔ 以下规则为万里汇 API 对接的**安全红线**，违反可能导致资金损失或安全事故，必须严格遵守。
 
-+   **私钥禁止硬编码**：RSA 私钥必须通过文件路径或密钥管理服务加载，严禁将私钥内容硬编码在源代码中。
-+   **私钥禁止记日志**：私钥内容不得出现在任何日志输出中，包括 debug 级别日志。
-+   **私钥禁止传公共仓库**：私钥文件不得上传到 GitHub、GitLab 等公共代码仓库，必须加入 `.gitignore`。
-+   **clientId / secretKey 禁止明文存储**：clientId 和密钥配置必须通过环境变量、配置中心或加密文件管理，禁止明文写入代码或配置文件提交到版本库。
-+   **响应必须验签**：收到 WF API 响应后必须使用 WF 公钥验签，确认响应来自万里汇，防止中间人篡改。
-+   **异步通知必须验签**：收到 notifyTradeOrder 等异步回调通知后，必须先验签再处理业务逻辑，防止伪造通知。
-+   **幂等性保障**：转账（createTransfer）和代发（createPayout）等资金类接口必须使用唯一的 transferRequestId / payoutRequestId，防止因重试导致重复扣款。
-+   **HTTPS 强制**：所有 API 请求必须通过 HTTPS 发送，禁止使用 HTTP 明文传输。
-+   **转账/代发结果不可假定**：发起转账或代发后，必须通过查询接口（inquiryTransfer / inquiryPayout）或异步通知确认最终状态，禁止仅凭请求响应的 status 判定最终结果。
-+   **生产密钥与测试密钥隔离**：生产环境和测试环境必须使用不同的 clientId 和密钥对，严禁混用。
++ **私钥禁止硬编码**：RSA 私钥必须通过文件路径或密钥管理服务加载，严禁将私钥内容硬编码在源代码中。
++ **私钥禁止记日志**：私钥内容不得出现在任何日志输出中，包括 debug 级别日志。
++ **私钥禁止传公共仓库**：私钥文件不得上传到 GitHub、GitLab 等公共代码仓库，必须加入 `.gitignore`。
++ **clientId / secretKey 禁止明文存储**：clientId 和密钥配置必须通过环境变量、配置中心或加密文件管理，禁止明文写入代码或配置文件提交到版本库。
++ **响应必须验签**：收到 WF API 响应后必须使用 WF 公钥验签，确认响应来自万里汇，防止中间人篡改。
++ **异步通知必须验签**：收到 notifyTradeOrder 等异步回调通知后，必须先验签再处理业务逻辑，防止伪造通知。
++ **幂等性保障**：转账（createTransfer）和代发（createPayout）等资金类接口必须使用唯一的 transferRequestId / payoutRequestId，防止因重试导致重复扣款。
++ **HTTPS 强制**：所有 API 请求必须通过 HTTPS 发送，禁止使用 HTTP 明文传输。
++ **转账/代发结果不可假定**：发起转账或代发后，必须通过查询接口（inquiryTransfer / inquiryPayout）或异步通知确认最终状态，禁止仅凭请求响应的 status 判定最终结果。
++ **生产密钥与测试密钥隔离**：生产环境和测试环境必须使用不同的 clientId 和密钥对，严禁混用。
