@@ -1,0 +1,10 @@
+# WorldFirst API Python SDK 依赖
+# Python >= 3.10
+
+# HTTP 客户端，用于发送签名请求和处理响应
+# 文档: https://docs.python-requests.org/
+requests>=2.28.0,<3.0.0
+
+# RSA256 签名/验签（SHA256withRSA, PKCS1v15, PEM 密钥加载）
+# 文档: https://cryptography.io/
+cryptography>=41.0.0,<44.0.0

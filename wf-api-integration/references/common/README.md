@@ -2,7 +2,7 @@
 
 Generates the shared foundation layer used by **all** WF API integration clients. This module provides configuration, RSA256 signing, HTTP communication, error handling, and common response models.
 
-**Note**: All Java template files use `{basePackage}` placeholder. Golang templates use `{moduleName}` placeholder. Replace with actual values when generating code.
+**Note**: All Java template files use `{basePackage}` placeholder. Golang templates use `{moduleName}` placeholder. Python templates use `{basePackage}` placeholder in import paths. Replace with actual values when generating code.
 
 ## Module Structure
 
@@ -21,19 +21,33 @@ common/
 │       │   └── WfException.java
 │       └── response/
 │           └── Result.java
-└── golang/
+├── golang/
+│   ├── config/
+│   │   └── config.go
+│   ├── signer/
+│   │   └── signer.go
+│   ├── util/
+│   │   └── wf_http_client.go
+│   └── model/
+│       ├── exception/
+│       │   ├── error_code.go
+│       │   └── wf_exception.go
+│       └── response/
+│           └── result.go
+└── python/
+    ├── requirements.txt
     ├── config/
-    │   └── config.go
+    │   └── wf_config.py
     ├── signer/
-    │   └── signer.go
+    │   └── wf_signer.py
     ├── util/
-    │   └── wf_http_client.go
+    │   └── wf_http_client.py
     └── model/
         ├── exception/
-        │   ├── error_code.go
-        │   └── wf_exception.go
+        │   ├── wf_error_code.py
+        │   └── wf_exception.py
         └── response/
-            └── result.go
+            └── result.py
 ```
 
 ## Design Principle
@@ -53,14 +67,14 @@ common/
 | API base URL | `https://open-sitprod-sg.alipay.com` |
 | Private key file path (PKCS#8) | `/path/to/private_key.pem` |
 | WF public key file path | `/path/to/wf_public_key.pem` |
-| Language (Java/Golang) | Java |
-| Base package (Java) or module name (Golang) | *(user input)* |
+| Language (Java/Golang/Python) | Java |
+| Base package (Java/Python) or module name (Golang) | *(user input)* |
 
 ---
 
 ## Component 1: WfConfig
 
-**Package:** `{basePackage}.config` (Java) / `config` (Golang)
+**Package:** `{basePackage}.config` (Java) / `config` (Golang) / `{basePackage}.wf.config` (Python)
 
 Holds all WF API configuration: client ID, base URL, key paths, and timeout settings.
 
@@ -84,68 +98,27 @@ Holds all WF API configuration: client ID, base URL, key paths, and timeout sett
 
 ### Java Template
 
-```java
-public class WfConfig {
-
-    /** WF client identifier */
-    private String clientId = "{USER_CLIENT_ID}";
-
-    /** WF user identifier（登录 userId） */
-    private String userId = "{USER_USER_ID}";
-
-    /** WF API base URL */
-    private String baseUrl = "{USER_BASE_URL}";
-
-    /** RSA private key file path (PKCS#8) */
-    private String privateKeyPath = "{USER_PRIVATE_KEY_PATH}";
-
-    /** WF RSA public key file path */
-    private String publicKeyPath = "{USER_PUBLIC_KEY_PATH}";
-
-    /** HTTP connect timeout in milliseconds */
-    private int connectTimeout = 10000;
-
-    /** HTTP read timeout in milliseconds */
-    private int readTimeout = 30000;
-
-    // standard getters and setters ...
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-}
-```
+Use `read_file` tool to view: `wf-api-integration/references/common/java/config/WfConfig.java`
 
 ### Golang Template
 
-```go
-package config
+Use `read_file` tool to view: `wf-api-integration/references/common/golang/config/config.go`
 
-type WfConfig struct {
-    ClientID       string
-    UserID         string
-    BaseURL        string
-    PrivateKeyPath string
-    PublicKeyPath  string
-}
+### Python Rules
 
-func NewWfConfig(clientID, userID, baseURL, privateKeyPath, publicKeyPath string) *WfConfig {
-    return &WfConfig{
-        ClientID:       clientID,
-        UserID:         userID,
-        BaseURL:        baseURL,
-        PrivateKeyPath: privateKeyPath,
-        PublicKeyPath:  publicKeyPath,
-    }
-}
-```
+- Constructor parameters support environment variable fallback via `os.getenv()`; avoid hardcoding sensitive information
+- Timeout units are **seconds** (not milliseconds), `connect_timeout` defaults to `10`, `read_timeout` defaults to `30`
+- `__repr__()` **must NOT** output `private_key_path` / `public_key_path` actual values
+
+### Python Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/python/config/wf_config.py`
 
 ---
 
 ## Component 2: WfSigner
 
-**Package:** `{basePackage}.signer` (Java) / `signer` (Golang)
+**Package:** `{basePackage}.signer` (Java) / `signer` (Golang) / `{basePackage}.wf.signer` (Python)
 
 Handles RSA256 request signing and response signature verification.
 
@@ -175,14 +148,28 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 
 ### Golang Interface & Struct
 
-```go
-type Signer interface {
-    GenerateSignatureWithPath(apiPath, clientID, requestTime, body string) (string, error)
-    GetRequestTime() string
-}
-```
+Use `read_file` tool to view: `wf-api-integration/references/common/golang/signer/signer.go`
 
 `WfSigner` struct implements `Signer` interface, enabling mock injection for testing.
+
+### Python Public Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `generate_signature(api_path, request_time, request_body)` | `str \| None` | Generate URL-encoded Base64 signature; return `None` on failure |
+| `verify_signature(signature_header, api_path, request_time, response_body)` | `bool` | Verify WF response signature; return `False` on failure |
+| `get_current_timestamp()` | `str` | ISO 8601 timestamp in Asia/Shanghai timezone (static method) |
+
+### Python Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/python/signer/wf_signer.py`
+
+### Python Rules
+
+- Uses `cryptography` library: `hashes.SHA256()` + `padding.PKCS1v15()` for signing
+- Private key loaded via `serialization.load_pem_private_key()`, public key via `serialization.load_pem_public_key()`
+- `generate_signature` returns `None` on any exception; caller MUST check before using
+- Uses Python `logging` module; signature content logged at DEBUG level
 
 ### Key Rules
 
@@ -197,7 +184,7 @@ type Signer interface {
 
 ## Component 3: WfHttpClientUtil
 
-**Package:** `{basePackage}.util` (Java) / `util` (Golang)
+**Package:** `{basePackage}.util` (Java) / `util` (Golang) / `{basePackage}.wf.util` (Python)
 
 Reusable HTTP layer for all WF API integrations. **Single responsibility**: all WF HTTP request logic lives here.
 
@@ -240,6 +227,20 @@ Every request MUST set these four headers:
 - `PostJSON(apiPath string, bodyBytes []byte) ([]byte, error)` — handles signing, headers, and request/response
 - Returns raw response body bytes; caller handles JSON unmarshaling
 
+### Python Design
+
+- `WfHttpClient` class wraps `requests.Session` with config and signer
+- Constructor: `WfHttpClient(config: WfConfig, signer: WfSigner = None)` — auto-creates signer if not provided (supports mock injection for testing)
+- `send_post_request(url, api_path, request_body) -> str` — handles signing, headers, request/response, and signature verification
+- `close()` — closes underlying `requests.Session`
+- Timeout uses `(connect_timeout, read_timeout)` tuple in **seconds**
+- Raises `WfException` on HTTP error (non-200) or signature verification failure
+- Response signature verification reads `Signature` and `response-time` headers
+
+### Python Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/python/util/wf_http_client.py`
+
 ### Rules
 
 - **Always** use `try-with-resources` for `CloseableHttpResponse` (Java)
@@ -258,7 +259,7 @@ Every request MUST set these four headers:
 
 ## Component 4: WfErrorCode
 
-**Package:** `{basePackage}.model.exception` (Java) / `model/exception` (Golang)
+**Package:** `{basePackage}.model.exception` (Java) / `model/exception` (Golang) / `{basePackage}.wf.model.exception` (Python)
 
 Enumeration of all WF API error codes with retryability flag.
 
@@ -273,35 +274,15 @@ Enumeration of all WF API error codes with retryability flag.
 
 ### Java Template
 
-```java
-public enum WfErrorCode {
-    PARAM_ILLEGAL("PARAM_ILLEGAL", false),
-    INVALID_SIGNATURE("INVALID_SIGNATURE", false),
-    HTTP_REQUEST_FAILED("HTTP_REQUEST_FAILED", false),
-    UNKNOWN_EXCEPTION("UNKNOWN_EXCEPTION", true),
-    // ... other codes
-    UNKNOWN("UNKNOWN", false);
-
-    private final String code;
-    private final boolean retryable;
-
-    // constructor, getters, fromCode() ...
-}
-```
+Use `read_file` tool to view: `wf-api-integration/references/common/java/model/exception/WfErrorCode.java`
 
 ### Golang Template
 
-```go
-type WfErrorCode string
+Use `read_file` tool to view: `wf-api-integration/references/common/golang/model/exception/error_code.go`
 
-const (
-    ParamIllegal    WfErrorCode = "PARAM_ILLEGAL"
-    InvalidSignature WfErrorCode = "INVALID_SIGNATURE"
-    // ...
-)
+### Python Template
 
-func (e WfErrorCode) IsRetryable() bool { ... }
-```
+Use `read_file` tool to view: `wf-api-integration/references/common/python/model/exception/wf_error_code.py`
 
 ### Rules
 
@@ -312,42 +293,27 @@ func (e WfErrorCode) IsRetryable() bool { ... }
 
 ## Component 5: WfException
 
-**Package:** `{basePackage}.model.exception` (Java) / `model/exception` (Golang)
+**Package:** `{basePackage}.model.exception` (Java) / `model/exception` (Golang) / `{basePackage}.wf.model.exception` (Python)
 
 Unified exception type for all WF API errors.
 
 ### Java Template
 
-```java
-public class WfException extends RuntimeException {
-    private final WfErrorCode errorCode;
-
-    public WfException(WfErrorCode errorCode, String message) { ... }
-    public WfException(WfErrorCode errorCode, String message, Throwable cause) { ... }
-
-    public WfErrorCode getErrorCode() { return errorCode; }
-    public boolean isRetryable() { return errorCode != null && errorCode.isRetryable(); }
-}
-```
+Use `read_file` tool to view: `wf-api-integration/references/common/java/model/exception/WfException.java`
 
 ### Golang Template
 
-```go
-type WfException struct {
-    Code    WfErrorCode
-    Message string
-}
+Use `read_file` tool to view: `wf-api-integration/references/common/golang/model/exception/wf_exception.go`
 
-func (e *WfException) Error() string {
-    return fmt.Sprintf("WF Error [%s]: %s", e.Code, e.Message)
-}
-```
+### Python Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/python/model/exception/wf_exception.py`
 
 ---
 
 ## Component 6: Result
 
-**Package:** `{basePackage}.model.response` (Java) / `model/response` (Golang)
+**Package:** `{basePackage}.model.response` (Java) / `model/response` (Golang) / `{basePackage}.wf.model.response` (Python)
 
 Common response result object used by all WF API responses.
 
@@ -361,34 +327,15 @@ Common response result object used by all WF API responses.
 
 ### Java Template
 
-```java
-public class Result {
-    private String resultStatus;
-    private String resultCode;
-    private String resultMessage;
-
-    // standard getters and setters ...
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-}
-```
+Use `read_file` tool to view: `wf-api-integration/references/common/java/model/response/Result.java`
 
 ### Golang Template
 
-```go
-type Result struct {
-    ResultStatus  string `json:"resultStatus"`
-    ResultCode    string `json:"resultCode"`
-    ResultMessage string `json:"resultMessage"`
-}
+Use `read_file` tool to view: `wf-api-integration/references/common/golang/model/response/result.go`
 
-func (r *Result) IsSuccess() bool { return r.ResultStatus == "S" }
-func (r *Result) IsFailure() bool { return r.ResultStatus == "F" }
-func (r *Result) IsUnknown() bool { return r.ResultStatus == "U" }
-```
+### Python Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/python/model/response/result.py`
 
 ---
 
@@ -399,17 +346,31 @@ func (r *Result) IsUnknown() bool { return r.ResultStatus == "U" }
 | `InvalidKeyException` on sign | PKCS#1 key used | Convert to PKCS#8 with `openssl pkcs8` |
 | Signature mismatch | Extra spaces/newlines in content | Use exact format specified above |
 | Verification always false | Wrong `requestTime` | Use original request's `requestTime`, not a new timestamp |
-| `privateKeyPath` leaked to logs | `toString()` includes key paths | `WfConfig.toString()` must NOT output key paths |
+| `privateKeyPath` leaked to logs | `toString()` includes key paths | `WfConfig.toString()` / `__repr__()` must NOT output key paths |
 | Duplicate `WfErrorCode` entries | Re-generated entire enum file | Append new codes to existing file |
+| Python `ImportError` for `cryptography` | Missing dependency | Run `pip install -r requirements.txt` |
+| Python timeout unit mismatch | Using milliseconds instead of seconds | Python `requests` uses seconds; `connect_timeout=10`, `read_timeout=30` |
 
 ---
 
 ## How to Generate
 
-1. Ask user for: project path, language (Java/Golang)
+1. Ask user for: project path, language (Java/Golang/Python)
 2. If Golang: read `go.mod` to get module name, replace `{moduleName}`
 3. If Java: ask for base package, replace `{basePackage}`
-4. Ask for credentials (clientID, userId, baseURL, key paths)
-5. Generate all 6 components in order: WfConfig → WfSigner → WfHttpClientUtil → WfErrorCode → WfException → Result
-6. Template files under `java/` and `golang/` are reference implementations
+4. If Python: ask for base package, replace `{basePackage}` in import paths; generate `requirements.txt`
+5. Ask for credentials (clientID, userId, baseURL, key paths)
+6. Generate all 6 components in order: WfConfig → WfSigner → WfHttpClientUtil → WfErrorCode → WfException → Result
+7. Template files under `java/`, `golang/`, and `python/` are reference implementations
+
+---
+
+## Python Dependencies
+
+Python version requires `Python >= 3.10`. The `requirements.txt` includes:
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `requests` | `>=2.28.0,<3.0.0` | HTTP client for sending signed requests |
+| `cryptography` | `>=41.0.0,<44.0.0` | RSA256 signing/verification (SHA256withRSA, PKCS1v15, PEM key loading) |
 
