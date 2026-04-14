@@ -4,10 +4,12 @@
  */
 package {basePackage}.wf;
 
-import {basePackage}.wf.client.account.InquiryAvailableQuotaClient;
+import {basePackage}.wf.client.account.InquiryAccountInfoClient;
 import {basePackage}.wf.config.WfConfig;
 import {basePackage}.wf.model.exception.WfException;
+import {basePackage}.wf.model.request.InquiryBalanceRequest;
 import {basePackage}.wf.model.request.InquiryAvailableQuotaRequest;
+import {basePackage}.wf.model.response.InquiryBalanceResponse;
 import {basePackage}.wf.model.response.InquiryAvailableQuotaResponse;
 import {basePackage}.wf.signer.WfSigner;
 import {basePackage}.wf.util.WfHttpClientUtil;
@@ -16,9 +18,10 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * InquiryAvailableQuotaClient 集成测试。
+ * InquiryAccountInfoClient 集成测试。
  *
- * <p>Mock WfConfig，不 Mock WfHttpClientUtil（请求真实发往 WF 接口）。
+ * <p>包含 inquiryBalance 和 inquiryAvailableQuota 两个接口的测试。
+ * Mock WfConfig，不 Mock WfHttpClientUtil（请求真实发往 WF 接口）。
  * WfSigner 根据签名模式决定是否 Mock：
  * <ul>
  *   <li>Mock 签名模式：generateSignature 固定返回 "TESTING_SIGNATURE"，WF 返回 INVALID_SIGNATURE</li>
@@ -26,14 +29,14 @@ import org.mockito.Mockito;
  * </ul>
  *
  * @author Qoder
- * @version InquiryAvailableQuotaClientTest.java, v 0.1 2026-04-10
+ * @version InquiryAccountInfoClientTest.java, v 0.1 2026-04-14
  */
-public class InquiryAvailableQuotaClientTest {
+public class InquiryAccountInfoClientTest {
 
     private static final String CLIENT_ID = "YOUR_CLIENT_ID";
     private static final String BASE_URL = "https://open-sitprod-sg.alipay.com";
 
-    private InquiryAvailableQuotaClient client;
+    private InquiryAccountInfoClient client;
     private WfConfig mockConfig;
 
     @Before
@@ -54,17 +57,46 @@ public class InquiryAvailableQuotaClientTest {
             .thenReturn(true);
 
         WfHttpClientUtil httpClientUtil = new WfHttpClientUtil(mockConfig, mockSigner);
-        client = new InquiryAvailableQuotaClient();
+        client = new InquiryAccountInfoClient();
         client.setConfig(mockConfig);
         client.setHttpClientUtil(httpClientUtil);
 
         // --- 真实签名模式（需要替换下方密钥路径并切换此段代码）---
         // Mockito.when(mockConfig.getPrivateKeyPath()).thenReturn("/path/to/your/private_key.pem");
         // Mockito.when(mockConfig.getPublicKeyPath()).thenReturn("/path/to/your/wf_public_key.pem");
-        // client = new InquiryAvailableQuotaClient();
+        // client = new InquiryAccountInfoClient();
         // client.setConfig(mockConfig);
         // client.init();
     }
+
+    // ==================== inquiryBalance Tests ====================
+
+    /**
+     * 测试查询所有币种余额。
+     */
+    @Test
+    public void testInquiryBalance() {
+        InquiryBalanceRequest request = new InquiryBalanceRequest();
+        // 不传 currencyList 则查询所有币种
+
+        System.out.println("====== testInquiryBalance ======");
+        System.out.println("Request: " + request);
+
+        try {
+            InquiryBalanceResponse response = client.inquiryBalance(request);
+            System.out.println("Response: " + response);
+            System.out.println("ResultStatus: " + response.getResult().getResultStatus());
+            if (response.getAccountBalanceList() != null) {
+                System.out.println("Balance count: " + response.getAccountBalanceList().size());
+            }
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+
+        System.out.println("================================");
+    }
+
+    // ==================== inquiryAvailableQuota Tests ====================
 
     /**
      * 测试按用户ID查询结汇额度。

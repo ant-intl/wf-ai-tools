@@ -64,21 +64,24 @@
 ```
 java/
 ├── client/
-│   ├── InquiryBalanceClient.java
-│   └── InquiryBalanceClientTest.java
+│   ├── InquiryAccountInfoClient.java          # 统一客户端，包含 balance + quota 两个方法
+│   └── InquiryAccountInfoClientTest.java
 └── model/
     ├── domain/AccountBalance.java
     ├── request/InquiryBalanceRequest.java
     └── response/InquiryBalanceResponse.java
 ```
 
+> 注意：`InquiryAccountInfoClient` 同时包含 `inquiryBalance` 和 `inquiryAvailableQuota` 两个方法，
+> `inquiry-available-quota` 模块下仅有 model 类，无需单独的 Client。
+
 ### Golang 模板结构
 
 ```
 golang/
 ├── client/
-│   ├── inquiry_balance_client.go
-│   └── inquiry_balance_integration_test.go
+│   ├── inquiry_account_info_client.go          # 统一客户端，包含两个方法
+│   └── inquiry_account_info_client_integration_test.go
 └── model/
     ├── request/inquiry_balance_request.go
     └── response/inquiry_balance_response.go
