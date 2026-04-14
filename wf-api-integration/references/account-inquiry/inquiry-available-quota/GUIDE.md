@@ -36,8 +36,8 @@ POST /amsin/api/v1/business/account/inquiryAvailableQuota
 ### Java
 
 ```java
-// 创建客户端
-InquiryAvailableQuotaClient client = new InquiryAvailableQuotaClient();
+// 创建客户端（统一客户端，位于 inquiry-balance 模块下）
+InquiryAccountInfoClient client = new InquiryAccountInfoClient();
 client.setConfig(wfConfig);
 client.init();
 
@@ -57,13 +57,16 @@ if (response.isSuccess()) {
 }
 ```
 
+> 注意：`InquiryAccountInfoClient` 位于 `inquiry-balance/` 模块下，
+> 同时包含 `inquiryBalance` 和 `inquiryAvailableQuota` 两个方法。
+
 ### Golang
 
 ```go
-// 创建客户端
+// 创建客户端（统一客户端，位于 inquiry-balance 模块下）
 cfg := config.NewWfConfig(clientID, userID, baseURL, privateKeyPath, publicKeyPath)
 s, _ := signer.NewWfSigner(privateKeyPath, publicKeyPath)
-client := client.NewInquiryAvailableQuotaClient(cfg, s)
+client := client.NewInquiryAccountInfoClient(util.NewWfHttpClient(cfg, s))
 
 // 构建请求
 req := &request.InquiryAvailableQuotaRequest{
@@ -85,6 +88,28 @@ if resp.IsSuccess() {
         resp.AvailableQuota.Currency)
 }
 ```
+
+### Java 模板结构
+
+```
+java/
+└── model/
+    ├── request/InquiryAvailableQuotaRequest.java
+    └── response/InquiryAvailableQuotaResponse.java
+```
+
+> 注意：`InquiryAccountInfoClient` 位于 `inquiry-balance/java/client/` 下。
+
+### Golang 模板结构
+
+```
+golang/
+└── model/
+    ├── request/inquiry_available_quota_request.go
+    └── response/inquiry_available_quota_response.go
+```
+
+> 注意：`InquiryAccountInfoClient` 位于 `inquiry-balance/golang/client/` 下。
 
 ## 四种累计方式说明
 
