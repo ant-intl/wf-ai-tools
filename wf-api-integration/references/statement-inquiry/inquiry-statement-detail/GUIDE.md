@@ -86,9 +86,6 @@
 
 ```
 java/
-├── client/
-│   ├── InquiryStatementDetailClient.java
-│   └── InquiryStatementDetailClientTest.java
 └── model/
     ├── domain/
     │   └── RelatedStatement.java
@@ -96,21 +93,23 @@ java/
     └── response/InquiryStatementDetailResponse.java
 ```
 
-> 注意：`Amount`、`FundMoveDetail`、`ForeignExchangeQuote`、`OperatorInfo` 等 domain 类与 `inquiry-statement-list` 共用，无需重复生成。
+> 注意：`StatementClient` 位于 `inquiry-statement-list/` 模块下，
+> 同时包含 `inquiryStatementList` 和 `inquiryStatementDetail` 两个方法。
+> `Amount`、`FundMoveDetail`、`ForeignExchangeQuote`、`OperatorInfo` 等 domain 类与 `inquiry-statement-list` 共用，无需重复生成。
 
 ### Golang 模板结构
 
 ```
 golang/
-├── client/
-│   ├── inquiry_statement_detail_client.go
-│   └── inquiry_statement_detail_integration_test.go
 └── model/
     ├── request/inquiry_statement_detail_request.go
     └── response/inquiry_statement_detail_response.go
 ```
 
-## InquiryStatementDetailClient 关键行为
+> 注意：`StatementClient` 位于 `inquiry-statement-list/golang/client/` 下，
+> 同时包含 `InquiryStatementList` 和 `InquiryStatementDetail` 两个方法。
+
+## StatementClient.inquiryStatementDetail 关键行为
 
 1. **参数校验**：`accountingBizNo` 必填，不能为空
 2. **构建请求体**：仅包含 `accountingBizNo` 字段
