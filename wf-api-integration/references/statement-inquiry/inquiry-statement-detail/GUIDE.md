@@ -80,7 +80,7 @@
 
 ## 示例代码
 
-参考同目录下 `java/` 和 `golang/` 中的模板代码。
+参考同目录下 `java/`、`golang/` 和 `python/` 中的模板代码。
 
 ### Java 模板结构
 
@@ -108,6 +108,21 @@ golang/
 
 > 注意：`StatementClient` 位于 `inquiry-statement-list/golang/client/` 下，
 > 同时包含 `InquiryStatementList` 和 `InquiryStatementDetail` 两个方法。
+
+### Python 模板结构
+
+```
+python/
+└── model/
+    ├── domain/
+    │   └── related_statement.py            # RelatedStatement
+    ├── request/inquiry_statement_detail_request.py
+    └── response/inquiry_statement_detail_response.py
+```
+
+> 注意：`StatementClient` 位于 `inquiry-statement-list/python/client/` 下，
+> 同时包含 `inquiry_statement_list` 和 `inquiry_statement_detail` 两个方法。
+> `Amount`、`FundMoveDetail`、`ForeignExchangeQuote`、`OperatorInfo` 等 domain 类与 `inquiry-statement-list` 共用，无需重复生成。
 
 ## StatementClient.inquiryStatementDetail 关键行为
 

@@ -72,7 +72,7 @@
 
 ## 示例代码
 
-参考同目录下 `java/` 和 `golang/` 中的模板代码。
+参考同目录下 `java/`、`golang/` 和 `python/` 中的模板代码。
 
 ### Java 模板结构
 
@@ -105,6 +105,24 @@ golang/
     ├── request/inquiry_statement_request.go
     └── response/inquiry_statement_response.go
 ```
+
+### Python 模板结构
+
+```
+python/
+├── client/
+│   ├── statement_client.py               # 统一客户端，包含 list + detail 两个方法
+│   └── statement_client_test.py
+└── model/
+    ├── domain/
+    │   └── statement_record.py            # Amount, ForeignExchangeQuote, FundMoveDetail, OperatorInfo, StatementRecord
+    ├── request/inquiry_statement_request.py
+    └── response/inquiry_statement_response.py
+```
+
+> 注意：Python 版 `StatementClient` 同时包含 `inquiry_statement_list` 和 `inquiry_statement_detail` 两个方法，
+> `inquiry-statement-detail` 模块下仅有 model 类，无需单独的 Client。
+> Python 公共基础设施（config、exception、signer、http_client）位于 `common/python/` 目录下。
 
 ## StatementClient.inquiryStatementList 关键行为
 
