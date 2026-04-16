@@ -49,8 +49,8 @@ class TestStatementClient(unittest.TestCase):
     def test_inquiry_statement_list(self):
         """测试查询账单流水列表"""
         request = InquiryStatementRequest(
-            start_time="2024-01-01T00:00:00+08:00",
-            end_time="2024-03-31T23:59:59+08:00",
+            start_time="2026-01-01T00:00:00+08:00",
+            end_time="2026-03-27T23:59:59+08:00",
             page_number=1,
         )
 
@@ -75,10 +75,20 @@ class TestStatementClient(unittest.TestCase):
     def test_inquiry_statement_detail(self):
         """测试查询账单流水详情
 
-        请替换 accounting_biz_no 为 inquiry_statement_list 返回的真实值。
+        先调用 inquiry_statement_list 获取真实的 accounting_biz_no，再查询详情。
         """
+        # Step 1: 查询流水列表，获取真实的 accounting_biz_no
+        list_request = InquiryStatementRequest(
+            start_time="2026-01-01T00:00:00+08:00",
+            end_time="2026-03-27T23:59:59+08:00",
+            page_number=1,
+        )
+        list_response = self.client.inquiry_statement_list(list_request)
+        accounting_biz_no = list_response.statement_list[1].accounting_biz_no
+
+        # Step 2: 查询流水详情
         request = InquiryStatementDetailRequest(
-            accounting_biz_no="YOUR_ACCOUNTING_BIZ_NO",
+            accounting_biz_no=accounting_biz_no,
         )
 
         try:
@@ -91,18 +101,8 @@ class TestStatementClient(unittest.TestCase):
 
             if response.transaction_amount:
                 print(f"  TransactionAmount: {response.transaction_amount}")
-            if response.fee_amount:
-                print(f"  FeeAmount: {response.fee_amount}")
-            if response.net_amount:
-                print(f"  NetAmount: {response.net_amount}")
-            if response.receive_amount:
-                print(f"  ReceiveAmount: {response.receive_amount}")
             if response.fund_move_detail:
-                print(f"  Payer: {response.fund_move_detail.payer_name} | "
-                      f"Beneficiary: {response.fund_move_detail.beneficiary_name}")
-            if response.fail_reason:
-                print(f"  FailReason: {response.fail_reason.result_code} - "
-                      f"{response.fail_reason.result_message}")
+                print(f"  FundMoveDetail: {response.fund_move_detail}")
             if response.combined_transaction_list:
                 print(f"  CombinedTransactionList count: {len(response.combined_transaction_list)}")
         except WfException as e:
