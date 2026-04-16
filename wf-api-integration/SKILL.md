@@ -14,7 +14,7 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 | 万里汇转账   | `references/transfer/`          | 转账至WF账户                            |
 | 全球分发     | `references/payout/`            | 代发到三方卡                            |
 | 收款人管理   | `references/beneficiary/`       | 卡模版查询、绑定/删除/编辑/查询收款人   |
-| 账户管理     | `references/balance-inquiry/`   | 查询账户余额                            |
+| 账户管理     | `references/account-inquiry/`   | 查询账户余额                            |
 | 账单管理     | `references/statement-inquiry/` | 查询账户流水及详情                      |
 | 交易信息管理 | `references/trade-order/`       | 上传交易订单（B2C 结汇 / B2B 订单关联） |
 

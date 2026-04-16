@@ -6,67 +6,202 @@ package {basePackage}.wf;
 
 import {basePackage}.wf.client.account.InquiryAccountInfoClient;
 import {basePackage}.wf.config.WfConfig;
+import {basePackage}.wf.model.domain.AccountInfo;
+import {basePackage}.wf.model.domain.BankAccount;
+import {basePackage}.wf.model.domain.Customer;
 import {basePackage}.wf.model.exception.WfException;
+import {basePackage}.wf.model.request.InquiryAccountRequest;
 import {basePackage}.wf.model.request.InquiryBalanceRequest;
 import {basePackage}.wf.model.request.InquiryAvailableQuotaRequest;
+import {basePackage}.wf.model.response.InquiryAccountResponse;
 import {basePackage}.wf.model.response.InquiryBalanceResponse;
 import {basePackage}.wf.model.response.InquiryAvailableQuotaResponse;
-import {basePackage}.wf.signer.WfSigner;
-import {basePackage}.wf.util.WfHttpClientUtil;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
  * InquiryAccountInfoClient 集成测试。
  *
- * <p>包含 inquiryBalance 和 inquiryAvailableQuota 两个接口的测试。
- * Mock WfConfig，不 Mock WfHttpClientUtil（请求真实发往 WF 接口）。
- * WfSigner 根据签名模式决定是否 Mock：
- * <ul>
- *   <li>Mock 签名模式：generateSignature 固定返回 "TESTING_SIGNATURE"，WF 返回 INVALID_SIGNATURE</li>
- *   <li>真实签名模式：使用真实密钥路径，可完整跑通接口</li>
- * </ul>
+ * <p>包含 inquiryAccount、inquiryBalance 和 inquiryAvailableQuota 三个接口的测试。
  *
  * @author Qoder
  * @version InquiryAccountInfoClientTest.java, v 0.1 2026-04-14
  */
 public class InquiryAccountInfoClientTest {
 
-    private static final String CLIENT_ID = "YOUR_CLIENT_ID";
-    private static final String BASE_URL = "https://open-sitprod-sg.alipay.com";
-
     private InquiryAccountInfoClient client;
     private WfConfig mockConfig;
 
     @Before
     public void setUp() {
-        mockConfig = Mockito.mock(WfConfig.class);
-        Mockito.when(mockConfig.getClientId()).thenReturn(CLIENT_ID);
-        Mockito.when(mockConfig.getBaseUrl()).thenReturn(BASE_URL);
-        Mockito.when(mockConfig.getConnectTimeout()).thenReturn(10000);
-        Mockito.when(mockConfig.getReadTimeout()).thenReturn(30000);
-
-        // --- Mock 签名模式（跳过验签，WF 将返回 INVALID_SIGNATURE）---
-        WfSigner mockSigner = Mockito.mock(WfSigner.class);
-        Mockito.when(mockSigner.generateSignature(
-                Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
-            .thenReturn("TESTING_SIGNATURE");
-        Mockito.when(mockSigner.verifySignature(
-                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
-            .thenReturn(true);
-
-        WfHttpClientUtil httpClientUtil = new WfHttpClientUtil(mockConfig, mockSigner);
+        mockConfig = new WfConfig();
         client = new InquiryAccountInfoClient();
         client.setConfig(mockConfig);
-        client.setHttpClientUtil(httpClientUtil);
+        client.init();
+    }
 
-        // --- 真实签名模式（需要替换下方密钥路径并切换此段代码）---
-        // Mockito.when(mockConfig.getPrivateKeyPath()).thenReturn("/path/to/your/private_key.pem");
-        // Mockito.when(mockConfig.getPublicKeyPath()).thenReturn("/path/to/your/wf_public_key.pem");
-        // client = new InquiryAccountInfoClient();
-        // client.setConfig(mockConfig);
-        // client.init();
+    // ==================== inquiryAccount Tests ====================
+
+    /**
+     * 测试查询收款账户信息（RECEIVE_ACCOUNT）。
+     */
+    @Test
+    public void testInquiryAccountByReceiveAccount() {
+        InquiryAccountRequest request = new InquiryAccountRequest();
+        request.setAccountType("RECEIVE_ACCOUNT");
+        request.setReferenceCustomerId("YOUR_CUSTOMER_ID");
+
+        System.out.println("====== testInquiryAccountByReceiveAccount ======");
+        System.out.println("Request: " + request);
+
+        try {
+            InquiryAccountResponse response = client.inquiryAccount(request);
+            System.out.println("Response: " + response);
+            System.out.println("ResultStatus: " + response.getResult().getResultStatus());
+            System.out.println("AccountId: " + response.getAccountId());
+
+            if (response.getAccountInfos() != null) {
+                System.out.println("AccountInfos count: " + response.getAccountInfos().size());
+                for (AccountInfo info : response.getAccountInfos()) {
+                    System.out.println("  - AccountNo: " + info.getAccountNo()
+                        + " | Status: " + info.getAccountStatus()
+                        + " | Currencies: " + info.getCurrencyList());
+                }
+            }
+
+            Customer customer = response.getCustomer();
+            if (customer != null) {
+                System.out.println("Customer: " + customer.getCustomerCompanyName());
+            }
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+
+        System.out.println("=================================================");
+    }
+
+    /**
+     * 测试查询虚拟账户信息（VIRTUAL_ACCOUNT）。
+     */
+    @Test
+    public void testInquiryAccountByVirtualAccount() {
+        InquiryAccountRequest request = new InquiryAccountRequest();
+        request.setAccountType("VIRTUAL_ACCOUNT");
+        request.setAccessToken("YOUR_ACCESS_TOKEN");
+
+        System.out.println("====== testInquiryAccountByVirtualAccount ======");
+        System.out.println("Request: " + request);
+
+        try {
+            InquiryAccountResponse response = client.inquiryAccount(request);
+            System.out.println("Response: " + response);
+            System.out.println("ResultStatus: " + response.getResult().getResultStatus());
+            System.out.println("AccountId: " + response.getAccountId());
+
+            if (response.getAccountInfos() != null) {
+                for (AccountInfo info : response.getAccountInfos()) {
+                    System.out.println("  - AccountNo: " + info.getAccountNo()
+                        + " | Status: " + info.getAccountStatus()
+                        + " | Currencies: " + info.getCurrencyList());
+                    if (info.getBankAccountList() != null) {
+                        for (BankAccount bank : info.getBankAccountList()) {
+                            System.out.println("    Bank: " + bank.getBankName()
+                                + " | Region: " + bank.getBankRegion()
+                                + " | AccountNo: " + bank.getBankAccountNo());
+                        }
+                    }
+                }
+            }
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+
+        System.out.println("=================================================");
+    }
+
+    /**
+     * 测试查询支付宝钱包信息（ALIPAY_WALLET）。
+     */
+    @Test
+    public void testInquiryAccountByAlipayWallet() {
+        InquiryAccountRequest request = new InquiryAccountRequest();
+        request.setAccountType("ALIPAY_WALLET");
+        request.setReferenceCustomerId("YOUR_CUSTOMER_ID");
+
+        System.out.println("====== testInquiryAccountByAlipayWallet ======");
+        System.out.println("Request: " + request);
+
+        try {
+            InquiryAccountResponse response = client.inquiryAccount(request);
+            System.out.println("Response: " + response);
+            System.out.println("ResultStatus: " + response.getResult().getResultStatus());
+
+            Customer customer = response.getCustomer();
+            if (customer != null) {
+                System.out.println("Customer: " + customer.getCustomerCompanyName()
+                    + " | LegalEntityType: " + customer.getLegalEntityType());
+            }
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+
+        System.out.println("================================================");
+    }
+
+    /**
+     * 测试查询关联公司支付宝钱包信息（ALIPAY_SHADOW_WALLET）。
+     */
+    @Test
+    public void testInquiryAccountByAlipayShadowWallet() {
+        InquiryAccountRequest request = new InquiryAccountRequest();
+        request.setAccountType("ALIPAY_SHADOW_WALLET");
+        request.setAccountId("YOUR_ACCOUNT_ID");
+
+        System.out.println("====== testInquiryAccountByAlipayShadowWallet ======");
+        System.out.println("Request: " + request);
+
+        try {
+            InquiryAccountResponse response = client.inquiryAccount(request);
+            System.out.println("Response: " + response);
+            System.out.println("ResultStatus: " + response.getResult().getResultStatus());
+
+            if (response.getAffiliatedCustomer() != null) {
+                System.out.println("AffiliatedCustomer: " + response.getAffiliatedCustomer().getCompanyName()
+                    + " | AlipayNo: " + response.getAffiliatedCustomer().getAlipayNo());
+            }
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+
+        System.out.println("=====================================================");
+    }
+
+    /**
+     * 测试查询企业支付宝钱包信息（ALIPAY_ORIGIN_WALLET）。
+     */
+    @Test
+    public void testInquiryAccountByAlipayOriginWallet() {
+        InquiryAccountRequest request = new InquiryAccountRequest();
+        request.setAccountType("ALIPAY_ORIGIN_WALLET");
+
+        System.out.println("====== testInquiryAccountByAlipayOriginWallet ======");
+        System.out.println("Request: " + request);
+
+        try {
+            InquiryAccountResponse response = client.inquiryAccount(request);
+            System.out.println("Response: " + response);
+            System.out.println("ResultStatus: " + response.getResult().getResultStatus());
+
+            if (response.getAlipayCustomer() != null) {
+                System.out.println("AlipayCustomer: " + response.getAlipayCustomer().getCompanyName()
+                    + " | AlipayNo: " + response.getAlipayCustomer().getAlipayNo()
+                    + " | Region: " + response.getAlipayCustomer().getRegion());
+            }
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+
+        System.out.println("=====================================================");
     }
 
     // ==================== inquiryBalance Tests ====================
