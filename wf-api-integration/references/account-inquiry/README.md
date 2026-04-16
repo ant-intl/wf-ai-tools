@@ -7,6 +7,7 @@
 | 查询账户信息 | `inquiry-account/` | 查询 WF 账户信息，包括账户类型、账号、激活状态、币种、银行账户等 |
 | 查询余额 | `inquiry-balance/` | 查询 WF 账户余额，支持按币种和余额类型过滤 |
 | 查询结汇额度 | `inquiry-available-quota/` | 查询可申报的结汇额度，支持四种累计方式 |
+| 查询子账号信息 | `inquiry-subuser/` | 查询万里汇主账号及子账号信息，支持分页 |
 
 ## 注意事项
 
@@ -25,4 +26,10 @@
 ### inquiryAvailableQuota
 - 支持四种累计方式：`USER_ID`、`RECEIVING_ACCOUNT`、`VIRTUAL_ACCOUNT`、`BENEFICIARY`
 - `BENEFICIARY` 方式时 `tradeType` 必填（`GOODS` 或 `SERVICE`）
+
+### inquirySubuser
+- `pageSize` 和 `pageNumber` 均为必填，`pageNumber` 从 1 开始
+- 仅**主账号**可调用，子账号调用将返回 `USER_ACCOUNT_NOT_PRIMARY`
+- `primaryUserInformation` 返回主账号信息，`userInformations` 返回当前页子账号列表
+- 子账号使用 `userNickName` 字段表示昵称，主账号使用 `userName` 字段
 

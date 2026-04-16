@@ -14,10 +14,11 @@ const (
 	pathInquiryAccount        = "/amsin/api/v1/business/account/inquiryAccount"
 	pathInquiryBalance        = "/amsin/api/v1/business/account/inquiryBalance"
 	pathInquiryAvailableQuota = "/amsin/api/v1/business/account/inquiryAvailableQuota"
+	pathInquirySubuser        = "/amsin/api/v1/business/user/inquirySubuser"
 )
 
 // InquiryAccountInfoClient handles account inquiry API business logic.
-// Includes InquiryAccount, InquiryBalance and InquiryAvailableQuota methods.
+// Includes InquiryAccount, InquiryBalance, InquiryAvailableQuota and InquirySubuser methods.
 // HTTP communication is delegated to WfHttpClient.
 type InquiryAccountInfoClient struct {
 	httpClient *util.WfHttpClient
@@ -67,6 +68,51 @@ func (c *InquiryAccountInfoClient) InquiryAccount(req *request.InquiryAccountReq
 	}
 
 	var resp response.InquiryAccountResponse
+	if err := json.Unmarshal(respBody, &resp); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
+	}
+
+	if resp.Result == nil || resp.Result.ResultStatus == "" {
+		return nil, exception.NewWfException(exception.InvalidResponseFormat, "resultStatus is missing")
+	}
+
+	switch resp.Result.ResultStatus {
+	case "S":
+		return &resp, nil
+	case "F":
+		return nil, exception.NewWfException(exception.FromCode(resp.Result.ResultCode), resp.Result.ResultMessage)
+	case "U":
+		return nil, exception.NewWfException(exception.FromCode(resp.Result.ResultCode), resp.Result.ResultMessage)
+	default:
+		return nil, exception.NewWfException(exception.InvalidResponseFormat,
+			fmt.Sprintf("unknown resultStatus: %s", resp.Result.ResultStatus))
+	}
+}
+
+// InquirySubuser calls the WF inquirySubuser API.
+// Query primary account and subaccount information with pagination.
+// Only the primary account is allowed to call this API.
+func (c *InquiryAccountInfoClient) InquirySubuser(req *request.InquirySubuserRequest) (*response.InquirySubuserResponse, error) {
+	if err := req.Validate(); err != nil {
+		return nil, exception.NewWfException(exception.ParamIllegal, err.Error())
+	}
+
+	bodyMap := map[string]interface{}{
+		"pageSize":   req.PageSize,
+		"pageNumber": req.PageNumber,
+	}
+
+	bodyBytes, err := json.Marshal(bodyMap)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	respBody, err := c.httpClient.PostJSON(pathInquirySubuser, bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp response.InquirySubuserResponse
 	if err := json.Unmarshal(respBody, &resp); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
