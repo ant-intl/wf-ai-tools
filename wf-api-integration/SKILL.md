@@ -1,10 +1,10 @@
 ---
 name: wf-api-integration
-description: Generate Java or Golang integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, balance inquiry, statement inquiry, and trade order management. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
+description: Generate Java, Golang, or Python integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, balance inquiry, statement inquiry, and trade order management. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
 ---
 # WF API Integration Skill
 
-帮助用户对接万里汇(WorldFirst) API，支持 Java 和 Golang 两种语言，涵盖转账、代发、收款人管理、余额查询、账单查询、交易订单管理等模块。
+帮助用户对接万里汇(WorldFirst) API，支持 Java、Golang 和 Python 三种语言，涵盖转账、代发、收款人管理、余额查询、账单查询、交易订单管理等模块。
 
 ## 模块索引
 
@@ -88,7 +88,7 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 2. **确认接口**：确认用户需要对接的具体接口，读取对应接口的 `GUIDE.md` 了解接口规范
 3. **加载公共代码**：读取 `references/common/` 下的公共代码模板
 4. **加载接口代码**：读取对应接口目录下的代码模板
-5. **生成代码**：根据用户项目结构生成代码，替换 `{basePackage}`（Java）或 `{moduleName}`（Golang）占位符
+5. **生成代码**：根据用户项目结构生成代码，替换 `{basePackage}`（Java）、`{moduleName}`（Golang）或 `{projectName}`（Python）占位符
 6. **代码检查**：执行「代码生成后检查清单」中的各项检查
 7. **测试验证**：运行单元测试，确保代码可正常编译和运行
 
@@ -99,10 +99,11 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 ### 基础信息
 
 1. **项目路径**：请问你的项目路径是什么？
-2. **语言选择**：你需要生成 Java 还是 Golang 的代码？
-3. **Base Package / Module Name**：
+2. **语言选择**：你需要生成 Java、Golang 还是 Python 的代码？
+3. **Base Package / Module Name / Project Name**：
    - Java：请提供 base package（如 `com.example.project`）
    - Golang：请提供 Go module name（如 `github.com/example/project`）
+   - Python：请提供项目名称（如 `wf_integration`），用于组织包结构
 
 ### WfConfig 配置属性（用于生成 WfConfig 类，禁止使用占位符）
 
@@ -114,7 +115,7 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 7. **私钥文件路径**：请提供 RSA 私钥文件路径（PKCS#8 格式），如 `/home/admin/keys/private_key.pem`
 8. **公钥文件路径**：请提供万里汇 RSA 公钥文件路径，如 `/home/admin/keys/wf_public_key.pem`
 
-> **重要**：用户提供的值直接填入生成的 WfConfig 代码中。如果用户表示暂时不确定某个值，应使用 Spring XML property placeholder（如 `${wf.clientId}`）或 Go 环境变量读取（如 `os.Getenv("WF_CLIENT_ID")`）而非硬编码占位符字符串。
+> **重要**：用户提供的值直接填入生成的 WfConfig 代码中。如果用户表示暂时不确定某个值，应使用 Spring XML property placeholder（如 `${wf.clientId}`）、Go 环境变量读取（如 `os.Getenv("WF_CLIENT_ID")`）或 Python 环境变量读取（如 `os.environ.get("WF_CLIENT_ID")`）而非硬编码占位符字符串。
 
 ## 公共依赖
 
@@ -144,10 +145,22 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 | WfErrorCode  | `model/exception/error_code.go`   | 错误码定义                             |
 | WfException  | `model/exception/wf_exception.go` | 异常定义                               |
 
+### Python (`references/common/python/`)
+
+
+| 组件         | 路径                                | 说明                           |
+| ------------ | ----------------------------------- | ------------------------------ |
+| WfConfig     | `config/wf_config.py`               | 配置管理                       |
+| WfSigner     | `signer/wf_signer.py`               | RSA256 签名/验签               |
+| WfHttpClient | `util/wf_http_client.py`            | HTTP 客户端封装                |
+| Result       | `model/response/result.py`          | 统一响应结果                   |
+| WfErrorCode  | `model/exception/wf_error_code.py`  | 错误码定义                     |
+| WfException  | `model/exception/wf_exception.py`   | 异常定义                       |
+
 ## 公共代码生成规则
 
 - **WfConfig**：使用 Pre-Generation Questions 中收集到的用户真实值（第 4-8 项）填充字段默认值，**禁止使用占位符**
-- **Result.java / result.go**：共享，仅首次生成，已存在则复用
+- **Result.java / result.go / result.py**：共享，仅首次生成，已存在则复用
 - **WfErrorCode**：共享，新接口的错误码追加到已有文件，不重复生成
 - **WfException**：共享，已存在则复用
 
@@ -165,6 +178,15 @@ description: Generate Java or Golang integration code for WorldFirst (WF) APIs i
 - 标准库优先，按包分文件
 - 依赖注入模式（构造函数注入）
 - `{moduleName}` 占位符替换为用户实际 go.mod 中的 module path
+
+### Python
+
+- Python 3.8+，使用 type hints 标注参数和返回值
+- snake_case 模块名、函数名、变量名，PascalCase 类名，UPPER_SNAKE_CASE 常量名
+- 4 空格缩进，每行最多 120 字符，遵循 PEP 8 规范
+- 使用 `dataclass` 或普通类定义 Model，属性使用 snake_case
+- 依赖管理通过 `requirements.txt` 声明，核心依赖：`requests`、`cryptography`
+- `{projectName}` 占位符替换为用户实际项目名称
 
 ## 签名算法
 
@@ -198,9 +220,9 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 **检查步骤**：
 
 1. 遍历生成的所有 Model 类（位于 `model/domain/`、`model/request/`、`model/response/`）
-2. 对比每个生成的类与对应模板文件（`references/{module}/{interface}/java/model/`）
+2. 对比每个生成的类与对应模板文件（`references/{module}/{interface}/{language}/model/`，其中 `{language}` 为 `java`、`golang` 或 `python`）
 3. 检查字段数量、字段名称、字段类型是否一致
-4. 检查 Getter/Setter 方法是否完整
+4. Java：检查 Getter/Setter 方法是否完整；Python：检查 `dataclass` 字段或属性定义是否完整
 
 **检查命令示例**：
 
@@ -230,8 +252,8 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 
 **检查要点**：
 
-- [ ]  包名与用户提供的路径一致
-- [ ]  无缺失的 import 语句
+- [ ]  Java：包名与用户提供的路径一致；Python：模块路径与项目结构一致
+- [ ]  无缺失的 import 语句（Python 中包括 `from ... import ...`）
 - [ ]  无循环依赖
 
 ### 检查清单执行记录

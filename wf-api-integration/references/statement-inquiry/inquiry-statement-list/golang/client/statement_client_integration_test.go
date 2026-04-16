@@ -35,8 +35,8 @@ func TestIntegration_InquiryStatementList(t *testing.T) {
 	c := newRealStatementClient(t)
 
 	resp, err := c.InquiryStatementList(&request.InquiryStatementRequest{
-		StartTime:  "2024-01-01T00:00:00+08:00",
-		EndTime:    "2024-03-31T23:59:59+08:00",
+		StartTime:  "2026-01-01T00:00:00+08:00",
+		EndTime:    "2026-03-27T23:59:59+08:00",
 		PageNumber: 1,
 	})
 	if err != nil {
@@ -58,12 +58,30 @@ func TestIntegration_InquiryStatementList(t *testing.T) {
 }
 
 // TestIntegration_InquiryStatementDetail queries statement detail from WF sandbox.
-// Replace accountingBizNo with a real value obtained from InquiryStatementList.
+// It first calls InquiryStatementList to obtain a real accountingBizNo.
 func TestIntegration_InquiryStatementDetail(t *testing.T) {
 	c := newRealStatementClient(t)
 
+	// Step 1: query statement list to get a real accountingBizNo
+	listResp, err := c.InquiryStatementList(&request.InquiryStatementRequest{
+		StartTime:  "2026-01-01T00:00:00+08:00",
+		EndTime:    "2026-03-27T23:59:59+08:00",
+		PageNumber: 1,
+	})
+	if err != nil {
+		if wfErr, ok := err.(*exception.WfException); ok {
+			fmt.Printf("[FAIL] InquiryStatementList Code: %s | Message: %s | Retryable: %v\n",
+				wfErr.Code, wfErr.Message, wfErr.Code.IsRetryable())
+		} else {
+			fmt.Printf("[FAIL] InquiryStatementList Error: %v\n", err)
+		}
+		t.FailNow()
+	}
+	accountingBizNo := listResp.StatementList[1].AccountingBizNo
+
+	// Step 2: query statement detail
 	resp, err := c.InquiryStatementDetail(&request.InquiryStatementDetailRequest{
-		AccountingBizNo: "YOUR_ACCOUNTING_BIZ_NO",
+		AccountingBizNo: accountingBizNo,
 	})
 	if err != nil {
 		if wfErr, ok := err.(*exception.WfException); ok {
@@ -82,21 +100,10 @@ func TestIntegration_InquiryStatementDetail(t *testing.T) {
 	if resp.TransactionAmount != nil {
 		fmt.Printf("  TransactionAmount: %+v\n", resp.TransactionAmount)
 	}
-	if resp.FeeAmount != nil {
-		fmt.Printf("  FeeAmount: %+v\n", resp.FeeAmount)
-	}
-	if resp.NetAmount != nil {
-		fmt.Printf("  NetAmount: %+v\n", resp.NetAmount)
-	}
-	if resp.ReceiveAmount != nil {
-		fmt.Printf("  ReceiveAmount: %+v\n", resp.ReceiveAmount)
-	}
 	if resp.FundMoveDetail != nil {
-		fmt.Printf("  Payer: %s | Beneficiary: %s\n",
-			resp.FundMoveDetail.PayerName, resp.FundMoveDetail.BeneficiaryName)
+		fmt.Printf("  FundMoveDetail: %+v\n", resp.FundMoveDetail)
 	}
-	if resp.FailReason != nil {
-		fmt.Printf("  FailReason: %s - %s\n", resp.FailReason.ResultCode, resp.FailReason.ResultMessage)
+	if resp.CombinedTransactionList != nil {
+		fmt.Printf("  CombinedTransactionList count: %d\n", len(resp.CombinedTransactionList))
 	}
-	fmt.Printf("  CombinedTransactionList count: %d\n", len(resp.CombinedTransactionList))
 }
