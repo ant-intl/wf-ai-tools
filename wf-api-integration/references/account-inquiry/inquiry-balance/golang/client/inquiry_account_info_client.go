@@ -11,12 +11,13 @@ import (
 )
 
 const (
+	pathInquiryAccount        = "/amsin/api/v1/business/account/inquiryAccount"
 	pathInquiryBalance        = "/amsin/api/v1/business/account/inquiryBalance"
 	pathInquiryAvailableQuota = "/amsin/api/v1/business/account/inquiryAvailableQuota"
 )
 
 // InquiryAccountInfoClient handles account inquiry API business logic.
-// Includes InquiryBalance and InquiryAvailableQuota methods.
+// Includes InquiryAccount, InquiryBalance and InquiryAvailableQuota methods.
 // HTTP communication is delegated to WfHttpClient.
 type InquiryAccountInfoClient struct {
 	httpClient *util.WfHttpClient
@@ -25,6 +26,66 @@ type InquiryAccountInfoClient struct {
 // NewInquiryAccountInfoClient creates a new InquiryAccountInfoClient
 func NewInquiryAccountInfoClient(httpClient *util.WfHttpClient) *InquiryAccountInfoClient {
 	return &InquiryAccountInfoClient{httpClient: httpClient}
+}
+
+// InquiryAccount calls the WF inquiryAccount API.
+// Query account information including account type, account number, activation status, currencies, etc.
+//
+// Supported accountType values:
+//   - RECEIVE_ACCOUNT: WF receiving account (requires referenceCustomerId)
+//   - VIRTUAL_ACCOUNT: WF virtual account (requires accessToken)
+//   - ALIPAY_WALLET: Alipay wallet (requires referenceCustomerId)
+//   - ALIPAY_SHADOW_WALLET: affiliated company Alipay wallet (requires accountId)
+//   - ALIPAY_ORIGIN_WALLET: enterprise Alipay wallet
+func (c *InquiryAccountInfoClient) InquiryAccount(req *request.InquiryAccountRequest) (*response.InquiryAccountResponse, error) {
+	if err := req.Validate(); err != nil {
+		return nil, exception.NewWfException(exception.ParamIllegal, err.Error())
+	}
+
+	// Build request body — only include non-empty fields
+	bodyMap := map[string]interface{}{
+		"accountType": req.AccountType,
+	}
+	if req.ReferenceCustomerID != "" {
+		bodyMap["referenceCustomerId"] = req.ReferenceCustomerID
+	}
+	if req.AccountID != "" {
+		bodyMap["accountId"] = req.AccountID
+	}
+	if req.AccessToken != "" {
+		bodyMap["accessToken"] = req.AccessToken
+	}
+
+	bodyBytes, err := json.Marshal(bodyMap)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	respBody, err := c.httpClient.PostJSON(pathInquiryAccount, bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp response.InquiryAccountResponse
+	if err := json.Unmarshal(respBody, &resp); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
+	}
+
+	if resp.Result == nil || resp.Result.ResultStatus == "" {
+		return nil, exception.NewWfException(exception.InvalidResponseFormat, "resultStatus is missing")
+	}
+
+	switch resp.Result.ResultStatus {
+	case "S":
+		return &resp, nil
+	case "F":
+		return nil, exception.NewWfException(exception.FromCode(resp.Result.ResultCode), resp.Result.ResultMessage)
+	case "U":
+		return nil, exception.NewWfException(exception.FromCode(resp.Result.ResultCode), resp.Result.ResultMessage)
+	default:
+		return nil, exception.NewWfException(exception.InvalidResponseFormat,
+			fmt.Sprintf("unknown resultStatus: %s", resp.Result.ResultStatus))
+	}
 }
 
 // InquiryBalance calls the WF inquiryBalance API.
