@@ -381,3 +381,101 @@ func TestIntegration_InquiryAvailableQuota_BENEFICIARY(t *testing.T) {
 	}
 	fmt.Println("=====================================================")
 }
+
+// ==================== InquirySubuser Tests ====================
+
+// TestIntegration_InquirySubuser_FirstPage queries primary account and subaccount info (page 1)
+func TestIntegration_InquirySubuser_FirstPage(t *testing.T) {
+	c := newRealAccountInfoClient(t)
+
+	req := &request.InquirySubuserRequest{
+		PageSize:   10,
+		PageNumber: 1,
+	}
+
+	fmt.Println("====== TestInquirySubuser_FirstPage ======")
+	fmt.Printf("Request: %+v\n", req)
+
+	resp, err := c.InquirySubuser(req)
+	if err != nil {
+		if wfErr, ok := err.(*exception.WfException); ok {
+			fmt.Printf("[FAIL] Code: %s | Message: %s | Retryable: %v\n",
+				wfErr.Code, wfErr.Message, wfErr.Code.IsRetryable())
+		} else {
+			fmt.Printf("[FAIL] Error: %v\n", err)
+		}
+		t.FailNow()
+	}
+
+	fmt.Printf("[PASS] TotalCount: %d | TotalPageNumber: %d | CurrentPageNumber: %d\n",
+		resp.TotalCount, resp.TotalPageNumber, resp.CurrentPageNumber)
+
+	if resp.PrimaryUserInformation != nil {
+		primary := resp.PrimaryUserInformation
+		fmt.Printf("  PrimaryUser - UserID: %s | LogonID: %s\n", primary.UserID, primary.LogonID)
+		if primary.UserName != nil {
+			fmt.Printf("  PrimaryUser - FullName: %s\n", primary.UserName.FullName)
+		}
+	}
+
+	fmt.Printf("  SubUsers count: %d\n", len(resp.UserInformations))
+	for _, sub := range resp.UserInformations {
+		nickName := ""
+		if sub.UserNickName != nil {
+			nickName = sub.UserNickName.FullName
+		}
+		fmt.Printf("  - UserID: %s | LogonID: %s | NickName: %s\n",
+			sub.UserID, sub.LogonID, nickName)
+	}
+	fmt.Println("==========================================")
+}
+
+// ==================== InquiryStore Tests ====================
+
+// TestIntegration_InquiryStore_FirstPage queries store information (page 1)
+func TestIntegration_InquiryStore_FirstPage(t *testing.T) {
+	c := newRealAccountInfoClient(t)
+
+	req := &request.InquiryStoreRequest{
+		PageSize:   10,
+		PageNumber: 1,
+	}
+
+	fmt.Println("====== TestInquiryStore_FirstPage ======")
+	fmt.Printf("Request: %+v\n", req)
+
+	resp, err := c.InquiryStore(req)
+	if err != nil {
+		if wfErr, ok := err.(*exception.WfException); ok {
+			fmt.Printf("[FAIL] Code: %s | Message: %s | Retryable: %v\n",
+				wfErr.Code, wfErr.Message, wfErr.Code.IsRetryable())
+		} else {
+			fmt.Printf("[FAIL] Error: %v\n", err)
+		}
+		t.FailNow()
+	}
+
+	fmt.Printf("[PASS] TotalCount: %d | TotalPageNumber: %d | CurrentPageNumber: %d\n",
+		resp.TotalCount, resp.TotalPageNumber, resp.CurrentPageNumber)
+
+	if resp.StoreInformation != nil {
+		fmt.Printf("  Stores count: %d\n", len(resp.StoreInformation))
+		for _, store := range resp.StoreInformation {
+			fmt.Printf("  - StoreName: %s | Marketplace: %s | AuthorizedStatus: %s\n",
+				store.StoreName, store.MarketplaceName, store.AuthorizedStatus)
+			if store.AccountInformation != nil {
+				for _, account := range store.AccountInformation {
+					fmt.Printf("    Account - No: %s | Type: %s | Status: %s | Currencies: %v\n",
+						account.AccountNo, account.AccountType, account.AccountStatus, account.CurrencyList)
+					if account.BankAccountList != nil {
+						for _, bank := range account.BankAccountList {
+							fmt.Printf("      Bank: %s | Region: %s | BIC: %s | Currencies: %v\n",
+								bank.BankName, bank.BankRegion, bank.BankBIC, bank.CurrencyList)
+						}
+					}
+				}
+			}
+		}
+	}
+	fmt.Println("========================================")
+}
