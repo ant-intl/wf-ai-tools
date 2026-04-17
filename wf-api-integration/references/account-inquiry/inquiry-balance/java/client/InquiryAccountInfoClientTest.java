@@ -16,17 +16,19 @@ import {basePackage}.wf.model.request.InquiryAccountRequest;
 import {basePackage}.wf.model.request.InquiryBalanceRequest;
 import {basePackage}.wf.model.request.InquiryAvailableQuotaRequest;
 import {basePackage}.wf.model.request.InquirySubuserRequest;
+import {basePackage}.wf.model.request.InquiryStoreRequest;
 import {basePackage}.wf.model.response.InquiryAccountResponse;
 import {basePackage}.wf.model.response.InquiryBalanceResponse;
 import {basePackage}.wf.model.response.InquiryAvailableQuotaResponse;
 import {basePackage}.wf.model.response.InquirySubuserResponse;
+import {basePackage}.wf.model.response.InquiryStoreResponse;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * InquiryAccountInfoClient 集成测试。
  *
- * <p>包含 inquiryAccount、inquiryBalance、inquiryAvailableQuota 和 inquirySubuser 四个接口的测试。
+ * <p>包含 inquiryAccount、inquiryBalance、inquiryAvailableQuota、inquirySubuser 和 inquiryStore 五个接口的测试。
  *
  * @author Qoder
  * @version InquiryAccountInfoClientTest.java, v 0.1 2026-04-14
@@ -396,5 +398,58 @@ public class InquiryAccountInfoClientTest {
         }
 
         System.out.println("=========================================");
+    }
+
+    // ==================== inquiryStore Tests ====================
+
+    /**
+     * 测试查询第一页店铺信息。
+     */
+    @Test
+    public void testInquiryStoreFirstPage() {
+        InquiryStoreRequest request = new InquiryStoreRequest();
+        request.setPageSize(10);
+        request.setPageNumber(1);
+
+        System.out.println("====== testInquiryStoreFirstPage ======");
+        System.out.println("Request: " + request);
+
+        try {
+            InquiryStoreResponse response = client.inquiryStore(request);
+            System.out.println("Response: " + response);
+            System.out.println("ResultStatus: " + response.getResult().getResultStatus());
+            System.out.println("TotalCount: " + response.getTotalCount());
+            System.out.println("TotalPageNumber: " + response.getTotalPageNumber());
+            System.out.println("CurrentPageNumber: " + response.getCurrentPageNumber());
+
+            if (response.getStoreInformation() != null) {
+                System.out.println("Stores count: " + response.getStoreInformation().size());
+                for ({basePackage}.wf.model.domain.StoreInfo store : response.getStoreInformation()) {
+                    System.out.println("  - StoreName: " + store.getStoreName()
+                        + " | Marketplace: " + store.getMarketplaceName()
+                        + " | AuthorizedStatus: " + store.getAuthorizedStatus());
+                    if (store.getAccountInformation() != null) {
+                        for (AccountInfo account : store.getAccountInformation()) {
+                            System.out.println("    Account - No: " + account.getAccountNo()
+                                + " | Type: " + account.getAccountType()
+                                + " | Status: " + account.getAccountStatus()
+                                + " | Currencies: " + account.getCurrencyList());
+                            if (account.getBankAccountList() != null) {
+                                for (BankAccount bank : account.getBankAccountList()) {
+                                    System.out.println("      Bank: " + bank.getBankName()
+                                        + " | Region: " + bank.getBankRegion()
+                                        + " | BIC: " + bank.getBankBIC()
+                                        + " | Currencies: " + bank.getCurrencyList());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+
+        System.out.println("=======================================");
     }
 }

@@ -8,6 +8,7 @@
 | 查询余额 | `inquiry-balance/` | 查询 WF 账户余额，支持按币种和余额类型过滤 |
 | 查询结汇额度 | `inquiry-available-quota/` | 查询可申报的结汇额度，支持四种累计方式 |
 | 查询子账号信息 | `inquiry-subuser/` | 查询万里汇主账号及子账号信息，支持分页 |
+| 查询店铺信息 | `inquiry-store/` | 查询店铺信息及店铺关联账号信息，支持分页 |
 
 ## 注意事项
 
@@ -32,4 +33,10 @@
 - 仅**主账号**可调用，子账号调用将返回 `USER_ACCOUNT_NOT_PRIMARY`
 - `primaryUserInformation` 返回主账号信息，`userInformations` 返回当前页子账号列表
 - 子账号使用 `userNickName` 字段表示昵称，主账号使用 `userName` 字段
+
+### inquiryStore
+- `pageSize` 和 `pageNumber` 均为必填，`pageNumber` 从 1 开始
+- `authorizedStatus` 取值为 `AUTHORIZED`（已授权）或 `NEVER_AUTHORIZED`（未授权）
+- `accountInformation` 中的 `AccountInfo` 结构与 `inquiryAccount` 接口返回的一致，包含银行账户详情
+- `accountType` 支持 `RECEIVE_ACCOUNT`、`VIRTUAL_ACCOUNT`、`ALIPAY_WALLET`
 

@@ -15,10 +15,12 @@ import {basePackage}.wf.model.request.InquiryAccountRequest;
 import {basePackage}.wf.model.request.InquiryBalanceRequest;
 import {basePackage}.wf.model.request.InquiryAvailableQuotaRequest;
 import {basePackage}.wf.model.request.InquirySubuserRequest;
+import {basePackage}.wf.model.request.InquiryStoreRequest;
 import {basePackage}.wf.model.response.InquiryAccountResponse;
 import {basePackage}.wf.model.response.InquiryBalanceResponse;
 import {basePackage}.wf.model.response.InquiryAvailableQuotaResponse;
 import {basePackage}.wf.model.response.InquirySubuserResponse;
+import {basePackage}.wf.model.response.InquiryStoreResponse;
 import {basePackage}.wf.model.response.Result;
 import {basePackage}.wf.signer.WfSigner;
 import {basePackage}.wf.util.WfHttpClientUtil;
@@ -29,12 +31,13 @@ import java.util.List;
 /**
  * WorldFirst 账户信息查询统一客户端。
  *
- * <p>包含 4 个接口方法：
+ * <p>包含 5 个接口方法：
  * <ul>
  *   <li>{@link #inquiryAccount} — 查询账户信息</li>
  *   <li>{@link #inquiryBalance} — 查询账户余额</li>
  *   <li>{@link #inquiryAvailableQuota} — 查询可申报结汇额度</li>
  *   <li>{@link #inquirySubuser} — 查询主账号及子账号信息</li>
+ *   <li>{@link #inquiryStore} — 查询店铺信息</li>
  * </ul>
  *
  * @author Qoder
@@ -49,6 +52,7 @@ public class InquiryAccountInfoClient {
     private static final String PATH_BALANCE         = "/amsin/api/v1/business/account/inquiryBalance";
     private static final String PATH_QUOTA           = "/amsin/api/v1/business/account/inquiryAvailableQuota";
     private static final String PATH_SUBUSER         = "/amsin/api/v1/business/user/inquirySubuser";
+    private static final String PATH_STORE           = "/amsin/api/v1/business/store/inquiryStore";
 
     private static final String RESULT_STATUS_SUCCESS = "S";
     private static final String RESULT_STATUS_FAIL = "F";
@@ -519,6 +523,101 @@ public class InquiryAccountInfoClient {
             // resultStatus=U 或未知状态，交由调用方重试
             WfErrorCode errorCode = WfErrorCode.fromCode(result.getResultCode());
             LOGGER.warn("InquiryAccountInfoClient inquirySubuser unknown/retryable status, resultStatus="
+                + resultStatus + ", resultCode=" + result.getResultCode());
+            throw new WfException(errorCode, result.getResultMessage());
+        }
+    }
+
+    // ==================== inquiryStore ====================
+
+    /**
+     * 查询店铺信息及店铺关联账号信息（分页）
+     *
+     * @param request 查询请求，pageSize 和 pageNumber 均为必填
+     * @return 店铺信息响应
+     * @throws WfException 调用失败时抛出
+     */
+    public InquiryStoreResponse inquiryStore(InquiryStoreRequest request) {
+        validateStoreRequest(request);
+
+        String requestBody = buildStoreRequestBody(request);
+        String url = config.getBaseUrl() + PATH_STORE;
+
+        LOGGER.info("InquiryAccountInfoClient invoking inquiryStore, url=" + url);
+
+        String responseBody = httpClientUtil.sendPostRequest(url, PATH_STORE, requestBody);
+
+        return parseStoreResponse(responseBody);
+    }
+
+    /**
+     * 校验店铺查询请求参数
+     *
+     * @param request 请求对象
+     * @throws WfException 校验失败时抛出
+     */
+    private void validateStoreRequest(InquiryStoreRequest request) {
+        if (request == null) {
+            throw new WfException(WfErrorCode.PARAM_ILLEGAL, "InquiryStoreRequest must not be null");
+        }
+        if (request.getPageSize() == null || request.getPageSize() <= 0) {
+            throw new WfException(WfErrorCode.PARAM_ILLEGAL, "pageSize must be a positive integer");
+        }
+        if (request.getPageNumber() == null || request.getPageNumber() <= 0) {
+            throw new WfException(WfErrorCode.PARAM_ILLEGAL, "pageNumber must be a positive integer");
+        }
+    }
+
+    /**
+     * 构建店铺查询请求体 JSON 字符串
+     *
+     * @param request 请求对象
+     * @return JSON 字符串
+     */
+    private String buildStoreRequestBody(InquiryStoreRequest request) {
+        JSONObject body = new JSONObject();
+        body.put("pageSize", request.getPageSize());
+        body.put("pageNumber", request.getPageNumber());
+        return body.toJSONString();
+    }
+
+    /**
+     * 解析店铺查询响应体
+     *
+     * @param responseBody 响应体 JSON 字符串
+     * @return 解析后的响应对象
+     * @throws WfException 响应格式非法或业务失败时抛出
+     */
+    private InquiryStoreResponse parseStoreResponse(String responseBody) {
+        InquiryStoreResponse response;
+        try {
+            response = JSON.parseObject(responseBody, InquiryStoreResponse.class);
+        } catch (Exception e) {
+            LOGGER.error("InquiryAccountInfoClient failed to parse inquiryStore response, body=" + responseBody, e);
+            throw new WfException(WfErrorCode.INVALID_RESPONSE_FORMAT,
+                "Failed to parse inquiryStore response: " + e.getMessage(), e);
+        }
+
+        Result result = response.getResult();
+        if (result == null) {
+            throw new WfException(WfErrorCode.INVALID_RESPONSE_FORMAT,
+                "inquiryStore response result is null");
+        }
+
+        String resultStatus = result.getResultStatus();
+        if (RESULT_STATUS_SUCCESS.equals(resultStatus)) {
+            LOGGER.info("InquiryAccountInfoClient inquiryStore success, totalCount=" + response.getTotalCount()
+                + ", currentPageNumber=" + response.getCurrentPageNumber());
+            return response;
+        } else if (RESULT_STATUS_FAIL.equals(resultStatus)) {
+            WfErrorCode errorCode = WfErrorCode.fromCode(result.getResultCode());
+            LOGGER.warn("InquiryAccountInfoClient inquiryStore failed, resultCode=" + result.getResultCode()
+                + ", resultMessage=" + result.getResultMessage());
+            throw new WfException(errorCode, result.getResultMessage());
+        } else {
+            // resultStatus=U 或未知状态，交由调用方重试
+            WfErrorCode errorCode = WfErrorCode.fromCode(result.getResultCode());
+            LOGGER.warn("InquiryAccountInfoClient inquiryStore unknown/retryable status, resultStatus="
                 + resultStatus + ", resultCode=" + result.getResultCode());
             throw new WfException(errorCode, result.getResultMessage());
         }
