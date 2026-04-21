@@ -10,6 +10,7 @@
 | 查询子账号信息 | `inquiry-subuser/` | 查询万里汇主账号及子账号信息，支持分页 |
 | 查询店铺信息 | `inquiry-store/` | 查询店铺信息及店铺关联账号信息，支持分页 |
 | 充值通知 | `notify-vostro/` | 接收万里汇充值/垫付回调通知（WF → 集成商） |
+| 余额变动通知 | `notify-balance-change/` | 接收万里汇余额账户动账变动回调通知（WF → 集成商） |
 
 ## 注意事项
 
@@ -47,4 +48,12 @@
 - `balanceResult.resultCode` 取值：`SUCCESS`（垫付成功）、`REFUND`（退款成功）
 - 集成商需返回成功响应，否则万里汇将重试最多 7 次（间隔：2分钟、10分钟、10分钟、1小时、2小时、6小时、15小时）
 - `balanceChangeAmount.value` 为最小货币单位的整数
+
+### notifyBalanceChange
+- **回调通知接口**（WF → 集成商），非主动调用接口
+- `notifySequence` 为通知时序，集成商可用于排序和去重
+- `balanceChangeLogs` 为余额变动记录列表，每条记录包含动账金额、实时余额、交易类型等
+- `transactionAmount.value` 正数为入账，负数为出账
+- `transactionType` 常见取值：`TRANSFER`、`WITHDRAWAL`、`COLLECTION`、`CONVERSION`、`CHARGE` 等
+- 集成商需返回成功响应，否则万里汇将重试最多 7 次（间隔：2分钟、10分钟、10分钟、1小时、2小时、6小时、15小时）
 
