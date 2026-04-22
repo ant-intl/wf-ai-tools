@@ -41,9 +41,9 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
         |       +-- 接收充值/垫付回调？ --> 充值通知（notifyVostro）
         |       +-- 接收余额变动回调？ --> 余额变动通知（notifyBalanceChange）
         |
-        +-- 查看账户交易流水或对账？ --> 账单查询
+        +-- 查看账户交易流水或对账？ --> 账单管理
         |
-        +-- 上传交易订单（跨境结汇 / B2B 订单关联）？ --> 交易订单管理
+        +-- 上传交易订单（跨境结汇 / B2B 订单关联）？ --> 交易信息单管理
 ```
 
 ## 场景关键词匹配
