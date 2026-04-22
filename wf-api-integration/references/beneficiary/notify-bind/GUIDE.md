@@ -130,6 +130,8 @@ java/
 
 ```
 golang/
+├── controller/
+│   └── notify_bind_beneficiary_controller.go  ← http.Handler 实现
 └── model/
     ├── request/notify_bind_beneficiary_request.go
     └── response/notify_bind_beneficiary_response.go

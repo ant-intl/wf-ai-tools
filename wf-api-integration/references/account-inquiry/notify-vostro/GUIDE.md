@@ -86,6 +86,19 @@
 - 重试总数：7 次
 - 两次重发请求之间的间隔：2分钟、10分钟、10分钟、1小时、2小时、6小时、15小时
 
+## 处理流程
+
+1. 从请求头提取 Signature 并调用 WfSigner.verifySignature() **验签**
+2. 验签失败 → 返回 HTTP 400，不返回 SUCCESS
+3. 解析 NotifyVostroRequest
+4. 以 fundingId 做**幂等判断**，已处理则直接返回 SUCCESS
+5. 根据 balanceResult 处理**垫付成功/退款成功**业务逻辑
+6. 构建 NotifyVostroResponse（resultCode=SUCCESS）
+7. 调用 WfSigner 对响应体签名，写入响应头 Signature
+8. 返回响应
+
+> 签名验证完成后立即返回 SUCCESS，业务逻辑异步处理，避免超时触发重试。
+
 ## 示例代码
 
 参考同目录下 `java/` 和 `golang/` 中的模板代码。
@@ -94,13 +107,11 @@
 
 ```
 java/
-├── client/
-│   ├── NotifyVostroHandler.java              # 回调通知处理器
-│   └── NotifyVostroHandlerTest.java
+├── controller/NotifyVostroController.java    ← Spring @RestController
 └── model/
     ├── domain/
     │   ├── PayerBankAccount.java
-    │   └── BeneficiaryBankAccount.java
+    │   └── VostroBeneficiaryAccount.java
     ├── request/NotifyVostroRequest.java
     └── response/NotifyVostroResponse.java
 ```
@@ -109,9 +120,8 @@ java/
 
 ```
 golang/
-├── client/
-│   ├── notify_vostro_handler.go              # 回调通知处理器
-│   └── notify_vostro_handler_test.go
+├── controller/
+│   └── notify_vostro_controller.go           ← http.Handler 实现
 └── model/
     ├── request/notify_vostro_request.go
     └── response/notify_vostro_response.go
