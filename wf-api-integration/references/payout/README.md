@@ -8,6 +8,7 @@
 | 咨询代发汇率 | `consult-payout/` | 调用 consultPayout 接口,咨询费用、校验卡模版、获取跨币种汇率报价 |
 | 创建代发     | `create-payout/`  | 调用 createPayout 接口，代发到银行卡或电子钱包                   |
 | 查询代发结果 | `inquiry-payout/` | 调用 inquiryPayout 接口，查询代发单状态                          |
+| 代发结果通知 | `notify-payout/`  | 接收 notifyPayout 回调，万里汇主动通知转账结果                   |
 
 ## 对接流程
 
