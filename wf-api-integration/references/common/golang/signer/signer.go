@@ -14,10 +14,11 @@ import (
 	"time"
 )
 
-// Signer is the interface for WF API signing.
+// Signer is the interface for WF API signing and verification.
 // Using an interface allows for mock injection in tests.
 type Signer interface {
 	GenerateSignatureWithPath(apiPath, clientID, requestTime, body string) (string, error)
+	VerifySignatureWithPath(apiPath, clientID, responseTime, body, signatureHeader string) error
 	GetRequestTime() string
 }
 

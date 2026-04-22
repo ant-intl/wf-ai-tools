@@ -13,9 +13,9 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 
 | 模块         | 模块目录                        | 模块说明                                                                 | 语言支持           |
 | ------------ | ------------------------------- | ------------------------------------------------------------------------ | ------------------ |
-| 万里汇转账   | `references/transfer/`          | 在 WF 账户之间划转资金（咨询/发起/查询）                                | Java、Golang       |
-| 全球分发     | `references/payout/`            | 代发到第三方银行卡或电子钱包（咨询/发起/查询）                          | Java、Golang       |
-| 收款人管理   | `references/beneficiary/`       | 卡模版查询、绑定/删除/编辑/查询收款人                                   | Java、Golang（部分）|
+| 万里汇转账   | `references/transfer/`          | 在 WF 账户之间划转资金（咨询/发起/查询/结果通知）                       | Java、Golang       |
+| 全球分发     | `references/payout/`            | 代发到第三方银行卡或电子钱包（咨询/发起/查询/结果通知）                 | Java、Golang       |
+| 收款人管理   | `references/beneficiary/`       | 卡模版查询、绑定/删除/编辑/查询收款人、绑定结果通知                     | Java、Golang（部分）|
 | 账户管理     | `references/account-inquiry/`   | 查询账户信息/余额/结汇额度/子账号/店铺，接收充值/余额变动通知           | Java、Golang       |
 | 账单管理     | `references/statement-inquiry/` | 查询账户交易流水列表及流水详情                                          | Java、Golang、Python |
 | 交易信息管理 | `references/trade-order/`       | 上传交易订单（B2C 结汇 / B2B 订单关联）、查询结果、处理异步通知        | Java、Golang       |
@@ -26,10 +26,16 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 用户咨询 WF API 对接
         |
         +-- 在 WF 账户之间划转资金？ --> 万里汇转账
+        |       |
+        |       +-- 接收转账结果回调？ --> 转账结果通知（notifyTransfer）
         |
         +-- 付款到第三方银行卡（发工资、供应商付款）？ --> 全球分发（代发）
+        |       |
+        |       +-- 接收代发结果回调？ --> 代发结果通知（notifyPayout）
         |
         +-- 管理收款人银行卡（增删改查、卡模版）？ --> 收款人管理
+        |       |
+        |       +-- 接收收款人绑定结果回调？ --> 绑定收款人通知（notifyBindBeneficiary）
         |
         +-- 账户相关查询？ --> 账户管理
         |       |
@@ -41,9 +47,9 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
         |       +-- 接收充值/垫付回调？ --> 充值通知（notifyVostro）
         |       +-- 接收余额变动回调？ --> 余额变动通知（notifyBalanceChange）
         |
-        +-- 查看账户交易流水或对账？ --> 账单查询
+        +-- 查看账户交易流水或对账？ --> 账单管理
         |
-        +-- 上传交易订单（跨境结汇 / B2B 订单关联）？ --> 交易订单管理
+        +-- 上传交易订单（跨境结汇 / B2B 订单关联）？ --> 交易信息单管理
 ```
 
 ## 场景关键词匹配
@@ -51,9 +57,9 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 
 | 关键词                                                                                                                                                                                                                    | 路由模块         |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| 转账、汇款、WF账户转账、内部转账、账户间转账、户到户、transfer、consultTransfer、createTransfer、inquiryTransfer、转账汇率、转账手续费、转账咨询、发起转账、转账状态、转账结果                                            | 万里汇转账       |
-| 代发、payout、发工资、付款到银行卡、付款到第三方、全球分发、跨境代发、批量付款、代发汇率、代发报价、quoteId、consultPayout、createPayout、inquiryPayout、代发状态、代发结果                                               | 全球分发（代发） |
-| 收款人、beneficiary、银行卡管理、绑卡、收款方、收款账户、卡模版、银行卡字段、inquiryTemplate、bindBeneficiary、editBeneficiary、removeBeneficiary、inquiryBeneficiaryList、添加收款人、删除收款人、修改收款人、收款人列表 | 收款人管理       |
+| 转账、汇款、WF账户转账、内部转账、账户间转账、户到户、transfer、consultTransfer、createTransfer、inquiryTransfer、notifyTransfer、转账汇率、转账手续费、转账咨询、发起转账、转账状态、转账结果、转账通知、转账回调            | 万里汇转账       |
+| 代发、payout、发工资、付款到银行卡、付款到第三方、全球分发、跨境代发、批量付款、代发汇率、代发报价、quoteId、consultPayout、createPayout、inquiryPayout、notifyPayout、代发状态、代发结果、代发通知、代发回调               | 全球分发（代发） |
+| 收款人、beneficiary、银行卡管理、绑卡、收款方、收款账户、卡模版、银行卡字段、inquiryTemplate、bindBeneficiary、editBeneficiary、removeBeneficiary、inquiryBeneficiaryList、notifyBindBeneficiary、添加收款人、删除收款人、修改收款人、收款人列表、绑定收款人通知、绑卡回调 | 收款人管理       |
 | 余额、账户余额、balance、查余额、inquiryBalance、账户可用余额、币种余额、账户信息、inquiryAccount、结汇额度、inquiryAvailableQuota、子账号、inquirySubuser、店铺信息、inquiryStore、充值通知、notifyVostro、余额变动、notifyBalanceChange、垫付回调、动账通知 | 账户管理         |
 | 账单、流水、交易记录、statement、对账、账户流水、inquiryStatementList、inquiryStatementDetail、流水列表、流水详情、账单详情                                                                                               | 账单查询         |
 | 交易订单、trade order、结汇、B2B订单、订单上传、PAY_INTO_CHINA、CREATE_B2B_ORDERS、submitTradeOrder、inquiryTradeOrder、notifyTradeOrder、订单回调、异步通知、webhook                                                     | 交易订单管理     |
@@ -66,15 +72,15 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 请确认您需要对接的万里汇（WorldFirst）业务模块：
 
 1. 万里汇转账
-   在 WF 账户之间划转资金，支持转账前汇率咨询、发起转账、查询转账结果
+   在 WF 账户之间划转资金，支持转账前汇率咨询、发起转账、查询转账结果、接收转账结果回调通知
    适用：WF 账户间资金划转
 
 2. 全球分发（代发）
-   代发资金到第三方银行卡，支持跨币种汇率咨询、发起代发、查询代发结果
+   代发资金到第三方银行卡，支持跨币种汇率咨询、发起代发、查询代发结果、接收代发结果回调通知
    适用：发工资、供应商付款、跨境分发等场景
 
 3. 收款人管理
-   管理代发目标银行卡，支持卡模版查询、绑定/编辑/删除/查询收款人
+   管理代发目标银行卡，支持卡模版查询、绑定/编辑/删除/查询收款人、接收绑定结果回调通知
    适用：维护代发收款方的银行卡信息
 
 4. 账户管理
@@ -134,7 +140,7 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 **收款人管理模块**：
 - **集成模式**：请问您的 Payout 集成场景是使用**卡详情模式**（每次代发直接传银行卡信息）还是**卡 token 模式**（先绑定收款人获取 token）？
   - 卡详情模式：仅需集成 `inquiry-template/`（查询卡模版）
-  - 卡 token 模式：需集成全部 5 个接口
+  - 卡 token 模式：需集成全部 6 个接口
 
 **交易订单管理模块**：
 - **业务场景**：请问需要支持哪些业务场景？
@@ -317,11 +323,14 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 | 咨询转账     | `consult-transfer/`  | 转账前获取汇率、手续费等信息                     |
 | 户到户转账   | `create-transfer/`   | 在万里汇账户之间转账                             |
 | 查询转账结果 | `inquiry-transfer/`  | 查询转账结果（PROCESSING 状态需轮询）            |
+| 转账结果通知 | `notify-transfer/`   | 回调通知：接收万里汇推送的转账结果通知（WF → 集成商） |
 
 注意事项：
 - 转账为异步接口，`PROCESSING` 状态必须轮询
 - `transferRequestId` 是幂等键，相同 ID + 不同 body → `REPEAT_REQ_INCONSISTENT`
 - `businessSceneCode` 在主/子账号余额互转时必填 `MULTI_ACCOUNT_TRANSFER`
+- `notifyTransfer` 是回调通知接口（WF → 集成商），需验签后返回 SUCCESS，业务逻辑异步处理
+- 回调通知需返回成功响应，否则万里汇将重试最多 7 次
 
 ### 全球分发（payout）
 
@@ -330,21 +339,25 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 | 咨询代发汇率 | `consult-payout/` | 咨询费用、校验卡模版、获取跨币种汇率报价 |
 | 创建代发     | `create-payout/`  | 代发到银行卡或电子钱包                   |
 | 查询代发结果 | `inquiry-payout/` | 查询代发单状态                           |
+| 代发结果通知 | `notify-payout/`  | 回调通知：接收万里汇推送的代发结果通知（WF → 集成商） |
 
 注意事项：
 - 支持两种收款模式（互斥）：卡详情模式（BANK_ACCOUNT_DETAIL）和卡 token 模式（BENEFICIARY_TOKEN）
 - 跨币种代发必须先调 consultPayout 获取 quoteId
+- `notifyPayout` 是回调通知接口（WF → 集成商），需验签后返回 SUCCESS，业务逻辑异步处理
+- 回调通知需返回成功响应，否则万里汇将重试最多 7 次
 - 完整嵌套对象字段定义见 `references/payout/field-reference.md`
 
 ### 收款人管理（beneficiary）
 
-| 接口           | 目录                | 说明                                            | 语言支持     |
-| -------------- | ------------------- | ----------------------------------------------- | ------------ |
-| 查询卡模版     | `inquiry-template/` | 查询指定国家/币种/账户类型的卡模版字段要求      | Java、Golang |
-| 绑定收款人     | `bind/`             | 绑定收款人到 WF 账户，获取 beneficiaryToken     | Java         |
-| 删除收款人     | `remove/`           | 删除已绑定的收款人                              | Java         |
-| 编辑收款人     | `edit/`             | 修改收款人昵称                                  | Java         |
-| 查询收款人列表 | `inquiry-list/`     | 分页查询已绑定的收款人                          | Java         |
+| 接口             | 目录                | 说明                                            | 语言支持     |
+| ---------------- | ------------------- | ----------------------------------------------- | ------------ |
+| 查询卡模版       | `inquiry-template/` | 查询指定国家/币种/账户类型的卡模版字段要求      | Java、Golang |
+| 绑定收款人       | `bind/`             | 绑定收款人到 WF 账户，获取 beneficiaryToken     | Java         |
+| 删除收款人       | `remove/`           | 删除已绑定的收款人                              | Java         |
+| 编辑收款人       | `edit/`             | 修改收款人昵称                                  | Java         |
+| 查询收款人列表   | `inquiry-list/`     | 分页查询已绑定的收款人                          | Java         |
+| 绑定收款人通知   | `notify-bind/`      | 回调通知：接收收款人绑定结果通知（WF → 集成商） | Java、Golang |
 
 ### 账户管理（account-inquiry）
 
@@ -400,7 +413,7 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 + **私钥禁止传公共仓库**：私钥文件不得上传到 GitHub、GitLab 等公共代码仓库，必须加入 `.gitignore`。
 + **clientId / secretKey 禁止明文存储**：clientId 和密钥配置必须通过环境变量、配置中心或加密文件管理，禁止明文写入代码或配置文件提交到版本库。
 + **响应必须验签**：收到 WF API 响应后必须使用 WF 公钥验签，确认响应来自万里汇，防止中间人篡改。
-+ **异步通知必须验签**：收到 notifyTradeOrder、notifyVostro、notifyBalanceChange 等异步回调通知后，必须先验签再处理业务逻辑，防止伪造通知。
++ **异步通知必须验签**：收到 notifyTradeOrder、notifyVostro、notifyBalanceChange、notifyTransfer、notifyPayout、notifyBindBeneficiary 等异步回调通知后，必须先验签再处理业务逻辑，防止伪造通知。
 + **幂等性保障**：转账（createTransfer）和代发（createPayout）等资金类接口必须使用唯一的 transferRequestId / payoutRequestId，防止因重试导致重复扣款。
 + **HTTPS 强制**：所有 API 请求必须通过 HTTPS 发送，禁止使用 HTTP 明文传输。
 + **转账/代发结果不可假定**：发起转账或代发后，必须通过查询接口（inquiryTransfer / inquiryPayout）或异步通知确认最终状态，禁止仅凭请求响应的 status 判定最终结果。

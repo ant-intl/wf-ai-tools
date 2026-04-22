@@ -83,6 +83,8 @@ java/
 
 ```
 golang/
+├── controller/
+│   └── notify_trade_order_controller.go  ← http.Handler 实现
 └── model/
     ├── request/notify_trade_order_request.go
     └── response/notify_trade_order_response.go
