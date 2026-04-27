@@ -42,13 +42,15 @@
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `paymentMethodType` | String | **Yes** | `BANK_ACCOUNT_DETAIL` (card detail mode) or `BENEFICIARY_TOKEN` (token mode) |
-| `paymentMethodMetaData` | PaymentMethodMetaData | Conditional | **Required** when `paymentMethodType=BANK_ACCOUNT_DETAIL` |
-| `paymentMethodId` | String | Conditional | **Required** when `paymentMethodType=BENEFICIARY_TOKEN`. Pass `beneficiaryToken` from `bindBeneficiary` API |
+| `paymentMethodType` | String | **Yes** | `BANK_ACCOUNT_DETAIL` (card detail mode), `BENEFICIARY_TOKEN` (token mode), `ALIPAY_CN_DETAIL` (Alipay CN account detail mode), or `REFERENCE_ALIPAY_CN` (linked Alipay wallet mode) |
+| `paymentMethodMetaData` | PaymentMethodMetaData | Conditional | **Required** when `paymentMethodType=BANK_ACCOUNT_DETAIL`; pass empty object `{}` when `paymentMethodType=ALIPAY_CN_DETAIL` |
+| `paymentMethodId` | String | Conditional | **Required** when `paymentMethodType=BENEFICIARY_TOKEN` (pass `beneficiaryToken` from `bindBeneficiary` API) or `paymentMethodType=REFERENCE_ALIPAY_CN` (pass `referenceCustomerId`) |
 
-> **Mode Selection** — Two mutually exclusive modes:
-> - **Card Detail Mode**: `paymentMethodType=BANK_ACCOUNT_DETAIL` + `paymentMethodMetaData`
-> - **Card Token Mode**: `paymentMethodType=BENEFICIARY_TOKEN` + `paymentMethodId`
+> **Mode Selection** — Four mutually exclusive modes:
+> - **Card Detail Mode**: `paymentMethodType=BANK_ACCOUNT_DETAIL` + `paymentMethodMetaData` (BankAccountPaymentMethodDetail)
+> - **Card Token Mode**: `paymentMethodType=BENEFICIARY_TOKEN` + `paymentMethodId` (beneficiaryToken)
+> - **Alipay CN Detail Mode**: `paymentMethodType=ALIPAY_CN_DETAIL` + `paymentMethodMetaData` (BankAccountPaymentMethodDetail)
+> - **Reference Alipay CN Mode**: `paymentMethodType=REFERENCE_ALIPAY_CN` + `paymentMethodId` (referenceCustomerId) +`paymentMethodMetaData` (BankAccountPaymentMethodDetail)
 
 ---
 

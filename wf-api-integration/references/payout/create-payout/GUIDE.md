@@ -2,7 +2,7 @@
 
 ## 接口说明
 
-调用此接口进行代发到第三方银行卡。支持卡详情模式和卡 token 模式。
+调用此接口进行代发到第三方银行卡或电子钱包（支付宝账户）。支持卡详情模式、卡 token 模式、支付宝账户详情模式、钱包账户模式和关联支付宝钱包模式。
 
 ## 请求地址
 
@@ -37,11 +37,11 @@
 
 ### TransferToMethod Object
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `paymentMethodType` | String | **Yes** | `BANK_ACCOUNT_DETAIL`（卡详情）或 `BENEFICIARY_TOKEN`（token） |
-| `paymentMethodMetaData` | Object | Conditional | 卡详情模式必填 |
-| `paymentMethodId` | String | Conditional | token 模式必填（传 beneficiaryToken） |
+| Field | Type | Required | Description                                                                                       |
+|-------|------|----------|---------------------------------------------------------------------------------------------------|
+| `paymentMethodType` | String | **Yes** | `BANK_ACCOUNT_DETAIL`（卡详情）、`BENEFICIARY_TOKEN`（token）、`ALIPAY_CN_DETAIL`（支付宝账户详情）、`WALLET_ACCOUNT_DETAIL`（钱包账户）或 `REFERENCE_ALIPAY_CN`（关联支付宝钱包） |
+| `paymentMethodMetaData` | String | Conditional | 卡详情模式必填（BankAccountPaymentMethodDetail JSON）；支付宝账户详情模式；钱包账户模式必填（WalletAccountDetail JSON） |
+| `paymentMethodId` | String | Conditional | token 模式传 beneficiaryToken；关联支付宝钱包模式传 referenceCustomerId；钱包账户模式传 walletAccountId         |
 
 ### PaymentMethodMetaData Object
 
@@ -53,6 +53,17 @@
 | `bankBIC` | String | Conditional | SWIFT 代码 |
 | `bankCountryCode` | String | Conditional | 国家代码（ISO-3166） |
 | `beneficiaryType` | String | No | 收款方类型 |
+
+### WalletAccountDetail Object
+
+钱包账户模式下 `paymentMethodMetaData` 的字段（JSON 字符串）：
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `walletFullName` | String | No | 钱包账户持有人姓名 |
+| `walletAccountNo` | String | No | 钱包账号 |
+| `walletBrandName` | String | No | 钱包品牌名称（如 GCASH） |
+| `walletCountryCode` | String | No | 钱包国家代码（ISO-3166，2 位字母，如 PH） |
 
 ## 响应参数
 
@@ -88,6 +99,45 @@
 
 > 注意：quoteId 有过期时间（quoteExpiryTime），过期后需重新调用 consultPayout 获取新报价。
 
+## 收款方式
+
+createPayout 支持五种互斥的收款方式（paymentMethodType）：
+
+### 1. 卡详情模式（BANK_ACCOUNT_DETAIL）
+
+直接传递银行卡详情信息，适用于未绑定收款人的场景。
+
+- `paymentMethodType` = `BANK_ACCOUNT_DETAIL`
+- `paymentMethodMetaData` = `BankAccountPaymentMethodDetail` 对象（必填 `bankAccountNo`）
+
+### 2. 卡 token 模式（BENEFICIARY_TOKEN）
+
+使用已绑定收款人的 token，适用于已通过 bindBeneficiary 绑定收款人的场景。
+
+- `paymentMethodType` = `BENEFICIARY_TOKEN`
+- `paymentMethodId` = `beneficiaryToken`（通过 bindBeneficiary 获取）
+
+### 3. 支付宝账户详情模式（ALIPAY_CN_DETAIL）
+
+代发到支付宝账户，`paymentMethodMetaData` 传空对象即可。
+
+- `paymentMethodType` = `ALIPAY_CN_DETAIL`
+- `paymentMethodMetaData` = `BankAccountPaymentMethodDetail` 对象（必填 `bankAccountNo`）
+
+### 4. 关联支付宝钱包模式（REFERENCE_ALIPAY_CN）
+
+代发到关联的支付宝钱包，通过 `paymentMethodId` 传递 `referenceCustomerId`。
+
+- `paymentMethodType` = `REFERENCE_ALIPAY_CN`
+- `paymentMethodId` = `referenceCustomerId`
+
+### 5. 钱包账户模式（WALLET_ACCOUNT_DETAIL）
+
+代发到钱包账户，通过 `paymentMethodMetaData` 传递钱包账户详情信息。
+
+- `paymentMethodType` = `WALLET_ACCOUNT_DETAIL`
+- `paymentMethodMetaData` = `WalletAccountDetail` 对象 JSON（包含 `walletFullName`、`walletAccountNo`、`walletBrandName`、`walletCountryCode`）
+
 ## 示例代码
 
 参考同目录下 `java/` 和 `golang/` 中的模板代码。
@@ -101,12 +151,19 @@ java/
 │   └── PayoutClientTest.java
 └── model/
     ├── domain/
-    │   ├── Amount.java, TransferFromDetail.java, TransferToDetail.java
-    │   ├── TransferToMethod.java, PaymentMethodMetaData.java
+    │   ├── Amount.java
+    │   ├── TransferFromDetail.java
+    │   ├── TransferToDetail.java
+    │   ├── TransferToMethod.java    ← paymentMethodMetaData 类型为 String（JSON 序列化）
+    │   ├── PaymentMethodMetaData.java ← 银行账户详情（BANK_ACCOUNT_DETAIL 模式）
     │   ├── TransferQuote.java       ← 汇率报价信息（跨币种代发）
-    │   ├── BankAccountDetail.java, BeneficiaryInfo.java
-    ├── request/CreatePayoutRequest.java
-    └── response/CreatePayoutResponse.java
+    │   ├── BankAccountDetail.java
+    │   ├── BeneficiaryInfo.java
+    │   └── WalletAccountDetail.java ← 钱包账户详情（WALLET_ACCOUNT_DETAIL 模式）
+    ├── request/
+    │   └── CreatePayoutRequest.java
+    └── response/
+        └── CreatePayoutResponse.java
 ```
 
 ## 测试方法
@@ -118,6 +175,9 @@ java/
 | `testCreatePayoutCardDetail` | 卡详情模式（同币种） |
 | `testCreatePayoutTokenMode` | token 模式 |
 | `testCreatePayoutFromAmount` | 指定付款方金额 |
+| `testCreatePayoutAlipayDetail` | 支付宝账户详情模式（ALIPAY_CN_DETAIL） |
+| `testCreatePayoutReferenceAlipay` | 关联支付宝钱包模式（REFERENCE_ALIPAY_CN） |
+| `testCreatePayoutWalletAccount` | 钱包账户模式（WALLET_ACCOUNT_DETAIL） |
 
 ### 默认测试卡信息
 

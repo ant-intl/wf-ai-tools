@@ -29,7 +29,7 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
         |       |
         |       +-- 接收转账结果回调？ --> 转账结果通知（notifyTransfer）
         |
-        +-- 付款到第三方银行卡（发工资、供应商付款）？ --> 全球分发（代发）
+        +-- 付款到第三方银行卡或电子钱包（发工资、供应商付款、支付宝代发）？ --> 全球分发（代发）
         |       |
         |       +-- 接收代发结果回调？ --> 代发结果通知（notifyPayout）
         |
@@ -58,7 +58,7 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 | 关键词                                                                                                                                                                                                                    | 路由模块         |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 转账、汇款、WF账户转账、内部转账、账户间转账、户到户、transfer、consultTransfer、createTransfer、inquiryTransfer、notifyTransfer、转账汇率、转账手续费、转账咨询、发起转账、转账状态、转账结果、转账通知、转账回调            | 万里汇转账       |
-| 代发、payout、发工资、付款到银行卡、付款到第三方、全球分发、跨境代发、批量付款、代发汇率、代发报价、quoteId、consultPayout、createPayout、inquiryPayout、notifyPayout、代发状态、代发结果、代发通知、代发回调               | 全球分发（代发） |
+| 代发、payout、发工资、付款到银行卡、付款到第三方、全球分发、跨境代发、批量付款、代发汇率、代发报价、quoteId、consultPayout、createPayout、inquiryPayout、notifyPayout、代发状态、代发结果、代发通知、代发回调、电子钱包、支付宝代发、ALIPAY_CN_DETAIL、REFERENCE_ALIPAY_CN、代发到支付宝               | 全球分发（代发） |
 | 收款人、beneficiary、银行卡管理、绑卡、收款方、收款账户、卡模版、银行卡字段、inquiryTemplate、bindBeneficiary、editBeneficiary、removeBeneficiary、inquiryBeneficiaryList、notifyBindBeneficiary、添加收款人、删除收款人、修改收款人、收款人列表、绑定收款人通知、绑卡回调 | 收款人管理       |
 | 余额、账户余额、balance、查余额、inquiryBalance、账户可用余额、币种余额、账户信息、inquiryAccount、结汇额度、inquiryAvailableQuota、子账号、inquirySubuser、店铺信息、inquiryStore、充值通知、notifyVostro、余额变动、notifyBalanceChange、垫付回调、动账通知 | 账户管理         |
 | 账单、流水、交易记录、statement、对账、账户流水、inquiryStatementList、inquiryStatementDetail、流水列表、流水详情、账单详情                                                                                               | 账单查询         |
@@ -342,7 +342,11 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 | 代发结果通知 | `notify-payout/`  | 回调通知：接收万里汇推送的代发结果通知（WF → 集成商） |
 
 注意事项：
-- 支持两种收款模式（互斥）：卡详情模式（BANK_ACCOUNT_DETAIL）和卡 token 模式（BENEFICIARY_TOKEN）
+- 支持四种收款模式（互斥）：
+  - 卡详情模式（BANK_ACCOUNT_DETAIL）— 直接传银行卡详情
+  - 卡 token 模式（BENEFICIARY_TOKEN）— 使用已绑定收款人的 token
+  - 支付宝账户详情模式（ALIPAY_CN_DETAIL）— 代发到支付宝账户，paymentMethodMetaData 传空对象
+  - 关联支付宝钱包模式（REFERENCE_ALIPAY_CN）— 代发到关联的支付宝钱包，paymentMethodId 传 referenceCustomerId
 - 跨币种代发必须先调 consultPayout 获取 quoteId
 - `notifyPayout` 是回调通知接口（WF → 集成商），需验签后返回 SUCCESS，业务逻辑异步处理
 - 回调通知需返回成功响应，否则万里汇将重试最多 7 次

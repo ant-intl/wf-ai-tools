@@ -9,7 +9,6 @@ import {basePackage}.wf.config.WfConfig;
 import {basePackage}.wf.exception.WfErrorCode;
 import {basePackage}.wf.exception.WfException;
 import {basePackage}.wf.model.domain.Amount;
-import {basePackage}.wf.model.domain.PaymentMethodMetaData;
 import {basePackage}.wf.model.domain.TransferFromDetail;
 import {basePackage}.wf.model.domain.TransferToDetail;
 import {basePackage}.wf.model.domain.TransferToMethod;
@@ -47,6 +46,9 @@ public class PayoutClient {
 
     private static final String TRANSFER_METHOD_BANK = "BANK_ACCOUNT_DETAIL";
     private static final String TRANSFER_METHOD_TOKEN = "BENEFICIARY_TOKEN";
+    private static final String TRANSFER_METHOD_ALIPAY_CN = "ALIPAY_CN_DETAIL";
+    private static final String TRANSFER_METHOD_REF_ALIPAY_CN = "REFERENCE_ALIPAY_CN";
+    private static final String TRANSFER_METHOD_WALLET_ACCOUNT = "WALLET_ACCOUNT_DETAIL";
     private static final String CNY = "CNY";
     private static final int MAX_TRANSFER_REQUEST_ID_LENGTH = 64;
 
@@ -244,31 +246,48 @@ public class PayoutClient {
         }
 
         String paymentMethodId = toMethod.getPaymentMethodId();
-        PaymentMethodMetaData metaData = toMethod.getPaymentMethodMetaData();
+        String metaData = toMethod.getPaymentMethodMetaData();
 
         if (TRANSFER_METHOD_TOKEN.equals(paymentMethodType)) {
             if (paymentMethodId == null || paymentMethodId.trim().isEmpty()) {
                 throw new WfException(WfErrorCode.PARAM_ILLEGAL,
                     "paymentMethodId (beneficiaryToken) is required when paymentMethodType=BENEFICIARY_TOKEN");
             }
-            if (metaData != null) {
+            if (metaData != null && !metaData.trim().isEmpty()) {
                 throw new WfException(WfErrorCode.PARAM_ILLEGAL,
                     "paymentMethodMetaData must not be specified when paymentMethodType=BENEFICIARY_TOKEN");
             }
         } else if (TRANSFER_METHOD_BANK.equals(paymentMethodType)) {
-            if (metaData == null || metaData.getBankAccountNo() == null
-                || metaData.getBankAccountNo().trim().isEmpty()) {
+            if (metaData == null || metaData.trim().isEmpty()) {
                 throw new WfException(WfErrorCode.PARAM_ILLEGAL,
-                    "paymentMethodMetaData.bankAccountNo is required when paymentMethodType=BANK_ACCOUNT_DETAIL");
+                    "paymentMethodMetaData is required when paymentMethodType=BANK_ACCOUNT_DETAIL");
             }
             if (paymentMethodId != null && !paymentMethodId.trim().isEmpty()) {
                 throw new WfException(WfErrorCode.PARAM_ILLEGAL,
                     "paymentMethodId must not be specified when paymentMethodType=BANK_ACCOUNT_DETAIL");
             }
+        } else if (TRANSFER_METHOD_ALIPAY_CN.equals(paymentMethodType)) {
+            // ALIPAY_CN_DETAIL 模式：代发到支付宝账户，paymentMethodMetaData 必传
+            if (metaData == null || metaData.trim().isEmpty()) {
+                throw new WfException(WfErrorCode.PARAM_ILLEGAL,
+                    "paymentMethodMetaData must not be null when paymentMethodType=ALIPAY_CN_DETAIL");
+            }
+        } else if (TRANSFER_METHOD_REF_ALIPAY_CN.equals(paymentMethodType)) {
+            // REFERENCE_ALIPAY_CN 模式：代发到关联的支付宝钱包，paymentMethodId 传 referenceCustomerId
+            if (paymentMethodId == null || paymentMethodId.trim().isEmpty()) {
+                throw new WfException(WfErrorCode.PARAM_ILLEGAL,
+                    "paymentMethodId (referenceCustomerId) is required when paymentMethodType=REFERENCE_ALIPAY_CN");
+            }
+        } else if (TRANSFER_METHOD_WALLET_ACCOUNT.equals(paymentMethodType)) {
+            // WALLET_ACCOUNT_DETAIL 模式：代发到钱包账户，paymentMethodMetaData 必传（JSON 字符串）
+            if (metaData == null || metaData.trim().isEmpty()) {
+                throw new WfException(WfErrorCode.PARAM_ILLEGAL,
+                    "paymentMethodMetaData is required when paymentMethodType=WALLET_ACCOUNT_DETAIL");
+            }
         } else {
             throw new WfException(WfErrorCode.PARAM_ILLEGAL,
                 "unsupported paymentMethodType: " + paymentMethodType
-                    + ", expected BANK_ACCOUNT_DETAIL or BENEFICIARY_TOKEN");
+                    + ", expected BANK_ACCOUNT_DETAIL, BENEFICIARY_TOKEN, ALIPAY_CN_DETAIL, REFERENCE_ALIPAY_CN or WALLET_ACCOUNT_DETAIL");
         }
 
         if (CNY.equals(toAmount.getCurrency())) {

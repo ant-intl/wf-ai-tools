@@ -31,14 +31,22 @@ type TransferToDetail struct {
 	FeeAmount         *Amount            `json:"feeAmount,omitempty"`
 }
 
-// TransferToMethod represents the payee transfer method
+// TransferToMethod represents the payee transfer method.
+// Supports five mutually exclusive modes:
+//   - BANK_ACCOUNT_DETAIL: payout to bank card, set PaymentMethodMetaData with bank details (JSON string)
+//   - BENEFICIARY_TOKEN: payout to bank card via token, set PaymentMethodID with beneficiaryToken
+//   - ALIPAY_CN_DETAIL: payout to Alipay CN account, PaymentMethodMetaData can be empty
+//   - REFERENCE_ALIPAY_CN: payout to linked Alipay wallet, set PaymentMethodID with referenceCustomerId
+//   - WALLET_ACCOUNT_DETAIL: payout to wallet account, set PaymentMethodMetaData with wallet details (JSON string), PaymentMethodID with walletAccountId
 type TransferToMethod struct {
-	PaymentMethodType     string                 `json:"paymentMethodType"`
-	PaymentMethodMetaData *PaymentMethodMetaData `json:"paymentMethodMetaData,omitempty"`
-	PaymentMethodID       string                 `json:"paymentMethodId,omitempty"`
+	PaymentMethodType     string `json:"paymentMethodType"`
+	PaymentMethodMetaData string `json:"paymentMethodMetaData,omitempty"`
+	PaymentMethodID       string `json:"paymentMethodId,omitempty"`
 }
 
-// PaymentMethodMetaData contains bank account details for card detail mode
+// PaymentMethodMetaData contains payment method details for bank account mode.
+// For BANK_ACCOUNT_DETAIL mode, bank fields are used.
+// For WALLET_ACCOUNT_DETAIL mode, use WalletAccountDetail struct instead.
 type PaymentMethodMetaData struct {
 	BankAccountName      string `json:"bankAccountName,omitempty"`
 	BankAccountNo        string `json:"bankAccountNo,omitempty"`
@@ -53,6 +61,14 @@ type PaymentMethodMetaData struct {
 	BankLocalName        string `json:"bankLocalName,omitempty"`
 	BankAccountLocalName string `json:"bankAccountLocalName,omitempty"`
 	BeneficiaryType      string `json:"beneficiaryType,omitempty"`
+}
+
+// WalletAccountDetail contains wallet account details for WALLET_ACCOUNT_DETAIL mode.
+type WalletAccountDetail struct {
+	WalletFullName   string `json:"walletFullName,omitempty"`
+	WalletAccountNo  string `json:"walletAccountNo,omitempty"`
+	WalletBrandName  string `json:"walletBrandName,omitempty"`
+	WalletCountryCode string `json:"walletCountryCode,omitempty"`
 }
 
 // TransferQuote contains quote information for cross-currency payout
