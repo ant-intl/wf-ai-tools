@@ -5,11 +5,13 @@
 package {basePackage}.wf;
 
 import {basePackage}.wf.client.PayoutClient;
+import com.alibaba.fastjson.JSON;
 import {basePackage}.wf.config.WfConfig;
 import {basePackage}.wf.exception.WfException;
 import {basePackage}.wf.model.domain.Amount;
 import {basePackage}.wf.model.domain.PaymentMethodMetaData;
 import {basePackage}.wf.model.domain.TransferFromDetail;
+import {basePackage}.wf.model.domain.WalletAccountDetail;
 import {basePackage}.wf.model.domain.TransferResult;
 import {basePackage}.wf.model.domain.TransferQuote;
 import {basePackage}.wf.model.domain.TransferToDetail;
@@ -70,7 +72,7 @@ public class PayoutClientTest {
 
         TransferToMethod toMethod = new TransferToMethod();
         toMethod.setPaymentMethodType("BANK_ACCOUNT_DETAIL");
-        toMethod.setPaymentMethodMetaData(metaData);
+        toMethod.setPaymentMethodMetaData(JSON.toJSONString(metaData));
 
         TransferToDetail toDetail = new TransferToDetail();
         toDetail.setTransferToAmount(transferToAmount);
@@ -117,7 +119,7 @@ public class PayoutClientTest {
 
         TransferToMethod toMethodConsult = new TransferToMethod();
         toMethodConsult.setPaymentMethodType("BANK_ACCOUNT_DETAIL");
-        toMethodConsult.setPaymentMethodMetaData(metaData);
+        toMethodConsult.setPaymentMethodMetaData(JSON.toJSONString(metaData));
 
         TransferToDetail toDetailConsult = new TransferToDetail();
         toDetailConsult.setTransferToAmount(toAmountConsult);
@@ -161,7 +163,7 @@ public class PayoutClientTest {
 
         TransferToMethod toMethod = new TransferToMethod();
         toMethod.setPaymentMethodType("BANK_ACCOUNT_DETAIL");
-        toMethod.setPaymentMethodMetaData(metaData);
+        toMethod.setPaymentMethodMetaData(JSON.toJSONString(metaData));
 
         TransferToDetail toDetail = new TransferToDetail();
         toDetail.setTransferToAmount(toAmount);
@@ -211,7 +213,7 @@ public class PayoutClientTest {
 
         TransferToMethod toMethod = new TransferToMethod();
         toMethod.setPaymentMethodType("BANK_ACCOUNT_DETAIL");
-        toMethod.setPaymentMethodMetaData(metaData);
+        toMethod.setPaymentMethodMetaData(JSON.toJSONString(metaData));
 
         TransferToDetail toDetail = new TransferToDetail();
         toDetail.setTransferToAmount(transferToAmount);
@@ -291,7 +293,7 @@ public class PayoutClientTest {
 
         TransferToMethod toMethod = new TransferToMethod();
         toMethod.setPaymentMethodType("BANK_ACCOUNT_DETAIL");
-        toMethod.setPaymentMethodMetaData(metaData);
+        toMethod.setPaymentMethodMetaData(JSON.toJSONString(metaData));
 
         TransferToDetail toDetail = new TransferToDetail();
         toDetail.setTransferToAmount(transferToAmount);
@@ -311,6 +313,152 @@ public class PayoutClientTest {
             System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
         }
         System.out.println("=========================================");
+    }
+
+    // =========================================================================
+    // createPayout — 电子钱包模式
+    // =========================================================================
+
+    /**
+     * 测试代发到支付宝账户（ALIPAY_CN_DETAIL 模式）。
+     *
+     * <p>paymentMethodType = ALIPAY_CN_DETAIL，paymentMethodMetaData 传空对象。
+     * 收款币种为 CNY 时 businessSceneCode 必填。
+     */
+    @Test
+    public void testCreatePayoutAlipayDetail() {
+        Amount transferFromAmount = new Amount();
+        transferFromAmount.setCurrency("USD");
+        transferFromAmount.setValue(10000L); // 100.00 USD
+
+        TransferFromDetail fromDetail = new TransferFromDetail();
+        fromDetail.setTransferFromAmount(transferFromAmount);
+
+        Amount transferToAmount = new Amount();
+        transferToAmount.setCurrency("CNY");
+
+        PaymentMethodMetaData metaData = new PaymentMethodMetaData();
+        metaData.setBankAccountName("STARK bankAccountName");
+        metaData.setBankAccountNo("777777777");
+        metaData.setBankName("STARK bankName");
+        metaData.setBankBIC("HSBCHKXXXXX");
+        metaData.setBankCountryCode("HK");
+        metaData.setBeneficiaryType("THIRD_PARTY_PERSONAL_BANK_ACCOUNT");
+
+        TransferToMethod toMethod = new TransferToMethod();
+        toMethod.setPaymentMethodType("ALIPAY_CN_DETAIL");
+        toMethod.setPaymentMethodMetaData(JSON.toJSONString(metaData));
+
+        TransferToDetail toDetail = new TransferToDetail();
+        toDetail.setTransferToAmount(transferToAmount);
+        toDetail.setTransferToMethod(toMethod);
+        toDetail.setPurposeCode("GDS");
+
+        CreatePayoutRequest request = new CreatePayoutRequest();
+        request.setTransferRequestId("PAYOUT_ALIPAY_" + System.currentTimeMillis());
+        request.setTransferFromDetail(fromDetail);
+        request.setTransferToDetail(toDetail);
+        request.setBusinessSceneCode("THIRD_PARTY_PAYOUT"); // CNY 必填
+
+        System.out.println("====== testCreatePayoutAlipayDetail ======");
+        try {
+            CreatePayoutResponse response = client.createPayout(request);
+            printCreatePayoutResponse(response);
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+        System.out.println("============================================");
+    }
+
+    /**
+     * 测试代发到关联的支付宝钱包（REFERENCE_ALIPAY_CN 模式）。
+     *
+     * <p>paymentMethodType = REFERENCE_ALIPAY_CN，paymentMethodId 传 referenceCustomerId。
+     */
+    @Test
+    public void testCreatePayoutReferenceAlipay() {
+        Amount transferFromAmount = new Amount();
+        transferFromAmount.setCurrency("USD");
+        transferFromAmount.setValue(10000L); // 100.00 USD
+
+        TransferFromDetail fromDetail = new TransferFromDetail();
+        fromDetail.setTransferFromAmount(transferFromAmount);
+
+        Amount transferToAmount = new Amount();
+        transferToAmount.setCurrency("CNY");
+
+        TransferToMethod toMethod = new TransferToMethod();
+        toMethod.setPaymentMethodType("REFERENCE_ALIPAY_CN");
+        toMethod.setPaymentMethodId("YOUR_REFERENCE_CUSTOMER_ID"); // 其取值为 referenceCustomerId 字段的值。
+
+        TransferToDetail toDetail = new TransferToDetail();
+        toDetail.setTransferToAmount(transferToAmount);
+        toDetail.setTransferToMethod(toMethod);
+        toDetail.setPurposeCode("GDS");
+
+        CreatePayoutRequest request = new CreatePayoutRequest();
+        request.setTransferRequestId("PAYOUT_REF_ALIPAY_" + System.currentTimeMillis());
+        request.setTransferFromDetail(fromDetail);
+        request.setTransferToDetail(toDetail);
+        request.setBusinessSceneCode("THIRD_PARTY_PAYOUT"); // CNY 必填
+
+        System.out.println("====== testCreatePayoutReferenceAlipay ======");
+        try {
+            CreatePayoutResponse response = client.createPayout(request);
+            printCreatePayoutResponse(response);
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+        System.out.println("=============================================");
+    }
+
+    /**
+     * 测试代发到钱包账户（WALLET_ACCOUNT_DETAIL 模式）。
+     *
+     * <p>paymentMethodType = WALLET_ACCOUNT_DETAIL，paymentMethodMetaData 传递钱包账户信息，
+     * paymentMethodId 传 walletAccountId。
+     */
+    @Test
+    public void testCreatePayoutWalletAccount() {
+        Amount transferFromAmount = new Amount();
+        transferFromAmount.setCurrency("USD");
+        transferFromAmount.setValue(10000L); // 100.00 USD
+
+        TransferFromDetail fromDetail = new TransferFromDetail();
+        fromDetail.setTransferFromAmount(transferFromAmount);
+
+        Amount transferToAmount = new Amount();
+        transferToAmount.setCurrency("USD");
+
+        WalletAccountDetail walletDetail = new WalletAccountDetail();
+        walletDetail.setWalletFullName("Paul Gorge");
+        walletDetail.setWalletAccountNo("176731*****");
+        walletDetail.setWalletBrandName("GCASH");
+        walletDetail.setWalletCountryCode("PH");
+
+        TransferToMethod toMethod = new TransferToMethod();
+        toMethod.setPaymentMethodType("WALLET_ACCOUNT_DETAIL");
+        toMethod.setPaymentMethodMetaData(JSON.toJSONString(walletDetail));
+        toMethod.setPaymentMethodId("YOUR_WALLET_ACCOUNT_ID");
+
+        TransferToDetail toDetail = new TransferToDetail();
+        toDetail.setTransferToAmount(transferToAmount);
+        toDetail.setTransferToMethod(toMethod);
+        toDetail.setPurposeCode("GDS");
+
+        CreatePayoutRequest request = new CreatePayoutRequest();
+        request.setTransferRequestId("PAYOUT_WALLET_" + System.currentTimeMillis());
+        request.setTransferFromDetail(fromDetail);
+        request.setTransferToDetail(toDetail);
+
+        System.out.println("====== testCreatePayoutWalletAccount ======");
+        try {
+            CreatePayoutResponse response = client.createPayout(request);
+            printCreatePayoutResponse(response);
+        } catch (WfException e) {
+            System.out.println("WfException: " + e.getErrorCode() + " - " + e.getMessage());
+        }
+        System.out.println("============================================");
     }
 
     // =========================================================================
