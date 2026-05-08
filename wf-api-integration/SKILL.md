@@ -11,14 +11,14 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 ## 模块索引
 
 
-| 模块         | 模块目录                        | 模块说明                                                                 | 语言支持           |
-| ------------ | ------------------------------- | ------------------------------------------------------------------------ | ------------------ |
-| 万里汇转账   | `references/transfer/`          | 在 WF 账户之间划转资金（咨询/发起/查询/结果通知）                       | Java、Golang       |
-| 全球分发     | `references/payout/`            | 代发到第三方银行卡或电子钱包（咨询/发起/查询/结果通知）                 | Java、Golang       |
-| 收款人管理   | `references/beneficiary/`       | 卡模版查询、绑定/删除/编辑/查询收款人、绑定结果通知                     | Java、Golang（部分）|
-| 账户管理     | `references/account-inquiry/`   | 查询账户信息/余额/结汇额度/子账号/店铺，接收充值/余额变动通知           | Java、Golang       |
-| 账单管理     | `references/statement-inquiry/` | 查询账户交易流水列表及流水详情                                          | Java、Golang、Python |
-| 交易信息管理 | `references/trade-order/`       | 上传交易订单（B2C 结汇 / B2B 订单关联）、查询结果、处理异步通知        | Java、Golang       |
+| 模块         | 模块目录                                                                                                                           | 模块说明                                                                 | 语言支持           |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------ |
+| 万里汇转账   | [references/transfer/](references/transfer/)          | 在 WF 账户之间划转资金（咨询/发起/查询/结果通知）                       | Java、Golang       |
+| 全球分发     | [references/payout/](references/payout/)              | 代发到第三方银行卡或电子钱包（咨询/发起/查询/结果通知）                 | Java、Golang       |
+| 收款人管理   | [references/beneficiary/](references/beneficiary/)    | 卡模版查询、绑定/删除/编辑/查询收款人、绑定结果通知                     | Java、Golang（部分）|
+| 账户管理     | [references/account-inquiry/](references/account-inquiry/)  | 查询账户信息/余额/结汇额度/子账号/店铺，接收充值/余额变动通知           | Java、Golang       |
+| 账单管理     | [references/statement-inquiry/](references/statement-inquiry/) | 查询账户交易流水列表及流水详情                                          | Java、Golang、Python |
+| 交易信息管理 | [references/trade-order/](references/trade-order/)    | 上传交易订单（B2C 结汇 / B2B 订单关联）、查询结果、处理异步通知        | Java、Golang       |
 
 ## 快速决策树
 
@@ -102,7 +102,7 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 
 1. **确认模块**：确认用户需要对接的模块，读取对应模块的 `README.md` 了解接口列表
 2. **确认接口**：确认用户需要对接的具体接口，读取对应接口的 `GUIDE.md` 了解接口规范
-3. **加载公共代码**：读取 `references/common/` 下的公共代码模板
+3. **加载公共代码**：读取 [references/common/](references/common/) 下的公共代码模板
 4. **加载接口代码**：读取对应接口目录下的代码模板
 5. **生成代码**：根据用户项目结构生成代码，替换 `{basePackage}`（Java/Python）或 `{moduleName}`（Golang）占位符
 6. **代码检查**：执行「代码生成后检查清单」中的各项检查
@@ -150,43 +150,43 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 
 ## 公共依赖
 
-所有模块共用以下组件，位于 `references/common/`：
+所有模块共用以下组件，位于 [references/common/](references/common/)：
 
-### Java (`references/common/java/`)
-
-
-| 组件             | 路径                               | 说明                                          |
-| ---------------- | ---------------------------------- | --------------------------------------------- |
-| WfConfig         | `config/WfConfig.java`             | 配置管理（clientId、baseUrl、密钥路径、超时） |
-| WfSigner         | `signer/WfSigner.java`             | RSA256 签名/验签                              |
-| WfHttpClientUtil | `util/WfHttpClientUtil.java`       | HTTP 客户端封装（签名注入、响应验签）         |
-| Result           | `model/response/Result.java`       | 统一响应结果对象                              |
-| WfErrorCode      | `model/exception/WfErrorCode.java` | 错误码枚举                                    |
-| WfException      | `model/exception/WfException.java` | 业务异常类                                    |
-
-### Golang (`references/common/golang/`)
+### Java ([references/common/java/](references/common/java/))
 
 
-| 组件         | 路径                              | 说明                                   |
-| ------------ | --------------------------------- | -------------------------------------- |
-| WfConfig     | `config/config.go`                | 配置管理                               |
-| WfSigner     | `signer/signer.go`                | RSA256 签名/验签（Signer 接口 + 实现） |
-| WfHttpClient | `util/wf_http_client.go`          | HTTP 客户端封装                        |
-| Result       | `model/response/result.go`        | 统一响应结果                           |
-| WfErrorCode  | `model/exception/error_code.go`   | 错误码定义                             |
-| WfException  | `model/exception/wf_exception.go` | 异常定义                               |
+| 组件             | 路径                                                                                                                               | 说明                                          |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| WfConfig         | [config/WfConfig.java](references/common/java/config/WfConfig.java)             | 配置管理（clientId、baseUrl、密钥路径、超时） |
+| WfSigner         | [signer/WfSigner.java](references/common/java/signer/WfSigner.java)             | RSA256 签名/验签                              |
+| WfHttpClientUtil | [util/WfHttpClientUtil.java](references/common/java/util/WfHttpClientUtil.java)       | HTTP 客户端封装（签名注入、响应验签）         |
+| Result           | [model/response/Result.java](references/common/java/model/response/Result.java)       | 统一响应结果对象                              |
+| WfErrorCode      | [model/exception/WfErrorCode.java](references/common/java/model/exception/WfErrorCode.java) | 错误码枚举                                    |
+| WfException      | [model/exception/WfException.java](references/common/java/model/exception/WfException.java) | 业务异常类                                    |
 
-### Python (`references/common/python/`)
+### Golang ([references/common/golang/](references/common/golang/))
 
 
-| 组件         | 路径                                | 说明                           |
-| ------------ | ----------------------------------- | ------------------------------ |
-| WfConfig     | `config/wf_config.py`               | 配置管理                       |
-| WfSigner     | `signer/wf_signer.py`               | RSA256 签名/验签               |
-| WfHttpClient | `util/wf_http_client.py`            | HTTP 客户端封装                |
-| Result       | `model/response/result.py`          | 统一响应结果                   |
-| WfErrorCode  | `model/exception/wf_error_code.py`  | 错误码定义                     |
-| WfException  | `model/exception/wf_exception.py`   | 异常定义                       |
+| 组件         | 路径                                                                                                                    | 说明                                   |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| WfConfig     | [config/config.go](references/common/golang/config/config.go)                | 配置管理                               |
+| WfSigner     | [signer/signer.go](references/common/golang/signer/signer.go)                | RSA256 签名/验签（Signer 接口 + 实现） |
+| WfHttpClient | [util/wf_http_client.go](references/common/golang/util/wf_http_client.go)          | HTTP 客户端封装                        |
+| Result       | [model/response/result.go](references/common/golang/model/response/result.go)        | 统一响应结果                           |
+| WfErrorCode  | [model/exception/error_code.go](references/common/golang/model/exception/error_code.go)   | 错误码定义                             |
+| WfException  | [model/exception/wf_exception.go](references/common/golang/model/exception/wf_exception.go) | 异常定义                               |
+
+### Python ([references/common/python/](references/common/python/))
+
+
+| 组件         | 路径                                                                                                                         | 说明                           |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| WfConfig     | [config/wf_config.py](references/common/python/config/wf_config.py)               | 配置管理                       |
+| WfSigner     | [signer/wf_signer.py](references/common/python/signer/wf_signer.py)               | RSA256 签名/验签               |
+| WfHttpClient | [util/wf_http_client.py](references/common/python/util/wf_http_client.py)            | HTTP 客户端封装                |
+| Result       | [model/response/result.py](references/common/python/model/response/result.py)          | 统一响应结果                   |
+| WfErrorCode  | [model/exception/wf_error_code.py](references/common/python/model/exception/wf_error_code.py)  | 错误码定义                     |
+| WfException  | [model/exception/wf_exception.py](references/common/python/model/exception/wf_exception.py)    | 异常定义                       |
 
 ## 公共代码生成规则
 
@@ -227,7 +227,7 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 ```
 
-详见 `references/common/` 下的签名工具代码。
+详见 [references/common/](references/common/) 下的签名工具代码。
 
 ## 测试代码生成
 
@@ -251,7 +251,7 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 **检查步骤**：
 
 1. 遍历生成的所有 Model 类（位于 `model/domain/`、`model/request/`、`model/response/`）
-2. 对比每个生成的类与对应模板文件（`references/{module}/{interface}/{language}/model/`，其中 `{language}` 为 `java`、`golang` 或 `python`）
+2. 对比每个生成的类与对应模板文件（[references/{module}/{interface}/{language}/model/](references/)，其中 `{language}` 为 `java`、`golang` 或 `python`）
 3. 检查字段数量、字段名称、字段类型是否一致
 4. Java：检查 Getter/Setter 方法是否完整；Python：检查 `dataclass` 字段或属性定义是否完整
 
@@ -318,12 +318,12 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 
 ### 万里汇转账（transfer）
 
-| 接口         | 目录                 | 说明                                             |
-| ------------ | -------------------- | ------------------------------------------------ |
-| 咨询转账     | `consult-transfer/`  | 转账前获取汇率、手续费等信息                     |
-| 户到户转账   | `create-transfer/`   | 在万里汇账户之间转账                             |
-| 查询转账结果 | `inquiry-transfer/`  | 查询转账结果（PROCESSING 状态需轮询）            |
-| 转账结果通知 | `notify-transfer/`   | 回调通知：接收万里汇推送的转账结果通知（WF → 集成商） |
+| 接口         | 目录                                                                                                                                                  | 说明                                             |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| 咨询转账     | [consult-transfer/](references/transfer/consult-transfer/)  | 转账前获取汇率、手续费等信息                     |
+| 户到户转账   | [create-transfer/](references/transfer/create-transfer/)    | 在万里汇账户之间转账                             |
+| 查询转账结果 | [inquiry-transfer/](references/transfer/inquiry-transfer/)  | 查询转账结果（PROCESSING 状态需轮询）            |
+| 转账结果通知 | [notify-transfer/](references/transfer/notify-transfer/)    | 回调通知：接收万里汇推送的转账结果通知（WF → 集成商） |
 
 注意事项：
 - 转账为异步接口，`PROCESSING` 状态必须轮询
@@ -334,13 +334,12 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 
 ### 全球分发（payout）
 
-| 接口         | 目录              | 说明                                     |
-| ------------ | ----------------- | ---------------------------------------- |
-| 咨询代发汇率 | `consult-payout/` | 咨询费用、校验卡模版、获取跨币种汇率报价 |
-| 创建代发     | `create-payout/`  | 代发到银行卡或电子钱包                   |
-| 查询代发结果 | `inquiry-payout/` | 查询代发单状态                           |
-| 代发结果通知 | `notify-payout/`  | 回调通知：接收万里汇推送的代发结果通知（WF → 集成商） |
-
+| 接口         | 目录                                                                                                                                           | 说明                                     |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| 咨询代发汇率 | [consult-payout/](references/payout/consult-payout/) | 咨询费用、校验卡模版、获取跨币种汇率报价 |
+| 创建代发     | [create-payout/](references/payout/create-payout/)   | 代发到银行卡或电子钱包                   |
+| 查询代发结果 | [inquiry-payout/](references/payout/inquiry-payout/)  | 查询代发单状态                           |
+| 代发结果通知 | [notify-payout/](references/payout/notify-payout/)    | 回调通知：接收万里汇推送的代发结果通知（WF → 集成商） |
 注意事项：
 - 支持四种收款模式（互斥）：
   - 卡详情模式（BANK_ACCOUNT_DETAIL）— 直接传银行卡详情
@@ -350,30 +349,30 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 - 跨币种代发必须先调 consultPayout 获取 quoteId
 - `notifyPayout` 是回调通知接口（WF → 集成商），需验签后返回 SUCCESS，业务逻辑异步处理
 - 回调通知需返回成功响应，否则万里汇将重试最多 7 次
-- 完整嵌套对象字段定义见 `references/payout/field-reference.md`
+- 完整嵌套对象字段定义见 [references/payout/field-reference.md](references/payout/field-reference.md)
 
 ### 收款人管理（beneficiary）
 
-| 接口             | 目录                | 说明                                            | 语言支持     |
-| ---------------- | ------------------- | ----------------------------------------------- | ------------ |
-| 查询卡模版       | `inquiry-template/` | 查询指定国家/币种/账户类型的卡模版字段要求      | Java、Golang |
-| 绑定收款人       | `bind/`             | 绑定收款人到 WF 账户，获取 beneficiaryToken     | Java         |
-| 删除收款人       | `remove/`           | 删除已绑定的收款人                              | Java         |
-| 编辑收款人       | `edit/`             | 修改收款人昵称                                  | Java         |
-| 查询收款人列表   | `inquiry-list/`     | 分页查询已绑定的收款人                          | Java         |
-| 绑定收款人通知   | `notify-bind/`      | 回调通知：接收收款人绑定结果通知（WF → 集成商） | Java、Golang |
+| 接口             | 目录                                                                                                                                                    | 说明                                            | 语言支持     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | ------------ |
+| 查询卡模版       | [inquiry-template/](references/beneficiary/inquiry-template/) | 查询指定国家/币种/账户类型的卡模版字段要求      | Java、Golang |
+| 绑定收款人       | [bind/](references/beneficiary/bind/)                         | 绑定收款人到 WF 账户，获取 beneficiaryToken     | Java         |
+| 删除收款人       | [remove/](references/beneficiary/remove/)                     | 删除已绑定的收款人                              | Java         |
+| 编辑收款人       | [edit/](references/beneficiary/edit/)                         | 修改收款人昵称                                  | Java         |
+| 查询收款人列表   | [inquiry-list/](references/beneficiary/inquiry-list/)         | 分页查询已绑定的收款人                          | Java         |
+| 绑定收款人通知   | [notify-bind/](references/beneficiary/notify-bind/)           | 回调通知：接收收款人绑定结果通知（WF → 集成商） | Java、Golang |
 
 ### 账户管理（account-inquiry）
 
-| 接口           | 目录                      | 说明                                                 |
-| -------------- | ------------------------- | ---------------------------------------------------- |
-| 查询账户信息   | `inquiry-account/`        | 查询 WF 账户信息（账户类型、账号、激活状态、币种等） |
-| 查询余额       | `inquiry-balance/`        | 查询 WF 账户余额，支持按币种和余额类型过滤          |
-| 查询结汇额度   | `inquiry-available-quota/`| 查询可申报的结汇额度，支持四种累计方式               |
-| 查询子账号信息 | `inquiry-subuser/`        | 查询万里汇主账号及子账号信息，支持分页               |
-| 查询店铺信息   | `inquiry-store/`          | 查询店铺信息及店铺关联账号信息，支持分页             |
-| 充值通知       | `notify-vostro/`          | 接收万里汇充值/垫付回调通知（WF → 集成商）          |
-| 余额变动通知   | `notify-balance-change/`  | 接收万里汇余额账户动账变动回调通知（WF → 集成商）   |
+| 接口           | 目录                                                                                                                                                                       | 说明                                                 |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| 查询账户信息   | [inquiry-account/](references/account-inquiry/inquiry-account/)                   | 查询 WF 账户信息（账户类型、账号、激活状态、币种等） |
+| 查询余额       | [inquiry-balance/](references/account-inquiry/inquiry-balance/)                   | 查询 WF 账户余额，支持按币种和余额类型过滤          |
+| 查询结汇额度   | [inquiry-available-quota/](references/account-inquiry/inquiry-available-quota/)   | 查询可申报的结汇额度，支持四种累计方式               |
+| 查询子账号信息 | [inquiry-subuser/](references/account-inquiry/inquiry-subuser/)                   | 查询万里汇主账号及子账号信息，支持分页               |
+| 查询店铺信息   | [inquiry-store/](references/account-inquiry/inquiry-store/)                       | 查询店铺信息及店铺关联账号信息，支持分页             |
+| 充值通知       | [notify-vostro/](references/account-inquiry/notify-vostro/)                       | 接收万里汇充值/垫付回调通知（WF → 集成商）          |
+| 余额变动通知   | [notify-balance-change/](references/account-inquiry/notify-balance-change/)       | 接收万里汇余额账户动账变动回调通知（WF → 集成商）   |
 
 注意事项：
 - `notifyVostro` 和 `notifyBalanceChange` 是回调通知接口（WF → 集成商），非主动调用接口
@@ -383,10 +382,10 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 
 ### 账单管理（statement-inquiry）
 
-| 接口         | 目录                        | 说明                       |
-| ------------ | --------------------------- | -------------------------- |
-| 查询账单流水 | `inquiry-statement-list/`   | 分页查询 WF 账户交易流水   |
-| 查询账单详情 | `inquiry-statement-detail/` | 查询指定账单流水的详细信息 |
+| 接口         | 目录                                                                                                                                                                           | 说明                       |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| 查询账单流水 | [inquiry-statement-list/](references/statement-inquiry/inquiry-statement-list/)     | 分页查询 WF 账户交易流水   |
+| 查询账单详情 | [inquiry-statement-detail/](references/statement-inquiry/inquiry-statement-detail/) | 查询指定账单流水的详细信息 |
 
 注意事项：
 - `pageSize` 固定为 10，不允许调用方修改
@@ -395,16 +394,16 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 
 ### 交易信息管理（trade-order）
 
-| 接口         | 目录                   | 说明                                                   |
-| ------------ | ---------------------- | ------------------------------------------------------ |
-| 提交交易订单 | `submit-trade-order/`  | 上传交易订单（B2C 结汇 / B2B 订单关联）               |
-| 查询订单结果 | `inquiry-trade-order/` | 查询上传结果（仅 PAY_INTO_CHINA）                      |
-| 订单回调通知 | `notify-trade-order/`  | 处理 WF 异步回调通知（仅 PAY_INTO_CHINA）              |
+| 接口         | 目录                                                                                                                                                      | 说明                                                   |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| 提交交易订单 | [submit-trade-order/](references/trade-order/submit-trade-order/)  | 上传交易订单（B2C 结汇 / B2B 订单关联）               |
+| 查询订单结果 | [inquiry-trade-order/](references/trade-order/inquiry-trade-order/) | 查询上传结果（仅 PAY_INTO_CHINA）                      |
+| 订单回调通知 | [notify-trade-order/](references/trade-order/notify-trade-order/)   | 处理 WF 异步回调通知（仅 PAY_INTO_CHINA）              |
 
 注意事项：
 - sceneCode 决定必填字段集合
 - tradeOrders 上限：B2C 最多 100 笔，B2B 最多 10 笔
-- 完整嵌套对象字段定义见 `references/trade-order/field-reference.md`
+- 完整嵌套对象字段定义见 [references/trade-order/field-reference.md](references/trade-order/field-reference.md)
 
 ---
 
