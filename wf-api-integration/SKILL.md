@@ -1,24 +1,24 @@
 ---
 name: wf-api-integration
-description: Generate Java, Golang, or Python integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, account inquiry (balance, quota, subuser, store, notifications), statement inquiry, and trade order management. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
+description: Generate Java, Golang, or Python integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, account (balance, quota, subuser, store, notifications), statement, and trade order management. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
 ---
 # WF API Integration Skill
 
 帮助用户对接万里汇(WorldFirst) API，支持 Java、Golang 和 Python 三种语言，涵盖转账、代发、收款人管理、账户管理（余额/额度/子账号/店铺/通知）、账单查询、交易订单管理等模块。
 
-> **语言支持说明**：Java 和 Golang 覆盖所有模块；Python 目前仅支持公共模块（`common/`）和账单管理模块（`statement-inquiry/`），其余模块暂无 Python 模板。
+> **语言支持说明**：Java 和 Golang 覆盖所有模块；Python 目前仅支持公共模块（`common/`）和账单管理模块（`statement-management/`），其余模块暂无 Python 模板。
 
 ## 模块索引
 
 
-| 模块         | 模块目录                                                                                                                           | 模块说明                                                                 | 语言支持           |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------ |
-| 万里汇转账   | [references/transfer/](references/transfer/)          | 在 WF 账户之间划转资金（咨询/发起/查询/结果通知）                       | Java、Golang       |
-| 全球分发     | [references/payout/](references/payout/)              | 代发到第三方银行卡或电子钱包（咨询/发起/查询/结果通知）                 | Java、Golang       |
-| 收款人管理   | [references/beneficiary/](references/beneficiary/)    | 卡模版查询、绑定/删除/编辑/查询收款人、绑定结果通知                     | Java、Golang（部分）|
-| 账户管理     | [references/account-inquiry/](references/account-inquiry/)  | 查询账户信息/余额/结汇额度/子账号/店铺，接收充值/余额变动通知           | Java、Golang       |
-| 账单管理     | [references/statement-inquiry/](references/statement-inquiry/) | 查询账户交易流水列表及流水详情                                          | Java、Golang、Python |
-| 交易信息管理 | [references/trade-order/](references/trade-order/)    | 上传交易订单（B2C 结汇 / B2B 订单关联）、查询结果、处理异步通知        | Java、Golang       |
+| 模块         | 模块目录                                                        | 模块说明                                                     | 语言支持           |
+| ----------- |----------------------------------------------------------------|-----------------------------------------------------------| ------------------ |
+| 万里汇转账   | [references/transfer/](references/transfer/)                   | 在 WF 账户之间划转资金（咨询/发起/查询/结果通知）                | Java、Golang       |
+| 全球分发     | [references/payout/](references/payout/)                       | 代发到第三方银行卡或电子钱包（咨询/发起/查询/结果通知）            | Java、Golang       |
+| 收款人管理   | [references/beneficiary/](references/beneficiary/)             | 卡模版查询、绑定/删除/编辑/查询收款人、绑定结果通知                | Java、Golang（部分）|
+| 账户管理     | [references/account-management/](references/account-management/)     | 查询账户信息/余额/结汇额度/子账号/店铺，接收充值/余额变动通知       | Java、Golang       |
+| 账单管理     | [references/statement-management/](references/statement-management/) | 查询账户交易流水列表及流水详情                                 | Java、Golang、Python |
+| 交易信息管理 | [references/trade-order/](references/trade-order/)             | 上传交易订单（B2C 结汇 / B2B 订单关联）、查询结果、处理异步通知     | Java、Golang       |
 
 ## 快速决策树
 
@@ -27,15 +27,24 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
         |
         +-- 在 WF 账户之间划转资金？ --> 万里汇转账
         |       |
+        |       +-- 需要提前获取汇率/手续费？ --> 咨询转账（consultTransfer）
+        |       +-- 发起转账？ --> 户到户转账（createTransfer）
+        |       +-- 查询转账结果？ --> 查询转账结果（inquiryTransfer）
         |       +-- 接收转账结果回调？ --> 转账结果通知（notifyTransfer）
         |
         +-- 付款到第三方银行卡或电子钱包（发工资、供应商付款、支付宝代发）？ --> 全球分发（代发）
         |       |
+        |       +-- 需要提前获取汇率/报价？ --> 咨询代发汇率（consultPayout）
+        |       +-- 发起代发？ --> 创建代发（createPayout）
+        |       +-- 查询代发结果？ --> 查询代发结果（inquiryPayout）
         |       +-- 接收代发结果回调？ --> 代发结果通知（notifyPayout）
         |
         +-- 管理收款人银行卡（增删改查、卡模版）？ --> 收款人管理
         |       |
-        |       +-- 接收收款人绑定结果回调？ --> 绑定收款人通知（notifyBindBeneficiary）
+        |       +-- 查看卡模版字段要求？ --> 查询卡模版（inquiryTemplate）
+        |       +-- 绑定收款人？ --> 绑定收款人（bindBeneficiary）
+        |       +-- 删除/编辑/查询收款人？ --> 对应接口
+        |       +-- 接收绑卡结果回调？ --> 绑定收款人通知（notifyBindBeneficiary）
         |
         +-- 账户相关查询？ --> 账户管理
         |       |
@@ -48,8 +57,15 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
         |       +-- 接收余额变动回调？ --> 余额变动通知（notifyBalanceChange）
         |
         +-- 查看账户交易流水或对账？ --> 账单管理
+        |       |
+        |       +-- 查询流水列表？ --> 查询账单流水（inquiryStatementList）
+        |       +-- 查询流水详情？ --> 查询账单详情（inquiryStatementDetail）
         |
-        +-- 上传交易订单（跨境结汇 / B2B 订单关联）？ --> 交易信息单管理
+        +-- 上传交易订单（跨境结汇 / B2B 订单关联）？ --> 交易信息管理
+                |
+                +-- 上传交易订单？ --> 提交交易订单（submitTradeOrder）
+                +-- 查询上传结果？ --> 查询订单结果（inquiryTradeOrder）
+                +-- 接收异步通知？ --> 订单回调通知（notifyTradeOrder）
 ```
 
 ## 场景关键词匹配
@@ -259,7 +275,7 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 
 ```bash
 # 对比生成的 FundMoveDetail.java 与模板
-diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statement-list/java/model/domain/FundMoveDetail.java
+diff generated/FundMoveDetail.java references/statement-management/inquiry-statement-list/java/model/domain/FundMoveDetail.java
 ```
 
 ### 2. 单元测试运行检查
@@ -362,17 +378,17 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 | 查询收款人列表   | [inquiry-list/](references/beneficiary/inquiry-list/)         | 分页查询已绑定的收款人                          | Java         |
 | 绑定收款人通知   | [notify-bind/](references/beneficiary/notify-bind/)           | 回调通知：接收收款人绑定结果通知（WF → 集成商） | Java、Golang |
 
-### 账户管理（account-inquiry）
+### 账户管理（account-management）
 
 | 接口           | 目录                                                                                                                                                                       | 说明                                                 |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| 查询账户信息   | [inquiry-account/](references/account-inquiry/inquiry-account/)                   | 查询 WF 账户信息（账户类型、账号、激活状态、币种等） |
-| 查询余额       | [inquiry-balance/](references/account-inquiry/inquiry-balance/)                   | 查询 WF 账户余额，支持按币种和余额类型过滤          |
-| 查询结汇额度   | [inquiry-available-quota/](references/account-inquiry/inquiry-available-quota/)   | 查询可申报的结汇额度，支持四种累计方式               |
-| 查询子账号信息 | [inquiry-subuser/](references/account-inquiry/inquiry-subuser/)                   | 查询万里汇主账号及子账号信息，支持分页               |
-| 查询店铺信息   | [inquiry-store/](references/account-inquiry/inquiry-store/)                       | 查询店铺信息及店铺关联账号信息，支持分页             |
-| 充值通知       | [notify-vostro/](references/account-inquiry/notify-vostro/)                       | 接收万里汇充值/垫付回调通知（WF → 集成商）          |
-| 余额变动通知   | [notify-balance-change/](references/account-inquiry/notify-balance-change/)       | 接收万里汇余额账户动账变动回调通知（WF → 集成商）   |
+| 查询账户信息   | [inquiry-account/](references/account-management/inquiry-account/)                   | 查询 WF 账户信息（账户类型、账号、激活状态、币种等） |
+| 查询余额       | [inquiry-balance/](references/account-management/inquiry-balance/)                   | 查询 WF 账户余额，支持按币种和余额类型过滤          |
+| 查询结汇额度   | [inquiry-available-quota/](references/account-management/inquiry-available-quota/)   | 查询可申报的结汇额度，支持四种累计方式               |
+| 查询子账号信息 | [inquiry-subuser/](references/account-management/inquiry-subuser/)                   | 查询万里汇主账号及子账号信息，支持分页               |
+| 查询店铺信息   | [inquiry-store/](references/account-management/inquiry-store/)                       | 查询店铺信息及店铺关联账号信息，支持分页             |
+| 充值通知       | [notify-vostro/](references/account-management/notify-vostro/)                       | 接收万里汇充值/垫付回调通知（WF → 集成商）          |
+| 余额变动通知   | [notify-balance-change/](references/account-management/notify-balance-change/)       | 接收万里汇余额账户动账变动回调通知（WF → 集成商）   |
 
 注意事项：
 - `notifyVostro` 和 `notifyBalanceChange` 是回调通知接口（WF → 集成商），非主动调用接口
@@ -380,12 +396,12 @@ diff generated/FundMoveDetail.java references/statement-inquiry/inquiry-statemen
 - `inquirySubuser` 仅主账号可调用，子账号调用返回 `USER_ACCOUNT_NOT_PRIMARY`
 - 余额 `value` 为最小货币单位的整数（如 USD 100.00 → value = 10000）
 
-### 账单管理（statement-inquiry）
+### 账单管理（statement-management）
 
 | 接口         | 目录                                                                                                                                                                           | 说明                       |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| 查询账单流水 | [inquiry-statement-list/](references/statement-inquiry/inquiry-statement-list/)     | 分页查询 WF 账户交易流水   |
-| 查询账单详情 | [inquiry-statement-detail/](references/statement-inquiry/inquiry-statement-detail/) | 查询指定账单流水的详细信息 |
+| 查询账单流水 | [inquiry-statement-list/](references/statement-management/inquiry-statement-list/)     | 分页查询 WF 账户交易流水   |
+| 查询账单详情 | [inquiry-statement-detail/](references/statement-management/inquiry-statement-detail/) | 查询指定账单流水的详细信息 |
 
 注意事项：
 - `pageSize` 固定为 10，不允许调用方修改
