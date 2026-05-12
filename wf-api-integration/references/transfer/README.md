@@ -1,5 +1,10 @@
 # 万里汇转账模块 (Transfer)
 
+## 官方文档
+
+- [WorldFirst 开发者文档 - Transfer](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/transfer)
+- [consultTransfer](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/consult_transfer) | [createTransfer](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/create_transfer) | [inquiryTransfer](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_transfer) | [notifyTransfer](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_transfer)
+
 ## 接口列表
 
 | 接口 | 目录 | 说明 |

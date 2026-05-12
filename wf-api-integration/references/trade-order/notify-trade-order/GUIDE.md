@@ -9,6 +9,10 @@ WF 在处理完成后主动 POST 到集成商的 `notifyUrl`。**仅适用于 PA
 2. 处理业务逻辑
 3. 构建响应并**签名**后返回
 
+## 官方文档
+
+- [notifyTradeOrder 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_trade_order)
+
 ## 入站请求（WF → 集成商）
 
 ### 请求头

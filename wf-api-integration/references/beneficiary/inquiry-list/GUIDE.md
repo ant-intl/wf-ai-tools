@@ -4,6 +4,10 @@
 
 分页查询已绑定的收款人列表。
 
+## 官方文档
+
+- [inquiryBeneficiaryList 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_beneficiary_list)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/account/inquiryBeneficiaryList`

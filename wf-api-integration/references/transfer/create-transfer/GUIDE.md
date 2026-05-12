@@ -6,6 +6,10 @@
 
 转账步骤为异步。调用本接口后，万里汇仅返回此接口的调用结果，而在 notifyTransfer 接口中返回转账结果。集成商也可以自行调用 inquiryTransfer 接口查询转账结果。
 
+## 官方文档
+
+- [createTransfer 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/create_transfer)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/fund/createTransfer`

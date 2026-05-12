@@ -4,6 +4,10 @@
 
 删除已绑定的收款人。
 
+## 官方文档
+
+- [removeBeneficiary 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/remove_beneficiary)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/account/removeBeneficiary`

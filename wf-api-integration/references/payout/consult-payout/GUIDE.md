@@ -4,6 +4,10 @@
 
 在发起跨币种 createPayout 之前，调用此接口获取汇率报价（quoteId）。获取到 quoteId 后，将其传入 createPayout 请求的 `transferToDetail.transferQuote.quoteId` 字段。
 
+## 官方文档
+
+- [consultPayout 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/consult_payout)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/fund/consultPayout`

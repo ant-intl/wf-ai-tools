@@ -9,6 +9,10 @@
 - 集成商需设定 timeout 机制中断查询，以处理转账后无明确结果的情况；
 - 若调用 createTransfer 接口后 2 小时没有接收到万里汇通知，且调用 inquiryTransfer 接口后 `transferResult.resultCode` 返回 `UNKNOWN`，联系万里汇技术支持。
 
+## 官方文档
+
+- [inquiryTransfer 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_transfer)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/fund/inquiryTransfer`

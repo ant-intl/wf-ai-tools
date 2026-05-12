@@ -4,6 +4,10 @@
 
 调用此接口进行代发到第三方银行卡或电子钱包（支付宝账户）。支持卡详情模式、卡 token 模式、支付宝账户详情模式、钱包账户模式和关联支付宝钱包模式。
 
+## 官方文档
+
+- [createPayout 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/create_payout)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/fund/createPayout`

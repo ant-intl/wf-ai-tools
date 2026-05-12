@@ -11,14 +11,14 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 ## 模块索引
 
 
-| 模块         | 模块目录                                                        | 模块说明                                                     | 语言支持           |
-| ----------- |----------------------------------------------------------------|-----------------------------------------------------------| ------------------ |
-| 万里汇转账   | [references/transfer/](references/transfer/)                   | 在 WF 账户之间划转资金（咨询/发起/查询/结果通知）                | Java、Golang       |
-| 全球分发     | [references/payout/](references/payout/)                       | 代发到第三方银行卡或电子钱包（咨询/发起/查询/结果通知）            | Java、Golang       |
-| 收款人管理   | [references/beneficiary/](references/beneficiary/)             | 卡模版查询、绑定/删除/编辑/查询收款人、绑定结果通知                | Java、Golang（部分）|
-| 账户管理     | [references/account-management/](references/account-management/)     | 查询账户信息/余额/结汇额度/子账号/店铺，接收充值/余额变动通知       | Java、Golang       |
-| 账单管理     | [references/statement-management/](references/statement-management/) | 查询账户交易流水列表及流水详情                                 | Java、Golang、Python |
-| 交易信息管理 | [references/trade-order/](references/trade-order/)             | 上传交易订单（B2C 结汇 / B2B 订单关联）、查询结果、处理异步通知     | Java、Golang       |
+| 模块         | 模块目录                                                        | 模块说明                                                     | 官方文档                                                                                             | 语言支持           |
+| ----------- |----------------------------------------------------------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------------| ------------------ |
+| 万里汇转账   | [references/transfer/](references/transfer/)                   | 在 WF 账户之间划转资金（咨询/发起/查询/结果通知）                | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/transfer)           | Java、Golang       |
+| 全球分发     | [references/payout/](references/payout/)                       | 代发到第三方银行卡或电子钱包（咨询/发起/查询/结果通知）            | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/payout)             | Java、Golang       |
+| 收款人管理   | [references/beneficiary/](references/beneficiary/)             | 卡模版查询、绑定/删除/编辑/查询收款人、绑定结果通知                | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/beneficiary)        | Java、Golang（部分）|
+| 账户管理     | [references/account-management/](references/account-management/)     | 查询账户信息/余额/结汇额度/子账号/店铺，接收充值/余额变动通知       | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/account)            | Java、Golang       |
+| 账单管理     | [references/statement-management/](references/statement-management/) | 查询账户交易流水列表及流水详情                                 | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/statement)          | Java、Golang、Python |
+| 交易信息管理 | [references/trade-order/](references/trade-order/)             | 上传交易订单（B2C 结汇 / B2B 订单关联）、查询结果、处理异步通知     | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/trade_order)        | Java、Golang       |
 
 ## 快速决策树
 
@@ -334,12 +334,14 @@ diff generated/FundMoveDetail.java references/statement-management/inquiry-state
 
 ### 万里汇转账（transfer）
 
-| 接口         | 目录                                                                                                                                                  | 说明                                             |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| 咨询转账     | [consult-transfer/](references/transfer/consult-transfer/)  | 转账前获取汇率、手续费等信息                     |
-| 户到户转账   | [create-transfer/](references/transfer/create-transfer/)    | 在万里汇账户之间转账                             |
-| 查询转账结果 | [inquiry-transfer/](references/transfer/inquiry-transfer/)  | 查询转账结果（PROCESSING 状态需轮询）            |
-| 转账结果通知 | [notify-transfer/](references/transfer/notify-transfer/)    | 回调通知：接收万里汇推送的转账结果通知（WF → 集成商） |
+> 📄 [官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/transfer)
+
+| 接口         | 目录                                                                                                                                                  | 说明                                             | 官方文档                                                                                                                                                                  |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 咨询转账     | [consult-transfer/](references/transfer/consult-transfer/)  | 转账前获取汇率、手续费等信息                     | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/consult_transfer)          |
+| 户到户转账   | [create-transfer/](references/transfer/create-transfer/)    | 在万里汇账户之间转账                             | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/create_transfer)           |
+| 查询转账结果 | [inquiry-transfer/](references/transfer/inquiry-transfer/)  | 查询转账结果（PROCESSING 状态需轮询）            | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_transfer)          |
+| 转账结果通知 | [notify-transfer/](references/transfer/notify-transfer/)    | 回调通知：接收万里汇推送的转账结果通知（WF → 集成商） | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_transfer)           |
 
 注意事项：
 - 转账为异步接口，`PROCESSING` 状态必须轮询
@@ -350,12 +352,14 @@ diff generated/FundMoveDetail.java references/statement-management/inquiry-state
 
 ### 全球分发（payout）
 
-| 接口         | 目录                                                                                                                                           | 说明                                     |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| 咨询代发汇率 | [consult-payout/](references/payout/consult-payout/) | 咨询费用、校验卡模版、获取跨币种汇率报价 |
-| 创建代发     | [create-payout/](references/payout/create-payout/)   | 代发到银行卡或电子钱包                   |
-| 查询代发结果 | [inquiry-payout/](references/payout/inquiry-payout/)  | 查询代发单状态                           |
-| 代发结果通知 | [notify-payout/](references/payout/notify-payout/)    | 回调通知：接收万里汇推送的代发结果通知（WF → 集成商） |
+> 📄 [官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/payout)
+
+| 接口         | 目录                                                                                                                                           | 说明                                     | 官方文档                                                                                                                                                         |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 咨询代发汇率 | [consult-payout/](references/payout/consult-payout/) | 咨询费用、校验卡模版、获取跨币种汇率报价 | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/consult_payout)       |
+| 创建代发     | [create-payout/](references/payout/create-payout/)   | 代发到银行卡或电子钱包                   | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/create_payout)         |
+| 查询代发结果 | [inquiry-payout/](references/payout/inquiry-payout/)  | 查询代发单状态                           | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_payout)        |
+| 代发结果通知 | [notify-payout/](references/payout/notify-payout/)    | 回调通知：接收万里汇推送的代发结果通知（WF → 集成商） | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_payout)         |
 注意事项：
 - 支持四种收款模式（互斥）：
   - 卡详情模式（BANK_ACCOUNT_DETAIL）— 直接传银行卡详情
@@ -369,26 +373,30 @@ diff generated/FundMoveDetail.java references/statement-management/inquiry-state
 
 ### 收款人管理（beneficiary）
 
-| 接口             | 目录                                                                                                                                                    | 说明                                            | 语言支持     |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | ------------ |
-| 查询卡模版       | [inquiry-template/](references/beneficiary/inquiry-template/) | 查询指定国家/币种/账户类型的卡模版字段要求      | Java、Golang |
-| 绑定收款人       | [bind/](references/beneficiary/bind/)                         | 绑定收款人到 WF 账户，获取 beneficiaryToken     | Java         |
-| 删除收款人       | [remove/](references/beneficiary/remove/)                     | 删除已绑定的收款人                              | Java         |
-| 编辑收款人       | [edit/](references/beneficiary/edit/)                         | 修改收款人昵称                                  | Java         |
-| 查询收款人列表   | [inquiry-list/](references/beneficiary/inquiry-list/)         | 分页查询已绑定的收款人                          | Java         |
-| 绑定收款人通知   | [notify-bind/](references/beneficiary/notify-bind/)           | 回调通知：接收收款人绑定结果通知（WF → 集成商） | Java、Golang |
+> 📄 [官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/beneficiary)
+
+| 接口             | 目录                                                                                                                                                    | 说明                                            | 官方文档                                                                                                                                                                     | 语言支持     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 查询卡模版       | [inquiry-template/](references/beneficiary/inquiry-template/) | 查询指定国家/币种/账户类型的卡模版字段要求      | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_template)                 | Java、Golang |
+| 绑定收款人       | [bind/](references/beneficiary/bind/)                         | 绑定收款人到 WF 账户，获取 beneficiaryToken     | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/bind_beneficiary)                 | Java         |
+| 删除收款人       | [remove/](references/beneficiary/remove/)                     | 删除已绑定的收款人                              | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/remove_beneficiary)               | Java         |
+| 编辑收款人       | [edit/](references/beneficiary/edit/)                         | 修改收款人昵称                                  | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/edit_beneficiary)                  | Java         |
+| 查询收款人列表   | [inquiry-list/](references/beneficiary/inquiry-list/)         | 分页查询已绑定的收款人                          | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_beneficiary_list)         | Java         |
+| 绑定收款人通知   | [notify-bind/](references/beneficiary/notify-bind/)           | 回调通知：接收收款人绑定结果通知（WF → 集成商） | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_bind_beneficiary)          | Java、Golang |
 
 ### 账户管理（account-management）
 
-| 接口           | 目录                                                                                                                                                                       | 说明                                                 |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| 查询账户信息   | [inquiry-account/](references/account-management/inquiry-account/)                   | 查询 WF 账户信息（账户类型、账号、激活状态、币种等） |
-| 查询余额       | [inquiry-balance/](references/account-management/inquiry-balance/)                   | 查询 WF 账户余额，支持按币种和余额类型过滤          |
-| 查询结汇额度   | [inquiry-available-quota/](references/account-management/inquiry-available-quota/)   | 查询可申报的结汇额度，支持四种累计方式               |
-| 查询子账号信息 | [inquiry-subuser/](references/account-management/inquiry-subuser/)                   | 查询万里汇主账号及子账号信息，支持分页               |
-| 查询店铺信息   | [inquiry-store/](references/account-management/inquiry-store/)                       | 查询店铺信息及店铺关联账号信息，支持分页             |
-| 充值通知       | [notify-vostro/](references/account-management/notify-vostro/)                       | 接收万里汇充值/垫付回调通知（WF → 集成商）          |
-| 余额变动通知   | [notify-balance-change/](references/account-management/notify-balance-change/)       | 接收万里汇余额账户动账变动回调通知（WF → 集成商）   |
+> 📄 [官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/account)
+
+| 接口           | 目录                                                                                                                                                                       | 说明                                                 | 官方文档                                                                                                                                                                                 |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 查询账户信息   | [inquiry-account/](references/account-management/inquiry-account/)                   | 查询 WF 账户信息（账户类型、账号、激活状态、币种等） | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_account)                               |
+| 查询余额       | [inquiry-balance/](references/account-management/inquiry-balance/)                   | 查询 WF 账户余额，支持按币种和余额类型过滤          | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_balance)                               |
+| 查询结汇额度   | [inquiry-available-quota/](references/account-management/inquiry-available-quota/)   | 查询可申报的结汇额度，支持四种累计方式               | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_available_quota)                       |
+| 查询子账号信息 | [inquiry-subuser/](references/account-management/inquiry-subuser/)                   | 查询万里汇主账号及子账号信息，支持分页               | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_subuser)                               |
+| 查询店铺信息   | [inquiry-store/](references/account-management/inquiry-store/)                       | 查询店铺信息及店铺关联账号信息，支持分页             | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_store)                                 |
+| 充值通知       | [notify-vostro/](references/account-management/notify-vostro/)                       | 接收万里汇充值/垫付回调通知（WF → 集成商）          | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_vostro)                                 |
+| 余额变动通知   | [notify-balance-change/](references/account-management/notify-balance-change/)       | 接收万里汇余额账户动账变动回调通知（WF → 集成商）   | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_balance_change)                         |
 
 注意事项：
 - `notifyVostro` 和 `notifyBalanceChange` 是回调通知接口（WF → 集成商），非主动调用接口
@@ -398,10 +406,12 @@ diff generated/FundMoveDetail.java references/statement-management/inquiry-state
 
 ### 账单管理（statement-management）
 
-| 接口         | 目录                                                                                                                                                                           | 说明                       |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| 查询账单流水 | [inquiry-statement-list/](references/statement-management/inquiry-statement-list/)     | 分页查询 WF 账户交易流水   |
-| 查询账单详情 | [inquiry-statement-detail/](references/statement-management/inquiry-statement-detail/) | 查询指定账单流水的详细信息 |
+> 📄 [官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/statement)
+
+| 接口         | 目录                                                                                                                                                                           | 说明                       | 官方文档                                                                                                                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 查询账单流水 | [inquiry-statement-list/](references/statement-management/inquiry-statement-list/)     | 分页查询 WF 账户交易流水   | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_statement_list)                         |
+| 查询账单详情 | [inquiry-statement-detail/](references/statement-management/inquiry-statement-detail/) | 查询指定账单流水的详细信息 | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_statement_detail)                       |
 
 注意事项：
 - `pageSize` 固定为 10，不允许调用方修改
@@ -410,11 +420,13 @@ diff generated/FundMoveDetail.java references/statement-management/inquiry-state
 
 ### 交易信息管理（trade-order）
 
-| 接口         | 目录                                                                                                                                                      | 说明                                                   |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| 提交交易订单 | [submit-trade-order/](references/trade-order/submit-trade-order/)  | 上传交易订单（B2C 结汇 / B2B 订单关联）               |
-| 查询订单结果 | [inquiry-trade-order/](references/trade-order/inquiry-trade-order/) | 查询上传结果（仅 PAY_INTO_CHINA）                      |
-| 订单回调通知 | [notify-trade-order/](references/trade-order/notify-trade-order/)   | 处理 WF 异步回调通知（仅 PAY_INTO_CHINA）              |
+> 📄 [官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/trade_order)
+
+| 接口         | 目录                                                                                                                                                      | 说明                                                   | 官方文档                                                                                                                                                                             |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 提交交易订单 | [submit-trade-order/](references/trade-order/submit-trade-order/)  | 上传交易订单（B2C 结汇 / B2B 订单关联）               | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/submit_trade_order)                       |
+| 查询订单结果 | [inquiry-trade-order/](references/trade-order/inquiry-trade-order/) | 查询上传结果（仅 PAY_INTO_CHINA）                      | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_trade_order)                      |
+| 订单回调通知 | [notify-trade-order/](references/trade-order/notify-trade-order/)   | 处理 WF 异步回调通知（仅 PAY_INTO_CHINA）              | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_trade_order)                       |
 
 注意事项：
 - sceneCode 决定必填字段集合

@@ -4,6 +4,10 @@
 
 上传交易订单到万里汇。支持两种业务场景：PAY_INTO_CHINA（B2C 结汇）和 CREATE_B2B_ORDERS（B2B 订单关联）。
 
+## 官方文档
+
+- [submitTradeOrder 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/submit_trade_order)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/account/submitTradeOrder`

@@ -13,6 +13,10 @@
 
 在收到通知后，集成商需正确发送响应。若不向 WF 发送响应信息，WF 会重新发送最多 **7 次**请求通知。
 
+## 官方文档
+
+- [notifyPayout 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_payout)
+
 ## 入站请求（WF → 集成商）
 
 ### 请求头

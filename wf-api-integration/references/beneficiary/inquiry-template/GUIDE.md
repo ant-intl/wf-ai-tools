@@ -4,6 +4,10 @@
 
 查询指定国家/币种/账户类型的卡模版信息，确定绑定收款人时需要传递哪些字段。
 
+## 官方文档
+
+- [inquiryTemplate 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_template)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/account/inquiryBeneficiaryTemplate`
