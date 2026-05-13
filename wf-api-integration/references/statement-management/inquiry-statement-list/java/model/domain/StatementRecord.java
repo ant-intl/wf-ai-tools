@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -11,8 +7,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * WorldFirst 账单流水记录
  *
- * @author Qoder
- * @version StatementRecord.java, v 0.1 2026-03-24
  */
 public class StatementRecord {
 

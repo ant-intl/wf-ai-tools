@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,9 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>跨币种代发时，需要先通过 consultPayout 获取 quoteId，
  * 然后在 createPayout 请求中传入 transferToDetail.transferQuote.quoteId。
- *
- * @author Qoder
- * @version TransferQuote.java, v 0.1 2026-04-02
  */
 public class TransferQuote {
 

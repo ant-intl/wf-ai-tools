@@ -9,8 +9,6 @@ WorldFirst 账单流水查询统一客户端
 典型调用流程：先调用 inquiry_statement_list 获取 accounting_biz_no，
 再以此为入参调用 inquiry_statement_detail。
 
-@author Qoder
-@version statement_client.py, v 0.1 2026-04-14
 """
 
 import json

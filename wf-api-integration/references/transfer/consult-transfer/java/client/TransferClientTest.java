@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf;
 
 import {basePackage}.wf.client.TransferClient;
@@ -18,8 +14,6 @@ import org.junit.Test;
 /**
  * TransferClient consultTransfer 集成测试（真实签名模式）。
  *
- * @author Qoder
- * @version TransferClientTest.java, v 0.1 2026-04-07
  */
 public class TransferClientTest {
 

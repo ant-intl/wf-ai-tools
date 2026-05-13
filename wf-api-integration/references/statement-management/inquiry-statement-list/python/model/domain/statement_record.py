@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 WorldFirst 账单流水记录及相关 domain 模型
-
-@author Qoder
-@version statement_record.py, v 0.1 2026-04-14
 """
 
 from dataclasses import dataclass, field

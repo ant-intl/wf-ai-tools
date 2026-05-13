@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.client.statement;
 
 import com.alibaba.common.logging.Logger;
@@ -36,8 +32,6 @@ import java.time.format.DateTimeParseException;
  * <p>典型调用流程：先调用 inquiryStatementList 获取 accountingBizNo，
  * 再以此为入参调用 inquiryStatementDetail。
  *
- * @author Qoder
- * @version StatementClient.java, v 0.1 2026-04-14
  */
 public class StatementClient {
 

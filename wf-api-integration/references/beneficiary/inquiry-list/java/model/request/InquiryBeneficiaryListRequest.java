@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import java.util.List;
@@ -14,8 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>用于分页查询已绑定的收款人列表。
  *
- * @author Qoder
- * @version InquiryBeneficiaryListRequest.java, v 0.1 2026-03-26
  */
 public class InquiryBeneficiaryListRequest {
 

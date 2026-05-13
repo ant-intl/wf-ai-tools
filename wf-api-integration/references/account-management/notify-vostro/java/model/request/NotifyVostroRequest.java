@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import {basePackage}.wf.model.domain.Amount;
@@ -17,9 +13,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>当集成商的万里汇账户发生充值后，万里汇会通过本请求通知集成商资金变化信息。
  * {@code fundingId} 为幂等字段，集成商可用于去重。
- *
- * @author Qoder
- * @version NotifyVostroRequest.java, v 0.1 2026-04-21
  */
 public class NotifyVostroRequest {
 

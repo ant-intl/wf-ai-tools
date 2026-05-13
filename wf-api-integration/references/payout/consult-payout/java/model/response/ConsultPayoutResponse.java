@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.response;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,9 +11,6 @@ import {basePackage}.wf.model.domain.TransferToDetail;
  *
  * <p>包含汇率报价信息，跨币种转账时需要从响应中获取 quoteId，
  * 并在 createPayout 请求的 transferToDetail.transferQuote.quoteId 中传入。
- *
- * @author Qoder
- * @version ConsultPayoutResponse.java, v 0.1 2026-04-02
  */
 public class ConsultPayoutResponse {
 

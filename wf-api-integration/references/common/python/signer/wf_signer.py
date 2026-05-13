@@ -3,9 +3,6 @@
 WorldFirst API RSA256 签名工具类
 
 签名内容格式: POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
-
-@author Qoder
-@version wf_signer.py, v 0.1 2026-03-24
 """
 
 import base64

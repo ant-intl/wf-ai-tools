@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import java.util.List;
@@ -17,8 +13,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>WF 在交易订单处理完成后，主动 POST 到集成商提供的 notifyUrl，
  * 携带订单处理结果列表。
  *
- * @author Qoder
- * @version NotifyTradeOrderRequest.java, v 0.1 2026-04-03
  */
 public class NotifyTradeOrderRequest {
 

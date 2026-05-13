@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 WorldFirst API HTTP 客户端工具类
-
-@author Qoder
-@version wf_http_client.py, v 0.1 2026-03-24
 """
 
 import logging

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf;
 
 import java.time.OffsetDateTime;
@@ -37,8 +33,6 @@ import org.junit.Test;
 /**
  * TradeOrderManagementClient 集成测试（真实签名模式）。
  *
- * @author Qoder
- * @version TradeOrderManagementClientTest.java, v 0.1 2026-04-03
  */
 public class TradeOrderManagementClientTest {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.response;
 
 import {basePackage}.wf.model.domain.Amount;
@@ -12,9 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * WorldFirst inquiryAvailableQuota 响应对象
  *
  * <p>包含可申报的结汇额度信息
- *
- * @author Qoder
- * @version InquiryAvailableQuotaResponse.java, v 0.1 2026-04-08
  */
 public class InquiryAvailableQuotaResponse {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -11,9 +7,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * WorldFirst inquiryAvailableQuota 请求对象
  *
  * <p>用于查询可申报的结汇额度
- *
- * @author Qoder
- * @version InquiryAvailableQuotaRequest.java, v 0.1 2026-04-08
  */
 public class InquiryAvailableQuotaRequest {
 

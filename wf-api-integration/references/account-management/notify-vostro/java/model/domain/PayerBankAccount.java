@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,9 +5,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 付款人银行账户信息（notifyVostro 回调中使用）
- *
- * @author Qoder
- * @version PayerBankAccount.java, v 0.1 2026-04-21
  */
 public class PayerBankAccount {
 

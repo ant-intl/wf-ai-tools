@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.client;
 
 import com.alibaba.fastjson.JSON;
@@ -23,8 +19,6 @@ import org.slf4j.LoggerFactory;
  *
  * <p>用于万里汇户到户转账，资金在万里汇账户之间流通。
  *
- * @author Qoder
- * @version TransferClient.java, v 0.1 2026-04-01
  */
 public class TransferClient {
 

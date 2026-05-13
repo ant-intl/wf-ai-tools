@@ -1,15 +1,11 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
-package com.ipay.iissuecard.common.service.integration.wf.util;
+package {basePackage}.wf.util;
 
 import com.alibaba.common.logging.Logger;
 import com.alibaba.common.logging.LoggerFactory;
-import com.ipay.iissuecard.common.service.integration.wf.config.WfConfig;
-import com.ipay.iissuecard.common.service.integration.wf.model.exception.WfErrorCode;
-import com.ipay.iissuecard.common.service.integration.wf.model.exception.WfException;
-import com.ipay.iissuecard.common.service.integration.wf.signer.WfSigner;
+import {basePackage}.wf.config.WfConfig;
+import {basePackage}.wf.model.exception.WfErrorCode;
+import {basePackage}.wf.model.exception.WfException;
+import {basePackage}.wf.signer.WfSigner;
 import org.apache.http.Header;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -27,9 +23,6 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * WorldFirst API HTTP 客户端工具类
- *
- * @author Qoder
- * @version WfHttpClientUtil.java, v 0.1 2026-03-24
  */
 public class WfHttpClientUtil {
 

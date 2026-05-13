@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -13,9 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>对应 WF createPayout 接口 {@code transferToDetail.transferToMethod.paymentMethodMetaData}。
  * 字段名遵循 inquiryBeneficiaryTemplate 接口返回的卡信息要素列表。
- *
- * @author Qoder
- * @version PaymentMethodMetaData.java, v 0.1 2026-03-26
  */
 public class PaymentMethodMetaData {
 

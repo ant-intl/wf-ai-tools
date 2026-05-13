@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import {basePackage}.wf.model.domain.BalanceChangeLog;
@@ -16,9 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>当集成商的万里汇余额账户发生动账交易后，万里汇会通过本请求通知集成商所有账务变动信息。
  * {@code notifySequence} 为通知时序，集成商可用于排序和去重。
- *
- * @author Qoder
- * @version NotifyBalanceChangeRequest.java, v 0.1 2026-04-21
  */
 public class NotifyBalanceChangeRequest {
 

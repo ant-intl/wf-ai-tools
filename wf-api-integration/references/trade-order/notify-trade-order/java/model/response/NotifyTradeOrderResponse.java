@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.response;
 
 
@@ -14,8 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>集成商收到 WF 回调后，需返回包含 result 的响应体。
  * result.resultStatus = S 且 result.resultCode = SUCCESS 表示处理成功，WF 不再重试。
  *
- * @author Qoder
- * @version NotifyTradeOrderResponse.java, v 0.1 2026-04-03
  */
 public class NotifyTradeOrderResponse {
 

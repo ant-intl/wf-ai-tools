@@ -3,9 +3,6 @@
 WorldFirst StatementClient 集成测试
 
 使用前需填入真实的 WF 沙箱/生产环境凭证。
-
-@author Qoder
-@version statement_client_test.py, v 0.1 2026-04-14
 """
 
 import unittest

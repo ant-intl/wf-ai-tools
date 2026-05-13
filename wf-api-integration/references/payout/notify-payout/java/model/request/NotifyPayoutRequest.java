@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import {basePackage}.wf.model.domain.TransferFromDetail;
@@ -17,10 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>万里汇在转账完成后，主动调用此接口将转账结果通知给集成商。
  * 集成商需在 createPayout 时通过 {@code transferToDetail.transferNotifyUrl} 配置回调地址。
  *
- * <p>{@code transferRequestId} 为幂等字段，集成商可用于去重。
- *
- * @author Qoder
- * @version NotifyPayoutRequest.java, v 0.1 2026-04-22
+* {@code transferRequestId} 为幂等字段，集成商可用于去重。
  */
 public class NotifyPayoutRequest {
 

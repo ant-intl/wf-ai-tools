@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -22,9 +18,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * </ul>
  *
  * <p>完整币种精度对照表见 WF 官方文档。
- *
- * @author Qoder
- * @version Amount.java, v 0.1 2026-03-25
  */
 public class Amount {
 

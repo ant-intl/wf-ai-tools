@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.response;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,8 +9,6 @@ import java.util.List;
 /**
  * WorldFirst inquiryStatementList 响应对象
  *
- * @author Qoder
- * @version InquiryStatementResponse.java, v 0.1 2026-03-24
  */
 public class InquiryStatementResponse {
 

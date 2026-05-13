@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,8 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * WorldFirst 支付宝客户信息
  *
- * @author Qoder
- * @version AlipayCustomer.java, v 0.1 2026-04-16
  */
 public class AlipayCustomer {
 

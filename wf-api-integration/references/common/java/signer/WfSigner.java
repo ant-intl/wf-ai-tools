@@ -1,12 +1,8 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
-package com.ipay.iissuecard.common.service.integration.wf.signer;
+package {basePackage}.wf.signer;
 
 import com.alibaba.common.logging.Logger;
 import com.alibaba.common.logging.LoggerFactory;
-import com.ipay.iissuecard.common.service.integration.wf.config.WfConfig;
+import {basePackage}.wf.config.WfConfig;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -27,9 +23,6 @@ import java.util.Base64;
 
 /**
  * WorldFirst API RSA256 签名工具类
- *
- * @author Qoder
- * @version WfSigner.java, v 0.1 2026-03-24
  */
 public class WfSigner {
 

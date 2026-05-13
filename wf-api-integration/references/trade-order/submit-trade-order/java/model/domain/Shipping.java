@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import java.util.List;
@@ -16,8 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * B2B 场景下根据 isUsedForExchange、isShipped、isDeclared、isNewBuyer
  * 等条件字段的组合，有不同的必填逻辑。
  *
- * @author Qoder
- * @version Shipping.java, v 0.1 2026-04-03
  */
 public class Shipping {
 

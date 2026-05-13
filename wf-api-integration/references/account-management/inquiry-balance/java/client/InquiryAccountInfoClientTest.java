@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf;
 
 import {basePackage}.wf.client.account.InquiryAccountInfoClient;
@@ -29,9 +25,6 @@ import org.junit.Test;
  * InquiryAccountInfoClient 集成测试。
  *
  * <p>包含 inquiryAccount、inquiryBalance、inquiryAvailableQuota、inquirySubuser 和 inquiryStore 五个接口的测试。
- *
- * @author Qoder
- * @version InquiryAccountInfoClientTest.java, v 0.1 2026-04-14
  */
 public class InquiryAccountInfoClientTest {
 

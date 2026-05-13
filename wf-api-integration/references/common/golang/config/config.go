@@ -2,7 +2,7 @@ package config
 
 // WfConfig holds WorldFirst API configuration.
 type WfConfig struct {
-	// ClientID is the WF client identifier assigned by WorldFirst (e.g., "3K5Y966G2Y5G5309739").
+	// ClientID is the WF client identifier assigned by WorldFirst.
 	ClientID string
 	// UserID is the WF user identifier (the login userId).
 	UserID string

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 WorldFirst inquiryStatementList 请求模型
-
-@author Qoder
-@version inquiry_statement_request.py, v 0.1 2026-04-14
 """
 
 from dataclasses import dataclass, field

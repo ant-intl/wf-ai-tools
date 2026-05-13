@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.client;
 
 import com.alibaba.fastjson.JSON;
@@ -24,8 +20,6 @@ import org.slf4j.LoggerFactory;
  * <p>在调用 createTransfer 进行转账之前，可先调用此接口获取转账相关信息，
  * 如跨币种汇率、手续费等。
  *
- * @author Qoder
- * @version TransferClient.java, v 0.1 2026-04-07
  */
 public class TransferClient {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.response;
 
 import {basePackage}.wf.model.domain.TransferFromDetail;
@@ -12,9 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * WorldFirst createPayout 响应对象
- *
- * @author Qoder
- * @version CreatePayoutResponse.java, v 0.1 2026-03-25
  */
 public class CreatePayoutResponse {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.client.account;
 
 import com.alibaba.common.logging.Logger;
@@ -39,9 +35,6 @@ import java.util.List;
  *   <li>{@link #inquirySubuser} — 查询主账号及子账号信息</li>
  *   <li>{@link #inquiryStore} — 查询店铺信息</li>
  * </ul>
- *
- * @author Qoder
- * @version InquiryAccountInfoClient.java, v 0.1 2026-04-14
  */
 public class InquiryAccountInfoClient {
 

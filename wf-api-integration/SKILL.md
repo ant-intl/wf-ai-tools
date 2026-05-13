@@ -144,8 +144,8 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 4. **WF Client ID**：请提供您的万里汇 Client ID
 5. **WF User ID**：请提供您的万里汇登录 User ID
 6. **API Base URL**：请提供 API 网关地址（默认 `https://open-sitprod-sg.alipay.com`）
-7. **私钥文件路径**：请提供 RSA 私钥文件路径（PKCS#8 格式），如 `/home/admin/keys/private_key.pem`
-8. **公钥文件路径**：请提供万里汇 RSA 公钥文件路径，如 `/home/admin/keys/wf_public_key.pem`
+7. **私钥文件路径**：请提供 RSA 私钥文件路径（PKCS#8 格式），如 `/etc/wf/certs/private_key.pem`
+8. **公钥文件路径**：请提供万里汇 RSA 公钥文件路径，如 `/etc/wf/certs/wf_public_key.pem`
 
 > **重要**：用户提供的值直接填入生成的 WfConfig 代码中。如果用户表示暂时不确定某个值，应使用 Spring XML property placeholder（如 `${wf.clientId}`）、Go 环境变量读取（如 `os.Getenv("WF_CLIENT_ID")`）或 Python 环境变量读取（如 `os.environ.get("WF_CLIENT_ID")`）而非硬编码占位符字符串。
 

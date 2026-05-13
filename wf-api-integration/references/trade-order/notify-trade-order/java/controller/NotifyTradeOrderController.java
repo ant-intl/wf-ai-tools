@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.controller;
 
 import com.alibaba.fastjson.JSON;
@@ -34,8 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * <p>WF 重试策略：未收到有效响应时重试 7 次，间隔 2min→10min→10min→1h→2h→6h→15h。
  *
- * @author Qoder
- * @version NotifyTradeOrderController.java, v 0.1 2026-04-03
  */
 @RestController
 public class NotifyTradeOrderController {

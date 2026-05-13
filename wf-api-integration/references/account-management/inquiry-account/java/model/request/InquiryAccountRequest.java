@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,8 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>用于查询账户信息，包括账户类型、账号、激活状态、币种等。
  *
- * @author Qoder
- * @version InquiryAccountRequest.java, v 0.1 2026-04-16
  */
 public class InquiryAccountRequest {
 

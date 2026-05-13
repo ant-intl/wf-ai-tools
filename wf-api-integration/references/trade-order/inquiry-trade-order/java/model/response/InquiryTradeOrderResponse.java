@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.response;
 
 import java.util.List;
@@ -22,8 +18,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *   <li>{@code FINISHED} — 批次处理完成，可查看各订单结果</li>
  * </ul>
  *
- * @author Qoder
- * @version InquiryTradeOrderResponse.java, v 0.1 2026-04-03
  */
 public class InquiryTradeOrderResponse {
 

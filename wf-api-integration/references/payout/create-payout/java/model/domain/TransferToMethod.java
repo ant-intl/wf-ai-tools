@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -22,9 +18,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *   <li><b>关联支付宝钱包模式</b>：{@code paymentMethodType=REFERENCE_ALIPAY_CN}，将 {@code referenceCustomerId} 作为 {@code paymentMethodId} 传入</li>
  *   <li><b>钱包账户模式</b>：{@code paymentMethodType=WALLET_ACCOUNT_DETAIL}，设置 {@code paymentMethodMetaData} 传递钱包账户信息（JSON 字符串，含 walletFullName/walletAccountNo/walletBrandName/walletCountryCode）
  * </ul>
- *
- * @author Qoder
- * @version TransferToMethod.java, v 0.1 2026-03-27
  */
 public class TransferToMethod {
 

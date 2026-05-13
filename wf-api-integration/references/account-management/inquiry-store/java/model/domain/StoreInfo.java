@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import java.util.List;
@@ -13,9 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * WorldFirst 店铺信息
  *
  * <p>用于 inquiryStore 接口，描述店铺及其关联账号信息。
- *
- * @author Qoder
- * @version StoreInfo.java, v 0.1 2026-04-17
  */
 public class StoreInfo {
 

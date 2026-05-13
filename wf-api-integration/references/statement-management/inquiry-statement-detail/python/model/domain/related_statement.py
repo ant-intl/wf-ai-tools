@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 WorldFirst 关联交易记录 domain 模型
-
-@author Qoder
-@version related_statement.py, v 0.1 2026-04-14
 """
 
 from dataclasses import dataclass

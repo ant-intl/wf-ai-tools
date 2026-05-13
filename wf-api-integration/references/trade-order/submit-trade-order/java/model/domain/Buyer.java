@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>对应 WF submitTradeOrder 接口请求体中的 {@code buyer} 字段。
  * {@code referenceBuyerId}、{@code buyerName}、{@code buyerEmail} 三者至少传一个。
  *
- * @author Qoder
- * @version Buyer.java, v 0.1 2026-04-03
  */
 public class Buyer {
 

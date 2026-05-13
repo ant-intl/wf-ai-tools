@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.exception;
 
 
@@ -10,9 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * WorldFirst API 业务异常
- *
- * @author Qoder
- * @version WfException.java, v 0.1 2026-04-01
  */
 public class WfException extends RuntimeException {
 

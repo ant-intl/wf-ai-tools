@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.response;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>集成商在收到 notifyTransfer 通知后，需返回本响应以确认收到通知。
  * 若不返回响应，万里汇将按重试策略重新发送通知（最多 7 次）。
  *
- * @author Qoder
- * @version NotifyTransferResponse.java, v 0.1 2026-04-22
  */
 public class NotifyTransferResponse {
 

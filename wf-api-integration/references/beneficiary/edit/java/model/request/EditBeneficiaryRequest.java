@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 
@@ -13,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>用于修改收款人昵称。
  *
- * @author Qoder
- * @version EditBeneficiaryRequest.java, v 0.1 2026-03-26
  */
 public class EditBeneficiaryRequest {
 

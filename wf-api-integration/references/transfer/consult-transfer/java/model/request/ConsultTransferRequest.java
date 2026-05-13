@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import {basePackage}.wf.model.domain.TransferFromDetail;
@@ -16,8 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>在调用 createTransfer API 进行转账之前，集成商可调用此接口获取转账相关信息，
  * 如跨币种汇率、手续费等。
  *
- * @author Qoder
- * @version ConsultTransferRequest.java, v 0.1 2026-04-07
  */
 public class ConsultTransferRequest {
 

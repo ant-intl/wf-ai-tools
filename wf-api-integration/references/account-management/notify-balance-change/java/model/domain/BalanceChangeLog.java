@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,9 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>每条记录代表一次账户余额变动，包含动账金额、实时余额、交易类型等信息。
  * {@code transactionAmount} 的正负代表资金流向：正数为入账，负数为出账。
- *
- * @author Qoder
- * @version BalanceChangeLog.java, v 0.1 2026-04-21
  */
 public class BalanceChangeLog {
 

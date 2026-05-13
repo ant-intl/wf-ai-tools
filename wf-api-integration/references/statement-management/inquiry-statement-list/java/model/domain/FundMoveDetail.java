@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,8 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>对应 statementList 中的 fundMoveDetail 字段，包含付款方和收款方信息。
  *
- * @author Qoder
- * @version FundMoveDetail.java, v 0.1 2026-03-24
  */
 public class FundMoveDetail {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 
@@ -13,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>{@code transferId} 与 {@code transferRequestId} 不能同时为空，二选一传入即可。
  *
- * @author Qoder
- * @version InquiryPayoutRequest.java, v 0.1 2026-03-27
  */
 public class InquiryPayoutRequest {
 

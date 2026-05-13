@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,8 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>只有在操作万里汇门户而产生交易单时才会返回。
  *
- * @author Qoder
- * @version OperatorInfo.java, v 0.1 2026-04-01
  */
 public class OperatorInfo {
 

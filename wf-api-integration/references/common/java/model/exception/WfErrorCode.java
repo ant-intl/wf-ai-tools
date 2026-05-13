@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.exception;
 
 /**
@@ -9,9 +5,6 @@ package {basePackage}.wf.model.exception;
  *
  * <p>本文件为 createTransfer 接口的错误码片段。
  * 若 WfErrorCode.java 已存在，请将以下枚举值追加到已有文件中，不要重复生成整个文件。</p>
- *
- * @author Qoder
- * @version WfErrorCode.java, v 0.1 2026-04-01
  */
 public enum WfErrorCode {
 

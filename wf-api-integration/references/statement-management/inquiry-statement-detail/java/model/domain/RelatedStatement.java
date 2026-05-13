@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,9 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>对应 inquiryStatementDetail 响应中的 combinedTransactionList 字段，
  * 包含与当前账单流水关联的其他交易信息。
- *
- * @author Qoder
- * @version RelatedStatement.java, v 0.1 2026-04-08
  */
 public class RelatedStatement {
 

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 WorldFirst API 通用响应结果对象
-
-@author Qoder
-@version result.py, v 0.1 2026-04-01
 """
 
 from dataclasses import dataclass, field

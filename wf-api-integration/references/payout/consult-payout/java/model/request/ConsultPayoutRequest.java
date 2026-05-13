@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,9 +16,6 @@ import {basePackage}.wf.model.domain.TransferToDetail;
  *   <li>transferFromAmount.value 与 transferToAmount.value 不能同时传入，二选一</li>
  *   <li>当 transferToAmount.currency = CNY 时，businessSceneCode 必填</li>
  * </ul>
- *
- * @author Qoder
- * @version ConsultPayoutRequest.java, v 0.1 2026-04-02
  */
 public class ConsultPayoutRequest {
 

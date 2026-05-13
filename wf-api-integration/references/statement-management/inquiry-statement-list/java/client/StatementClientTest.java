@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf;
 
 import {basePackage}.wf.client.statement.StatementClient;
@@ -19,8 +15,6 @@ import org.junit.Test;
  *
  * <p>包含 inquiryStatementList 和 inquiryStatementDetail 两个接口的测试。
  *
- * @author Qoder
- * @version StatementClientTest.java, v 0.1 2026-04-14
  */
 public class StatementClientTest {
 

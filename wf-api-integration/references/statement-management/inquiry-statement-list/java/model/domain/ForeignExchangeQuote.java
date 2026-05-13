@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -13,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>对应 statementList 中的 foreignExchangeQuote 和 refundForeignExchangeQuote 字段。
  *
- * @author Qoder
- * @version ForeignExchangeQuote.java, v 0.1 2026-03-24
  */
 public class ForeignExchangeQuote {
 
