@@ -1,5 +1,10 @@
 # 全球分发模块 (Payout)
 
+## 官方文档
+
+- [WorldFirst 开发者文档 - Payout](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/payout)
+- [consultPayout](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/consult_payout) | [createPayout](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/create_payout) | [inquiryPayout](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_payout) | [notifyPayout](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_payout)
+
 ## 接口列表
 
 

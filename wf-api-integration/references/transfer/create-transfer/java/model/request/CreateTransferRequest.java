@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import {basePackage}.wf.model.domain.TransferFromDetail;
@@ -16,8 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>集成商可调用此接口进行资金的转账。资金会转入到另一个万里汇账户，
  * 即资金在万里汇账户之间流通。
  *
- * @author Qoder
- * @version CreateTransferRequest.java, v 0.1 2026-04-01
  */
 public class CreateTransferRequest {
 

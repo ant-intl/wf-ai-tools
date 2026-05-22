@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf;
 
 import {basePackage}.wf.client.BeneficiaryManagementClient;
@@ -32,8 +28,6 @@ import java.util.Map;
  *
  * <p>Mock WfConfig，不 Mock WfSigner 和 WfHttpClientUtil。
  *
- * @author Qoder
- * @version BeneficiaryManagementClientTest.java, v 0.1 2026-03-26
  */
 public class BeneficiaryManagementClientTest {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.client;
 
 import com.alibaba.fastjson.JSON;
@@ -21,8 +17,6 @@ import org.slf4j.LoggerFactory;
  * <p>用于查询转账结果。当 createTransfer 返回 PROCESSING 时，
  * 需调用此接口轮询最终状态。
  *
- * @author Qoder
- * @version TransferClient.java, v 0.1 2026-04-07
  */
 public class TransferClient {
 

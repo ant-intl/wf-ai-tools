@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>在 notifyTransfer 回调中，万里汇可能携带此对象，
  * 包含集成商定义的关联订单 ID 等附加信息。
  *
- * @author Qoder
- * @version TransferOrderAddition.java, v 0.1 2026-04-22
  */
 public class TransferOrderAddition {
 

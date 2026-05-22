@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 WorldFirst API 错误码枚举
-
-@author Qoder
-@version wf_error_code.py, v 0.1 2026-04-01
 """
 
 from enum import Enum

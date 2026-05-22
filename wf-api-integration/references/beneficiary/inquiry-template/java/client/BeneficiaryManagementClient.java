@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.client;
 
 import com.alibaba.fastjson.JSON;
@@ -36,8 +32,6 @@ import org.slf4j.LoggerFactory;
  *   <li>{@link #inquiryBeneficiaryList} — 查询收款人列表</li>
  * </ul>
  *
- * @author Qoder
- * @version BeneficiaryManagementClient.java, v 0.1 2026-03-26
  */
 public class BeneficiaryManagementClient {
 

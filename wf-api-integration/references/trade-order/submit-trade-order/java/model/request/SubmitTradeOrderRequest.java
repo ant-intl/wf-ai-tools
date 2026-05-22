@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import java.util.List;
@@ -20,8 +16,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *   <li>{@code CREATE_B2B_ORDERS} — B2B 外贸订单创建（最多 10 笔订单）</li>
  * </ul>
  *
- * @author Qoder
- * @version SubmitTradeOrderRequest.java, v 0.1 2026-04-03
  */
 public class SubmitTradeOrderRequest {
 

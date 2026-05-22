@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -12,9 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 收款人信息对象。
  *
  * <p>绑定收款人成功后返回，或在查询收款人列表中返回。
- *
- * @author Qoder
- * @version Beneficiary.java, v 0.1 2026-03-26
  */
 public class Beneficiary {
 

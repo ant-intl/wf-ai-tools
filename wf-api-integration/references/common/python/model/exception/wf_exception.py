@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 WorldFirst API 业务异常
-
-@author Qoder
-@version wf_exception.py, v 0.1 2026-04-01
 """
 
 from {basePackage}.wf.model.exception.wf_error_code import WfErrorCode

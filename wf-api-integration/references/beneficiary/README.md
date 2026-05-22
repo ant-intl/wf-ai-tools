@@ -1,5 +1,10 @@
 # 收款人管理模块 (Beneficiary Management)
 
+## 官方文档
+
+- [WorldFirst 开发者文档 - Beneficiary](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/beneficiary)
+- [inquiryTemplate](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_template) | [bindBeneficiary](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/bind_beneficiary) | [removeBeneficiary](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/remove_beneficiary) | [editBeneficiary](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/edit_beneficiary) | [inquiryBeneficiaryList](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_beneficiary_list) | [notifyBindBeneficiary](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_bind_beneficiary)
+
 ## Pre-Generation Question (MUST ASK)
 
 在生成代码前，**必须**询问用户：

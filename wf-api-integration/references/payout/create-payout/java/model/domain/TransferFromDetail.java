@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -10,9 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 支付方转账详情
- *
- * @author Qoder
- * @version TransferFromDetail.java, v 0.1 2026-03-25
  */
 public class TransferFromDetail {
 

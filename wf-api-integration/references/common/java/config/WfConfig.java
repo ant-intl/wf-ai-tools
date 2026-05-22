@@ -1,8 +1,4 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
-package com.ipay.iissuecard.common.service.integration.wf.config;
+package {basePackage}.wf.config;
 
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,13 +6,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * WorldFirst API 配置类
- *
- * @author Qoder
- * @version WfConfig.java, v 0.1 2026-03-24
  */
 public class WfConfig {
 
-    /** WF client identifier（由 WF 分配，如 "3K5Y966G2Y5G5309739"） */
+    /** WF client identifier（由 WF 分配） */
     private String clientId = "{clientId}";
 
     /** WF user identifier（即登录 WF 的 userId） */

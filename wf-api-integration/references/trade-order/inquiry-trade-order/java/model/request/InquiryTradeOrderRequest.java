@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 
@@ -13,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>仅适用于 PAY_INTO_CHINA 场景，用于查询 submitTradeOrder 提交的交易订单处理结果。
  *
- * @author Qoder
- * @version InquiryTradeOrderRequest.java, v 0.1 2026-04-03
  */
 public class InquiryTradeOrderRequest {
 

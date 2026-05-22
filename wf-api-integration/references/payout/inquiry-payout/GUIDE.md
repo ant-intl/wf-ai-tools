@@ -4,6 +4,10 @@
 
 查询代发单的处理状态。当 createPayout 返回 `PROCESSING` 时，必须调用此接口轮询最终结果。
 
+## 官方文档
+
+- [inquiryPayout 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_payout)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/fund/inquiryPayout`

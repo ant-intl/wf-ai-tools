@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,9 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>当 result.resultStatus=S 时，万里汇会在回调中携带本对象，
  * 包含收款人令牌、账户类型、状态等信息。
- *
- * @author Qoder
- * @version NotifyBeneficiary.java, v 0.1 2026-04-21
  */
 public class NotifyBeneficiary {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -14,8 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>当 beneficiaryType 为 THIRD_PARTY_PERSONAL_BANK_ACCOUNT 或 
  * THIRD_PARTY_COMPANY_BANK_ACCOUNT 且 countryCode=CN、currency=CNY 时必填。
  *
- * @author Qoder
- * @version ThirdPartyIdentity.java, v 0.1 2026-03-26
  */
 public class ThirdPartyIdentity {
 

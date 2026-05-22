@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import java.util.List;
@@ -15,8 +11,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>对应 WF submitTradeOrder 接口请求体中的 {@code shipping.declarationInfos[]} 元素。
  * 在 B2B + isUsedForExchange=Y + isShipped=Y + isDeclared=Y 时必填。
  *
- * @author Qoder
- * @version DeclarationInfo.java, v 0.1 2026-04-03
  */
 public class DeclarationInfo {
 

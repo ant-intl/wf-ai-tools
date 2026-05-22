@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.response;
 
 import {basePackage}.wf.model.domain.Beneficiary;
@@ -13,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * WorldFirst inquiryBeneficiaryList 响应对象。
  *
- * @author Qoder
- * @version InquiryBeneficiaryListResponse.java, v 0.1 2026-03-26
  */
 public class InquiryBeneficiaryListResponse {
 

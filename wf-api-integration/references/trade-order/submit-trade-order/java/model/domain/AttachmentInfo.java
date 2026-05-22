@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -14,8 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>用于物流凭证、合同、报关单据等附件的统一模型。
  * {@code fileKey} 通过文件上传接口获取。
  *
- * @author Qoder
- * @version AttachmentInfo.java, v 0.1 2026-04-03
  */
 public class AttachmentInfo {
 

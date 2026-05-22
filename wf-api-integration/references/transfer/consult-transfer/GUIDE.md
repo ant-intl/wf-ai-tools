@@ -6,6 +6,10 @@
 
 此接口为同步接口，调用后直接返回咨询结果。
 
+## 官方文档
+
+- [consultTransfer 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/consult_transfer)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/fund/consultTransfer`

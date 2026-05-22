@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 WorldFirst API 配置类
-
-@author Qoder
-@version wf_config.py, v 0.1 2026-03-24
 """
 
 import os

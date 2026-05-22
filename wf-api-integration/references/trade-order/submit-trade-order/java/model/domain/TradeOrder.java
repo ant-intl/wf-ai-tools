@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 import java.util.List;
@@ -16,8 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * B2C 场景需要传入 merchant/seller/buyer 等字段，
  * B2B 场景需要传入 tradeTerms/bizContractInfo 等字段。
  *
- * @author Qoder
- * @version TradeOrder.java, v 0.1 2026-04-03
  */
 public class TradeOrder {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -14,8 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>对应 WF submitTradeOrder 接口请求体中的 {@code buyer.buyerName} 字段。
  * 当传入 buyerName 时，{@code fullName} 为必填项。
  *
- * @author Qoder
- * @version BuyerName.java, v 0.1 2026-04-03
  */
 public class BuyerName {
 

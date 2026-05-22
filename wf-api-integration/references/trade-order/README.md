@@ -1,5 +1,10 @@
 # 交易信息管理模块 (Trade Order Management)
 
+## 官方文档
+
+- [WorldFirst 开发者文档 - Trade Order](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/trade_order)
+- [submitTradeOrder](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/submit_trade_order) | [inquiryTradeOrder](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_trade_order) | [notifyTradeOrder](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_trade_order)
+
 ## Pre-Generation Question (MUST ASK)
 
 在生成代码前，**必须**询问用户：

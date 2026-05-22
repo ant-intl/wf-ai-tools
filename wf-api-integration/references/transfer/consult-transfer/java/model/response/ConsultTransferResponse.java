@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.response;
 
 import {basePackage}.wf.model.domain.TransferFromDetail;
@@ -15,8 +11,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>返回转账咨询结果，包含计算后的金额、手续费、汇率等信息。
  *
- * @author Qoder
- * @version ConsultTransferResponse.java, v 0.1 2026-04-07
  */
 public class ConsultTransferResponse {
 

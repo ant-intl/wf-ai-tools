@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import {basePackage}.wf.model.domain.TransferFromDetail;
@@ -15,9 +11,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>接口约束：transferFromAmount 与 transferToAmount 不能同时传入，二选一。
  * 当前场景传 transferToAmount，WF 自动计算付款方扣款金额。
- *
- * @author Qoder
- * @version CreatePayoutRequest.java, v 0.1 2026-03-25
  */
 public class CreatePayoutRequest {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,8 +11,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 且调用 inquiryTransfer 接口后 transferResult.resultCode 返回 UNKNOWN，
  * 联系万里汇技术支持。
  *
- * @author Qoder
- * @version InquiryTransferRequest.java, v 0.1 2026-04-07
  */
 public class InquiryTransferRequest {
 

@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.request;
 
 import {basePackage}.wf.model.domain.NotifyBeneficiary;
@@ -16,8 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>收款人绑定成功后，万里汇会主动调用此接口将收款人绑定结果通知给集成商。
  * {@code bindBeneficiaryRequestId} 为幂等字段，集成商可用于去重。
  *
- * @author Qoder
- * @version NotifyBindBeneficiaryRequest.java, v 0.1 2026-04-21
  */
 public class NotifyBindBeneficiaryRequest {
 

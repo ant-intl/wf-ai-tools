@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.client;
 
 import com.alibaba.fastjson.JSON;
@@ -32,9 +28,6 @@ import org.slf4j.LoggerFactory;
  *   <li>将 quoteId 传入 {@link #createPayout} 的 transferToDetail.transferQuote.quoteId</li>
  *   <li>若返回 PROCESSING，调用 {@link #inquiryPayout} 轮询最终结果</li>
  * </ol>
- *
- * @author Qoder
- * @version PayoutClient.java, v 0.1 2026-03-27
  */
 public class PayoutClient {
 

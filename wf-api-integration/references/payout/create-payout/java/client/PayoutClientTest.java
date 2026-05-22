@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf;
 
 import {basePackage}.wf.client.PayoutClient;
@@ -27,9 +23,6 @@ import org.junit.Test;
 
 /**
  * PayoutClient 集成测试（真实签名模式）。
- *
- * @author Qoder
- * @version PayoutClientTest.java, v 0.1 2026-03-27
  */
 public class PayoutClientTest {
 

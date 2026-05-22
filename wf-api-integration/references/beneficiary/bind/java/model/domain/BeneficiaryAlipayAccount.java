@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.model.domain;
 
 
@@ -13,8 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * <p>当 beneficiaryType 为 RELATED_MERCHANT_ALIPAY_COMPANY_ACCOUNT 时必填。
  *
- * @author Qoder
- * @version BeneficiaryAlipayAccount.java, v 0.1 2026-03-26
  */
 public class BeneficiaryAlipayAccount {
 

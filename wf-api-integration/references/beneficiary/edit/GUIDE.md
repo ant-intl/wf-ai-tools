@@ -4,6 +4,10 @@
 
 修改收款人昵称。
 
+## 官方文档
+
+- [editBeneficiary 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/edit_beneficiary)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/account/editBeneficiary`

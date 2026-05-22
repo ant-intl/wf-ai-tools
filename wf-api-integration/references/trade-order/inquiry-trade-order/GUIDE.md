@@ -4,6 +4,10 @@
 
 查询 submitTradeOrder 的上传处理结果。**仅适用于 PAY_INTO_CHINA 场景**。
 
+## 官方文档
+
+- [inquiryTradeOrder 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_trade_order)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/account/inquiryTradeOrder`

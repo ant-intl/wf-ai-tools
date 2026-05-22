@@ -4,6 +4,10 @@
 
 绑定收款人到当前 WF 账户，获取 `beneficiaryToken` 用于后续代发。
 
+## 官方文档
+
+- [bindBeneficiary 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/bind_beneficiary)
+
 ## 请求地址
 
 `POST /amsin/api/v1/business/account/bindBeneficiary`

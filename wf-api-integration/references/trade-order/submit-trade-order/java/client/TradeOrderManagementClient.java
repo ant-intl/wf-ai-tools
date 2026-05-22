@@ -1,7 +1,3 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2026 All Rights Reserved.
- */
 package {basePackage}.wf.client;
 
 import java.util.List;
@@ -30,8 +26,6 @@ import org.slf4j.LoggerFactory;
  *   <li>或通过 notifyUrl 接收 WF 回调通知（NotifyTradeOrderController）</li>
  * </ol>
  *
- * @author Qoder
- * @version TradeOrderManagementClient.java, v 0.1 2026-04-03
  */
 public class TradeOrderManagementClient {
 
