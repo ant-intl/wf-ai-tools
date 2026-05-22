@@ -206,7 +206,3 @@ See `references/common/` for signing utility code in each language.
 6. **Use HTTPS only** — All API requests must use HTTPS. HTTP is not allowed.
 7. **Don't assume final results** — After initiating a transfer or payout, confirm the final status via inquiry APIs or async notifications, never rely on the request response status alone.
 8. **Separate production and test keys** — Production and test environments must use different clientId and key pairs.
-
-## License
-
-This Skill is provided for WorldFirst API integration purposes. Refer to the WorldFirst OpenAPI terms of service for usage guidelines.
