@@ -1,6 +1,6 @@
 # WF API Integration Skill
 
-A Skill for integrating WorldFirst (WF) APIs with LLMs or agent frameworks. Supports code generation in Java, Golang, and Python, covering transfer, payout, beneficiary management, account management, FX rate query, statement management, and trade order management — with RSA256 signing and production-ready templates.
+A Skill for integrating WorldFirst (WF) APIs with LLMs or agent frameworks. Supports code generation in Java, Golang, and Python, covering transfer, payout, beneficiary management, account management, statement management, and trade order management — with RSA256 signing and production-ready templates.
 
 ## What Problem Does It Solve
 
@@ -20,7 +20,6 @@ This Skill packages WF API integration knowledge into standardized templates tha
 | **Payout** | Disburse funds to bank cards or e-wallets (consult / create / inquiry / notify) | Java, Golang |
 | **Beneficiary Management** | Beneficiary management (template inquiry / bind / remove / edit / list / bind notify) | Java, Golang |
 | **Account Management** | Query account info, balance, quota, sub-users, stores; receive credit / balance change notifications | Java, Golang |
-| **FX Rate** | Query real-time reference exchange rates and create forex quotes (inquiry-rate / create-quote) | Java, Golang |
 | **Statement Management** | Query transaction statement list and details | Java, Golang, Python |
 | **Trade Order** | Submit trade orders (B2C settlement / B2B order association), query results, handle async notifications | Java, Golang |
 
@@ -36,7 +35,6 @@ Determine which WF API module you need:
 - **Payout** — Sending money to third-party bank accounts or e-wallets (payroll, supplier payments, etc.)
 - **Beneficiary Management** — Managing beneficiary bank card information
 - **Account Management** — Querying account balance, info, quotas, sub-users, stores, and receiving notifications
-- **FX Rate** — Querying real-time exchange rates and creating forex quotes for actual currency exchange
 - **Statement Management** — Viewing transaction records and reconciling accounts
 - **Trade Order** — Uploading trade orders for B2C settlement or B2B order association
 
@@ -68,10 +66,6 @@ wf-api-integration/
     │   ├── golang/
     │   ├── java/
     │   ├── python/
-    │   └── README.md
-    ├── fx-rate/                       # FX rate and quote module
-    │   ├── create-quote/
-    │   ├── inquiry-rate/
     │   └── README.md
     ├── transfer/                     # Transfer module
     │   ├── consult-transfer/
@@ -163,13 +157,6 @@ Each interface directory contains:
 | inquiry-store | Query store info and associated accounts with pagination |
 | notify-vostro | Receive credit / advance payment notification (WF → integrator) |
 | notify-balance-change | Receive balance change notification (WF → integrator) |
-
-### FX Rate (汇率与报价)
-
-| Interface | Description |
-|-----------|-------------|
-| inquiry-rate | Query real-time reference exchange rates, supports batch query for multiple currency pairs |
-| create-quote | Create forex quote with actual tradeable rate (supports SPOT / FORWARD / UNFUNDED_SPOT) |
 
 ### Statement Management (账单管理)
 
