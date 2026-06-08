@@ -37,10 +37,27 @@
 
 ## 示例代码
 
+### Java 模板结构
+
 ```
 java/
 └── model/
     ├── request/InquiryBeneficiaryListRequest.java
     └── response/InquiryBeneficiaryListResponse.java
 ```
+
+### Golang 模板结构
+
+```
+golang/
+└── model/
+    ├── domain/
+    │   └── beneficiary.go
+    ├── request/
+    │   └── inquiry_beneficiary_list_request.go
+    └── response/
+        └── inquiry_beneficiary_list_response.go
+```
+
+> **注意**: Client 实现集中在 `inquiry-template/golang/client/beneficiary_management_client.go` 中，已包含 inquiryBeneficiaryList 接口。
 

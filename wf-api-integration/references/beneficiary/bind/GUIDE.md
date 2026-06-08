@@ -71,3 +71,18 @@ bankCountryCode = "HK"
 beneficiaryType = "THIRD_PARTY_PERSONAL_BANK_ACCOUNT"
 ```
 
+### Golang 模板结构
+
+```
+golang/
+└── model/
+    ├── domain/
+    │   └── beneficiary.go
+    ├── request/
+    │   └── bind_beneficiary_request.go
+    └── response/
+        └── bind_beneficiary_response.go
+```
+
+> **注意**: Client 实现集中在 `inquiry-template/golang/client/beneficiary_management_client.go` 中，已包含 bindBeneficiary 接口。
+
