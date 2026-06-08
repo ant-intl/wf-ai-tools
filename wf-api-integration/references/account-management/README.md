@@ -1,4 +1,4 @@
-# 账户管理模块 (Account Inquiry)
+# 账户管理模块 (Account Management)
 
 ## 官方文档
 

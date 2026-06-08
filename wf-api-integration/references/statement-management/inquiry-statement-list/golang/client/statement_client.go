@@ -15,7 +15,7 @@ const (
 	pathInquiryStatementDetail = "/amsin/api/v1/business/account/inquiryStatementDetail"
 )
 
-// StatementClient handles statement inquiry API business logic.
+// StatementClient handles statement management API business logic.
 // Includes InquiryStatementList and InquiryStatementDetail methods.
 // HTTP communication is delegated to WfHttpClient.
 type StatementClient struct {

@@ -18,7 +18,7 @@ const (
 	pathInquiryStore          = "/amsin/api/v1/business/store/inquiryStore"
 )
 
-// InquiryAccountInfoClient handles account inquiry API business logic.
+// InquiryAccountInfoClient handles account management API business logic.
 // Includes InquiryAccount, InquiryBalance, InquiryAvailableQuota, InquirySubuser and InquiryStore methods.
 // HTTP communication is delegated to WfHttpClient.
 type InquiryAccountInfoClient struct {
