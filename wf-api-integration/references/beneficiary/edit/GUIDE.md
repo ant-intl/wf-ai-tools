@@ -28,10 +28,25 @@
 
 ## 示例代码
 
+### Java 模板结构
+
 ```
 java/
 └── model/
     ├── request/EditBeneficiaryRequest.java
     └── response/EditBeneficiaryResponse.java
 ```
+
+### Golang 模板结构
+
+```
+golang/
+└── model/
+    ├── request/
+    │   └── edit_beneficiary_request.go
+    └── response/
+        └── edit_beneficiary_response.go
+```
+
+> **注意**: Client 实现集中在 `inquiry-template/golang/client/beneficiary_management_client.go` 中，已包含 editBeneficiary 接口。
 

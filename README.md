@@ -1,6 +1,6 @@
 # WF API Integration Skill
 
-A Skill for integrating WorldFirst (WF) APIs with LLMs or agent frameworks. Supports code generation in Java, Golang, and Python, covering transfer, payout, beneficiary management, account inquiry, statement inquiry, and trade order management — with RSA256 signing and production-ready templates.
+A Skill for integrating WorldFirst (WF) APIs with LLMs or agent frameworks. Supports code generation in Java, Golang, and Python, covering transfer, payout, beneficiary management, account management, statement management, and trade order management — with RSA256 signing and production-ready templates.
 
 ## What Problem Does It Solve
 
@@ -18,9 +18,9 @@ This Skill packages WF API integration knowledge into standardized templates tha
 |--------|-------------|-----------|
 | **Transfer** | Fund transfers between WF accounts (consult / create / inquiry / notify) | Java, Golang |
 | **Payout** | Disburse funds to bank cards or e-wallets (consult / create / inquiry / notify) | Java, Golang |
-| **Beneficiary** | Beneficiary card management (template inquiry / bind / remove / edit / list / bind notify) | Java, Golang (partial) |
-| **Account Inquiry** | Query account info, balance, quota, sub-users, stores; receive credit / balance change notifications | Java, Golang |
-| **Statement Inquiry** | Query transaction statement list and details | Java, Golang, Python |
+| **Beneficiary Management** | Beneficiary management (template inquiry / bind / remove / edit / list / bind notify) | Java, Golang |
+| **Account Management** | Query account info, balance, quota, sub-users, stores; receive credit / balance change notifications | Java, Golang |
+| **Statement Management** | Query transaction statement list and details | Java, Golang, Python |
 | **Trade Order** | Submit trade orders (B2C settlement / B2B order association), query results, handle async notifications | Java, Golang |
 
 > **Note**: Python currently only supports common modules (`common/`) and statement management (`statement-management/`). Other modules do not yet have Python templates.
@@ -33,9 +33,9 @@ Determine which WF API module you need:
 
 - **Transfer** — Moving funds between WF accounts
 - **Payout** — Sending money to third-party bank accounts or e-wallets (payroll, supplier payments, etc.)
-- **Beneficiary** — Managing beneficiary bank card information
-- **Account Inquiry** — Querying account balance, info, quotas, sub-users, stores, and receiving notifications
-- **Statement Inquiry** — Viewing transaction records and reconciling accounts
+- **Beneficiary Management** — Managing beneficiary bank card information
+- **Account Management** — Querying account balance, info, quotas, sub-users, stores, and receiving notifications
+- **Statement Management** — Viewing transaction records and reconciling accounts
 - **Trade Order** — Uploading trade orders for B2C settlement or B2B order association
 
 ### 2. Select an Interface
@@ -135,7 +135,7 @@ Each interface directory contains:
 | inquiry-payout | Query payout status |
 | notify-payout | Receive async payout result notification (WF → integrator) |
 
-### Beneficiary (收款人管理)
+### Beneficiary Management (收款人管理)
 
 | Interface | Description |
 |-----------|-------------|
@@ -146,7 +146,7 @@ Each interface directory contains:
 | inquiry-list | Query bound beneficiaries with pagination |
 | notify-bind | Receive beneficiary bind result notification (WF → integrator) |
 
-### Account Inquiry (账户管理)
+### Account Management (账户管理)
 
 | Interface | Description |
 |-----------|-------------|
@@ -158,7 +158,7 @@ Each interface directory contains:
 | notify-vostro | Receive credit / advance payment notification (WF → integrator) |
 | notify-balance-change | Receive balance change notification (WF → integrator) |
 
-### Statement Inquiry (账单管理)
+### Statement Management (账单管理)
 
 | Interface | Description |
 |-----------|-------------|

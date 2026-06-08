@@ -1,4 +1,4 @@
-# 账单管理模块 (Statement Inquiry)
+# 账单管理模块 (Statement Management)
 
 ## 官方文档
 

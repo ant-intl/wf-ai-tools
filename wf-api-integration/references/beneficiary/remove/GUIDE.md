@@ -28,10 +28,25 @@
 
 ## 示例代码
 
+### Java 模板结构
+
 ```
 java/
 └── model/
     ├── request/RemoveBeneficiaryRequest.java
     └── response/RemoveBeneficiaryResponse.java
 ```
+
+### Golang 模板结构
+
+```
+golang/
+└── model/
+    ├── request/
+    │   └── remove_beneficiary_request.go
+    └── response/
+        └── remove_beneficiary_response.go
+```
+
+> **注意**: Client 实现集中在 `inquiry-template/golang/client/beneficiary_management_client.go` 中，已包含 removeBeneficiary 接口。
 
