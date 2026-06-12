@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="resources/logos/wf-api-skill-logo-dark.svg">
-    <img alt="WF API Integration Skill" src="resources/logos/wf-api-skill-logo.svg" width="80" height="80">
-  </picture>
+  <img alt="WF API Integration Skill" src="resources/logos/wf-api-skill-logo.svg" width="80" height="80">
 </p>
 
 <p align="center">
