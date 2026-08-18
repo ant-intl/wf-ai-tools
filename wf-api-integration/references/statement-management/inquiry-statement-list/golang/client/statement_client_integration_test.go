@@ -11,11 +11,11 @@ import (
 	"{moduleName}/wf/util"
 )
 
-// Fill in your WF sandbox/production credentials before running
+// Fill in your WF credentials before running
 const (
 	wfClientID   = "{clientId}"
 	wfUserID     = "{userId}"
-	wfBaseURL    = "{baseUrl}" // sandbox: https://open-sitprod-sg.alipay.com
+	wfBaseURL    = "{baseUrl}" // https://open-sea.worldfirst.com
 	wfPrivateKey = "{privateKeyPath}"
 	wfPublicKey  = "{publicKeyPath}"
 )
@@ -30,7 +30,7 @@ func newRealStatementClient(t *testing.T) *StatementClient {
 	return NewStatementClient(util.NewWfHttpClient(cfg, s))
 }
 
-// TestIntegration_InquiryStatementList queries statement list from WF sandbox
+// TestIntegration_InquiryStatementList queries statement list from WF
 func TestIntegration_InquiryStatementList(t *testing.T) {
 	c := newRealStatementClient(t)
 
@@ -57,7 +57,7 @@ func TestIntegration_InquiryStatementList(t *testing.T) {
 	}
 }
 
-// TestIntegration_InquiryStatementDetail queries statement detail from WF sandbox.
+// TestIntegration_InquiryStatementDetail queries statement detail from WF.
 // It first calls InquiryStatementList to obtain a real accountingBizNo.
 func TestIntegration_InquiryStatementDetail(t *testing.T) {
 	c := newRealStatementClient(t)

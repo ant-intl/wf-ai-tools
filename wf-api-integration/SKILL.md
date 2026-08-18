@@ -143,7 +143,7 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 
 4. **WF Client ID**：请提供您的万里汇 Client ID
 5. **WF User ID**：请提供您的万里汇登录 User ID
-6. **API Base URL**：请提供 API 网关地址（默认 `https://open-sitprod-sg.alipay.com`）
+6. **API Base URL**：请提供 API 网关地址（默认 `https://open-sea.worldfirst.com`）
 7. **私钥文件路径**：请提供 RSA 私钥文件路径（PKCS#8 格式），如 `/etc/wf/certs/private_key.pem`
 8. **公钥文件路径**：请提供万里汇 RSA 公钥文件路径，如 `/etc/wf/certs/wf_public_key.pem`
 

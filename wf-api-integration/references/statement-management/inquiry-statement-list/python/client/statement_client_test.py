@@ -2,7 +2,7 @@
 """
 WorldFirst StatementClient 集成测试
 
-使用前需填入真实的 WF 沙箱/生产环境凭证。
+使用前需填入真实的 WF 环境凭证。
 """
 
 import unittest
@@ -15,10 +15,10 @@ from {basePackage}.wf.model.request.inquiry_statement_request import InquiryStat
 from {basePackage}.wf.model.request.inquiry_statement_detail_request import InquiryStatementDetailRequest
 from {basePackage}.wf.model.exception.wf_exception import WfException
 
-# ============ 填入你的 WF 沙箱/生产凭证 ============
+# ============ 填入你的 WF 凭证 ============
 WF_CLIENT_ID = "{clientId}"
 WF_USER_ID = "{userId}"
-WF_BASE_URL = "{baseUrl}"  # 沙箱: https://open-sitprod-sg.alipay.com
+WF_BASE_URL = "{baseUrl}"  # https://open-sea.worldfirst.com
 WF_PRIVATE_KEY_PATH = "{privateKeyPath}"
 WF_PUBLIC_KEY_PATH = "{publicKeyPath}"
 

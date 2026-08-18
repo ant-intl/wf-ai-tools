@@ -32,7 +32,7 @@ import java.util.Map;
 public class BeneficiaryManagementClientTest {
 
     private static final String CLIENT_ID = "YOUR_CLIENT_ID";
-    private static final String BASE_URL = "https://open-sitprod-sg.alipay.com";
+    private static final String BASE_URL = "https://open-sea.worldfirst.com";
 
     private BeneficiaryManagementClient client;
     private WfConfig mockConfig;
