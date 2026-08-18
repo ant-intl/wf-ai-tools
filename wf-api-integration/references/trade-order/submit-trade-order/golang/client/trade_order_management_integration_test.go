@@ -13,11 +13,11 @@ import (
 	"{moduleName}/wf/util"
 )
 
-// Fill in your WF sandbox/production credentials before running
+// Fill in your WF credentials before running
 const (
 	wfClientID   = "{clientId}"
 	wfUserID     = "{userId}"
-	wfBaseURL    = "{baseUrl}" // sandbox: https://open-sitprod-sg.alipay.com
+	wfBaseURL    = "{baseUrl}" // https://open-sea.worldfirst.com
 	wfPrivateKey = "{privateKeyPath}"
 	wfPublicKey  = "{publicKeyPath}"
 )
