@@ -16,4 +16,5 @@ Thumbs.db
 # 依赖目录
 node_modules/
 vendor/
-.DS_Store to gitignore
+.DS_Store to gitignore.idea/
+.DS_Store
