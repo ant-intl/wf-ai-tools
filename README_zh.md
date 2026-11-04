@@ -10,13 +10,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](CHANGELOG.md)
-[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python-orange)](wf-api-integration/references/)
+[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python%20|%20PHP%20|%20Adaptive-orange)](wf-api-integration/references/)
 
 🌐 **Language / 语言:** [English](README.md) | [中文](README_zh.md)
 
 # WF API 集成技能
 
-一个用于将万里汇（WorldFirst）API 与 LLM 或 Agent 框架集成的技能。支持 Java、Golang 和 Python 代码生成，覆盖转账、全球分发、收款人管理、账户管理、账单管理和交易信息管理——内置 RSA256 签名和生产级模板。
+一个用于将万里汇（WorldFirst）API 与 LLM 或 Agent 框架集成的技能。原生支持 Java、Golang、Python 和 PHP，并可通过语言无关适配流程生成其他技术栈的代码，覆盖转账、全球分发、收款人管理、账户管理、账单管理和交易信息管理——内置 RSA256 签名、项目适配和生产级模板。
 
 **[快速开始](#快速开始)** | **[支持的模块](#支持的模块)** | **[浏览参考代码](wf-api-integration/references/)**
 
@@ -49,14 +49,16 @@
 
 | 模块 | 描述 | 支持语言 |
 |------|------|----------|
-| **转账（Transfer）** | 万里汇账户间资金转账（咨询 / 创建 / 查询 / 通知） | Java, Golang |
-| **全球分发（Payout）** | 向银行卡或电子钱包付款（咨询 / 创建 / 查询 / 通知） | Java, Golang |
-| **收款人管理（Beneficiary）** | 收款人管理（模板查询 / 绑定 / 解绑 / 编辑 / 列表查询 / 绑定通知） | Java, Golang |
-| **账户管理（Account）** | 查询账户信息、余额、额度、子账户、店铺；接收入账/余额变动通知 | Java, Golang |
-| **账单管理（Statement）** | 查询交易账单列表和详情 | Java, Golang, Python |
-| **交易信息管理（Trade Order）** | 提交交易订单（B2C 结算 / B2B 关联），查询结果，处理异步通知 | Java, Golang |
+| **转账（Transfer）** | 万里汇账户间资金转账（咨询 / 创建 / 查询 / 通知） | Java, Golang, PHP |
+| **全球分发（Payout）** | 向银行卡或电子钱包付款（咨询 / 创建 / 查询 / 通知） | Java, Golang, PHP |
+| **收款人管理（Beneficiary）** | 收款人管理（模板查询 / 绑定 / 解绑 / 编辑 / 列表查询 / 绑定通知） | Java, Golang, PHP |
+| **账户管理（Account）** | 查询账户信息、余额、额度、子账户、店铺；接收入账/余额变动通知 | Java, Golang, PHP |
+| **账单管理（Statement）** | 查询交易账单列表和详情 | Java, Golang, Python, PHP |
+| **交易信息管理（Trade Order）** | 提交交易订单（B2C 结算 / B2B 关联），查询结果，处理异步通知 | Java, Golang, PHP |
 
-> **注意**：Python 目前仅支持公共模块（`common/`）和账单管理（`statement-management/`）。其他模块暂无 Python 模板。
+> **注意**：Java、Golang 和 PHP 覆盖所有模块；Python 目前仅支持公共模块（`common/`）和账单管理（`statement-management/`）。PHP 要求 8.1+，使用 PSR-4、Guzzle 和 OpenSSL。
+>
+> **其他技术栈**：通过[语言无关适配流程](wf-api-integration/references/language-agnostic/README.md)，根据客户项目和现有示例生成。该模式要求目标技术栈具备 HTTPS、JSON、RSA256 和无损金额整数能力，并通过构建及签名验证，不承诺未经运行验证的“任意语言可用”。
 
 ## 快速开始
 
@@ -80,8 +82,8 @@
 代码生成前，你需要提供：
 
 - **项目路径** —— 代码生成的目标位置
-- **编程语言** —— Java、Golang 或 Python
-- **基础包名 / 模块名** —— 例如 `com.example.project`（Java）、`github.com/example/project`（Go）、`wf_integration`（Python）
+- **编程语言与技术栈** —— Java、Golang、Python、PHP，或其他语言、运行时和框架
+- **基础包名 / 模块名 / 基础命名空间 / 项目模块约定** —— 例如 `com.example.project`（Java）、`github.com/example/project`（Go）、`wf_integration`（Python）、`Acme\Integration`（PHP）；其他语言以现有项目为准
 - **WF 凭证** —— Client ID、User ID、API 基础 URL、RSA 密钥路径
 
 ### 4. 生成并验证
@@ -99,6 +101,9 @@ wf-api-integration/
     │   ├── golang/
     │   ├── java/
     │   ├── python/
+    │   ├── php/
+    │   └── README.md
+    ├── language-agnostic/            # 其他技术栈的契约驱动适配流程
     │   └── README.md
     ├── transfer/                     # 转账模块
     │   ├── consult-transfer/
@@ -147,6 +152,7 @@ wf-api-integration/
 - `java/` —— Java 代码模板
 - `golang/` —— Golang 代码模板
 - `python/` —— Python 代码模板（部分接口提供）
+- `php/` —— PHP 8.1+ 代码模板（所有接口提供）
 
 ## 模块详情
 
@@ -210,14 +216,14 @@ wf-api-integration/
 
 所有模块共享以下位于 `references/common/` 的组件：
 
-| 组件 | Java | Golang | Python | 描述 |
-|------|------|--------|--------|------|
-| WfConfig | `config/WfConfig.java` | `config/config.go` | `config/wf_config.py` | 配置管理（clientId、baseUrl、密钥路径、超时时间） |
-| WfSigner | `signer/WfSigner.java` | `signer/signer.go` | `signer/wf_signer.py` | RSA256 签名与验签 |
-| HttpClient | `util/WfHttpClientUtil.java` | `util/wf_http_client.go` | `util/wf_http_client.py` | 带签名注入和响应验签的 HTTP 客户端 |
-| Result | `model/response/Result.java` | `model/response/result.go` | `model/response/result.py` | 统一响应对象 |
-| ErrorCode | `model/exception/WfErrorCode.java` | `model/exception/error_code.go` | `model/exception/wf_error_code.py` | 错误码定义 |
-| Exception | `model/exception/WfException.java` | `model/exception/wf_exception.go` | `model/exception/wf_exception.py` | 业务异常类 |
+| 组件 | Java | Golang | Python | PHP | 描述 |
+|------|------|--------|--------|-----|------|
+| WfConfig | `config/WfConfig.java` | `config/config.go` | `config/wf_config.py` | `Config/WfConfig.php` | 配置管理（clientId、baseUrl、密钥路径、超时时间） |
+| WfSigner | `signer/WfSigner.java` | `signer/signer.go` | `signer/wf_signer.py` | `Signer/WfSigner.php` | RSA256 签名与验签 |
+| HttpClient | `util/WfHttpClientUtil.java` | `util/wf_http_client.go` | `util/wf_http_client.py` | `Util/WfHttpClient.php` | 带签名注入和响应验签的 HTTP 客户端 |
+| Result | `model/response/Result.java` | `model/response/result.go` | `model/response/result.py` | `Model/Response/Result.php` | 统一响应对象 |
+| ErrorCode | `model/exception/WfErrorCode.java` | `model/exception/error_code.go` | `model/exception/wf_error_code.py` | `Model/Exception/WfErrorCode.php` | 错误码定义 |
+| Exception | `model/exception/WfException.java` | `model/exception/wf_exception.go` | `model/exception/wf_exception.py` | `Model/Exception/WfException.php` | 业务异常类 |
 
 ## 签名算法
 

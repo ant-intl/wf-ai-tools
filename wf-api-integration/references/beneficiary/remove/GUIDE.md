@@ -48,5 +48,15 @@ golang/
         └── remove_beneficiary_response.go
 ```
 
-> **注意**: Client 实现集中在 `inquiry-template/golang/client/beneficiary_management_client.go` 中，已包含 removeBeneficiary 接口。
+### PHP 模板结构
+
+```
+php/
+└── Model/
+    ├── Request/RemoveBeneficiaryRequest.php
+    └── Response/RemoveBeneficiaryResponse.php
+```
+
+> **注意**: Client 实现集中在 `inquiry-template/golang/client/beneficiary_management_client.go` 和
+> `inquiry-template/php/Client/BeneficiaryManagementClient.php` 中，均已包含 removeBeneficiary 接口。
 
