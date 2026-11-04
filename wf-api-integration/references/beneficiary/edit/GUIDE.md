@@ -48,5 +48,15 @@ golang/
         └── edit_beneficiary_response.go
 ```
 
-> **注意**: Client 实现集中在 `inquiry-template/golang/client/beneficiary_management_client.go` 中，已包含 editBeneficiary 接口。
+### PHP 模板结构
+
+```
+php/
+└── Model/
+    ├── Request/EditBeneficiaryRequest.php
+    └── Response/EditBeneficiaryResponse.php
+```
+
+> **注意**: Client 实现集中在 `inquiry-template/golang/client/beneficiary_management_client.go` 和
+> `inquiry-template/php/Client/BeneficiaryManagementClient.php` 中，均已包含 editBeneficiary 接口。
 

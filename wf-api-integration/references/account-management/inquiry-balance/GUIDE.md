@@ -61,7 +61,7 @@
 
 ## 示例代码
 
-参考同目录下 `java/` 和 `golang/` 中的模板代码。
+参考同目录下 `java/`、`golang/` 和 `php/` 中的模板代码。
 
 ### Java 模板结构
 
@@ -78,6 +78,20 @@ java/
 
 > 注意：`InquiryAccountInfoClient` 同时包含 `inquiryBalance` 和 `inquiryAvailableQuota` 两个方法，
 > `inquiry-available-quota` 模块下仅有 model 类，无需单独的 Client。
+
+### PHP 模板结构
+
+```
+php/
+├── Client/InquiryAccountInfoClient.php          # 统一客户端，包含五个账户查询方法
+└── Model/
+    ├── Domain/AccountBalance.php
+    ├── Domain/Money.php
+    ├── Request/InquiryBalanceRequest.php
+    └── Response/InquiryBalanceResponse.php
+```
+
+> PHP 统一客户端位于 `inquiry-balance/php/Client/`，账户信息、余额、额度、子账号和店铺查询共用该客户端。
 
 ### Golang 模板结构
 

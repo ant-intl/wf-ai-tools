@@ -10,13 +10,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](CHANGELOG.md)
-[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python-orange)](wf-api-integration/references/)
+[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python%20|%20PHP-orange)](wf-api-integration/references/)
 
 🌐 **Language / 语言:** [English](README.md) | [中文](README_zh.md)
 
 # WF API Integration Skill
 
-A skill for integrating WorldFirst APIs with LLM or Agent frameworks. Supports Java, Golang, and Python code generation, covering Transfer, Payout, Beneficiary Management, Account Management, Statement Management, and Trade Order Management — with built-in RSA256 signing and production-grade templates.
+A skill for integrating WorldFirst APIs with LLM or Agent frameworks. Supports Java, Golang, Python, and PHP code generation, covering Transfer, Payout, Beneficiary Management, Account Management, Statement Management, and Trade Order Management — with built-in RSA256 signing and production-grade templates.
 
 **[Quick Start](#quick-start)** | **[Supported Modules](#supported-modules)** | **[Browse References](wf-api-integration/references/)**
 
@@ -49,14 +49,14 @@ This skill packages WF API integration knowledge into standardized templates tha
 
 | Module | Description | Languages |
 |--------|-------------|-----------|
-| **Transfer** | Fund transfers between WorldFirst accounts (Consult / Create / Inquiry / Notify) | Java, Golang |
-| **Payout** | Payments to bank cards or e-wallets (Consult / Create / Inquiry / Notify) | Java, Golang |
-| **Beneficiary** | Beneficiary management (Template Inquiry / Bind / Remove / Edit / List / Bind Notify) | Java, Golang |
-| **Account** | Query account info, balance, quota, sub-users, stores; receive deposit/balance change notifications | Java, Golang |
-| **Statement** | Query transaction statement list and details | Java, Golang, Python |
-| **Trade Order** | Submit trade orders (B2C settlement / B2B association), query results, handle async notifications | Java, Golang |
+| **Transfer** | Fund transfers between WorldFirst accounts (Consult / Create / Inquiry / Notify) | Java, Golang, PHP |
+| **Payout** | Payments to bank cards or e-wallets (Consult / Create / Inquiry / Notify) | Java, Golang, PHP |
+| **Beneficiary** | Beneficiary management (Template Inquiry / Bind / Remove / Edit / List / Bind Notify) | Java, Golang, PHP |
+| **Account** | Query account info, balance, quota, sub-users, stores; receive deposit/balance change notifications | Java, Golang, PHP |
+| **Statement** | Query transaction statement list and details | Java, Golang, Python, PHP |
+| **Trade Order** | Submit trade orders (B2C settlement / B2B association), query results, handle async notifications | Java, Golang, PHP |
 
-> **Note**: Python currently only supports the common module (`common/`) and Statement Management (`statement-management/`). Other modules do not have Python templates yet.
+> **Note**: Java, Golang, and PHP support all modules. Python currently only supports the common module (`common/`) and Statement Management (`statement-management/`). PHP requires 8.1+ and uses PSR-4, Guzzle, and OpenSSL.
 
 ## Quick Start
 
@@ -80,8 +80,8 @@ Each module contains specific endpoints. See [Module Details](#module-details) b
 Before code generation, you need to provide:
 
 - **Project path** — Target location for generated code
-- **Programming language** — Java, Golang, or Python
-- **Base package / module name** — e.g., `com.example.project` (Java), `github.com/example/project` (Go), `wf_integration` (Python)
+- **Programming language** — Java, Golang, Python, or PHP
+- **Base package / module name / base namespace** — e.g., `com.example.project` (Java), `github.com/example/project` (Go), `wf_integration` (Python), `Acme\Integration` (PHP)
 - **WF credentials** — Client ID, User ID, API base URL, RSA key paths
 
 ### 4. Generate and Verify
@@ -99,6 +99,7 @@ wf-api-integration/
     │   ├── golang/
     │   ├── java/
     │   ├── python/
+    │   ├── php/
     │   └── README.md
     ├── transfer/                     # Transfer module
     │   ├── consult-transfer/
@@ -147,6 +148,7 @@ Each endpoint directory contains:
 - `java/` — Java code templates
 - `golang/` — Golang code templates
 - `python/` — Python code templates (available for some endpoints)
+- `php/` — PHP 8.1+ code templates (available for all endpoints)
 
 ## Module Details
 
@@ -210,14 +212,14 @@ Each endpoint directory contains:
 
 All modules share the following components located in `references/common/`:
 
-| Component | Java | Golang | Python | Description |
-|-----------|------|--------|--------|-------------|
-| WfConfig | `config/WfConfig.java` | `config/config.go` | `config/wf_config.py` | Configuration management (clientId, baseUrl, key paths, timeout) |
-| WfSigner | `signer/WfSigner.java` | `signer/signer.go` | `signer/wf_signer.py` | RSA256 signing and verification |
-| HttpClient | `util/WfHttpClientUtil.java` | `util/wf_http_client.go` | `util/wf_http_client.py` | HTTP client with signature injection and response verification |
-| Result | `model/response/Result.java` | `model/response/result.go` | `model/response/result.py` | Unified response object |
-| ErrorCode | `model/exception/WfErrorCode.java` | `model/exception/error_code.go` | `model/exception/wf_error_code.py` | Error code definitions |
-| Exception | `model/exception/WfException.java` | `model/exception/wf_exception.go` | `model/exception/wf_exception.py` | Business exception class |
+| Component | Java | Golang | Python | PHP | Description |
+|-----------|------|--------|--------|-----|-------------|
+| WfConfig | `config/WfConfig.java` | `config/config.go` | `config/wf_config.py` | `Config/WfConfig.php` | Configuration management (clientId, baseUrl, key paths, timeout) |
+| WfSigner | `signer/WfSigner.java` | `signer/signer.go` | `signer/wf_signer.py` | `Signer/WfSigner.php` | RSA256 signing and verification |
+| HttpClient | `util/WfHttpClientUtil.java` | `util/wf_http_client.go` | `util/wf_http_client.py` | `Util/WfHttpClient.php` | HTTP client with signature injection and response verification |
+| Result | `model/response/Result.java` | `model/response/result.go` | `model/response/result.py` | `Model/Response/Result.php` | Unified response object |
+| ErrorCode | `model/exception/WfErrorCode.java` | `model/exception/error_code.go` | `model/exception/wf_error_code.py` | `Model/Exception/WfErrorCode.php` | Error code definitions |
+| Exception | `model/exception/WfException.java` | `model/exception/wf_exception.go` | `model/exception/wf_exception.py` | `Model/Exception/WfException.php` | Business exception class |
 
 ## Signing Algorithm
 

@@ -1,24 +1,24 @@
 ---
 name: wf-api-integration
-description: Generate Java, Golang, or Python integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, account (balance, quota, subuser, store, notifications), statement, and trade order management. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
+description: Generate Java, Golang, Python, or PHP integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, account (balance, quota, subuser, store, notifications), statement, and trade order management. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
 ---
 # WF API Integration Skill
 
-帮助用户对接万里汇(WorldFirst) API，支持 Java、Golang 和 Python 三种语言，涵盖转账、代发、收款人管理、账户管理（余额/额度/子账号/店铺/通知）、账单查询、交易订单管理等模块。
+帮助用户对接万里汇(WorldFirst) API，支持 Java、Golang、Python 和 PHP 四种语言，涵盖转账、代发、收款人管理、账户管理（余额/额度/子账号/店铺/通知）、账单查询、交易订单管理等模块。
 
-> **语言支持说明**：Java 和 Golang 覆盖所有模块；Python 目前仅支持公共模块（`common/`）和账单管理模块（`statement-management/`），其余模块暂无 Python 模板。
+> **语言支持说明**：Java、Golang 和 PHP 覆盖所有模块；Python 目前仅支持公共模块（`common/`）和账单管理模块（`statement-management/`），其余模块暂无 Python 模板。PHP 要求 8.1+，使用 PSR-4、Guzzle 和 OpenSSL。
 
 ## 模块索引
 
 
 | 模块         | 模块目录                                                        | 模块说明                                                     | 官方文档                                                                                             | 语言支持           |
 | ----------- |----------------------------------------------------------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------------| ------------------ |
-| 万里汇转账   | [references/transfer/](references/transfer/)                   | 在 WF 账户之间划转资金（咨询/发起/查询/结果通知）                | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/transfer_funds)           | Java、Golang       |
-| 全球分发     | [references/payout/](references/payout/)                       | 代发到第三方银行卡或电子钱包（咨询/发起/查询/结果通知）            | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/create_payout)             | Java、Golang       |
-| 收款人管理   | [references/beneficiary/](references/beneficiary/)             | 卡模版查询、绑定/删除/编辑/查询收款人、绑定结果通知                | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/beneficiary_management)        | Java、Golang       |
-| 账户管理     | [references/account-management/](references/account-management/)     | 查询账户信息/余额/结汇额度/子账号/店铺，接收充值/余额变动通知       | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/account_management)            | Java、Golang       |
-| 账单管理     | [references/statement-management/](references/statement-management/) | 查询账户交易流水列表及流水详情                                 | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/statement_management)          | Java、Golang、Python |
-| 交易信息管理 | [references/trade-order/](references/trade-order/)             | 上传交易订单（B2C 结汇 / B2B 订单关联）、查询结果、处理异步通知     | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/trade_order_management)        | Java、Golang       |
+| 万里汇转账   | [references/transfer/](references/transfer/)                   | 在 WF 账户之间划转资金（咨询/发起/查询/结果通知）                | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/transfer_funds)           | Java、Golang、PHP  |
+| 全球分发     | [references/payout/](references/payout/)                       | 代发到第三方银行卡或电子钱包（咨询/发起/查询/结果通知）            | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/create_payout)             | Java、Golang、PHP  |
+| 收款人管理   | [references/beneficiary/](references/beneficiary/)             | 卡模版查询、绑定/删除/编辑/查询收款人、绑定结果通知                | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/beneficiary_management)        | Java、Golang、PHP  |
+| 账户管理     | [references/account-management/](references/account-management/)     | 查询账户信息/余额/结汇额度/子账号/店铺，接收充值/余额变动通知       | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/account_management)            | Java、Golang、PHP  |
+| 账单管理     | [references/statement-management/](references/statement-management/) | 查询账户交易流水列表及流水详情                                 | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/statement_management)          | Java、Golang、Python、PHP |
+| 交易信息管理 | [references/trade-order/](references/trade-order/)             | 上传交易订单（B2C 结汇 / B2B 订单关联）、查询结果、处理异步通知     | [📄 官方文档](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_solution/trade_order_management)        | Java、Golang、PHP  |
 
 ## 快速决策树
 
@@ -120,7 +120,7 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 2. **确认接口**：确认用户需要对接的具体接口，读取对应接口的 `GUIDE.md` 了解接口规范
 3. **加载公共代码**：读取 [references/common/](references/common/) 下的公共代码模板
 4. **加载接口代码**：读取对应接口目录下的代码模板
-5. **生成代码**：根据用户项目结构生成代码，替换 `{basePackage}`（Java/Python）或 `{moduleName}`（Golang）占位符
+5. **生成代码**：根据用户项目结构生成代码，替换 `{basePackage}`（Java/Python）、`{moduleName}`（Golang）或 `{baseNamespace}`（PHP）占位符
 6. **代码检查**：执行「代码生成后检查清单」中的各项检查
 7. **测试验证**：运行单元测试，确保代码可正常编译和运行
 
@@ -131,11 +131,12 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 ### 基础信息
 
 1. **项目路径**：请问你的项目路径是什么？
-2. **语言选择**：你需要生成 Java、Golang 还是 Python 的代码？
-3. **Base Package / Module Name**：
+2. **语言选择**：你需要生成 Java、Golang、Python 还是 PHP 的代码？
+3. **Base Package / Module Name / Base Namespace**：
    - Java：请提供 base package（如 `com.example.project`）
    - Golang：请提供 Go module name（如 `github.com/example/project`）
    - Python：请提供 base package（如 `wf_integration`），用于组织 import 路径
+   - PHP：请提供 base namespace（如 `Acme\Integration`），用于 namespace 和 Composer PSR-4 自动加载
 
 ### WfConfig 配置属性（用于生成 WfConfig 类，禁止使用占位符）
 
@@ -147,7 +148,7 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 7. **私钥文件路径**：请提供 RSA 私钥文件路径（PKCS#8 格式），如 `/etc/wf/certs/private_key.pem`
 8. **公钥文件路径**：请提供万里汇 RSA 公钥文件路径，如 `/etc/wf/certs/wf_public_key.pem`
 
-> **重要**：用户提供的值直接填入生成的 WfConfig 代码中。如果用户表示暂时不确定某个值，应使用 Spring XML property placeholder（如 `${wf.clientId}`）、Go 环境变量读取（如 `os.Getenv("WF_CLIENT_ID")`）或 Python 环境变量读取（如 `os.environ.get("WF_CLIENT_ID")`）而非硬编码占位符字符串。
+> **重要**：用户提供的值直接填入生成的 WfConfig 代码中。如果用户表示暂时不确定某个值，应使用 Spring XML property placeholder（如 `${wf.clientId}`）、Go 环境变量读取（如 `os.Getenv("WF_CLIENT_ID")`）、Python 环境变量读取（如 `os.environ.get("WF_CLIENT_ID")`）或 PHP 环境变量读取（如 `getenv("WF_CLIENT_ID")`）而非硬编码占位符字符串。
 
 ### 模块特定问题（按需询问）
 
@@ -204,10 +205,24 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 | WfErrorCode  | [model/exception/wf_error_code.py](references/common/python/model/exception/wf_error_code.py)  | 错误码定义                     |
 | WfException  | [model/exception/wf_exception.py](references/common/python/model/exception/wf_exception.py)    | 异常定义                       |
 
+### PHP ([references/common/php/](references/common/php/))
+
+| 组件 | 路径 | 说明 |
+| ---- | ---- | ---- |
+| WfConfig | [Config/WfConfig.php](references/common/php/Config/WfConfig.php) | 配置管理与环境变量回退 |
+| WfSigner | [Signer/WfSigner.php](references/common/php/Signer/WfSigner.php) | 基于 OpenSSL 的 RSA256 签名/验签 |
+| WfHttpClient | [Util/WfHttpClient.php](references/common/php/Util/WfHttpClient.php) | Guzzle HTTP 封装、HTTPS 校验、强制响应验签 |
+| WfWebhookHandler | [Util/WfWebhookHandler.php](references/common/php/Util/WfWebhookHandler.php) | 通知原始请求体验签与签名响应 |
+| AbstractWfClient | [Client/AbstractWfClient.php](references/common/php/Client/AbstractWfClient.php) | 主动调用结果与异常统一处理 |
+| WfModel | [Model/WfModel.php](references/common/php/Model/WfModel.php) | 字段声明、嵌套模型和 JSON 序列化 |
+| Result | [Model/Response/Result.php](references/common/php/Model/Response/Result.php) | 统一响应结果 |
+| WfErrorCode | [Model/Exception/WfErrorCode.php](references/common/php/Model/Exception/WfErrorCode.php) | 错误码枚举 |
+| WfException | [Model/Exception/WfException.php](references/common/php/Model/Exception/WfException.php) | 业务异常 |
+
 ## 公共代码生成规则
 
 - **WfConfig**：使用 Pre-Generation Questions 中收集到的用户真实值（第 4-8 项）填充字段默认值，**禁止使用占位符**
-- **Result.java / result.go / result.py**：共享，仅首次生成，已存在则复用
+- **Result.java / result.go / result.py / Result.php**：共享，仅首次生成，已存在则复用
 - **WfErrorCode**：共享，新接口的错误码追加到已有文件，不重复生成
 - **WfException**：共享，已存在则复用
 
@@ -235,6 +250,18 @@ description: Generate Java, Golang, or Python integration code for WorldFirst (W
 - 依赖管理通过 `requirements.txt` 声明，核心依赖：`requests>=2.28.0`、`cryptography>=41.0.0`
 - `{basePackage}` 占位符替换为用户实际 base package 名称（用于 import 路径）
 
+### PHP
+
+- PHP 8.1+，所有文件启用 `declare(strict_types=1)`，遵循 PSR-12 和 PSR-4
+- PascalCase 类名和目录名，lowerCamelCase 方法名和变量名，UPPER_SNAKE_CASE 常量名
+- Model 继承 `WfModel`，通过 `FIELDS` 保留 API camelCase 字段，通过 `RELATIONS` 声明嵌套对象
+- Domain 按业务模块隔离命名空间（Transfer/Payout/Beneficiary/Account/Statement/TradeOrder），禁止用同名模型互相覆盖
+- 同一业务模块的 Client 必须合并方法和 import，转账统一使用 `consult-transfer/php/Client/TransferClient.php`
+- Webhook 从框架路由取得实际 request URI（路径及查询字符串），请求验签和响应签名必须使用同一 URI
+- 使用 Guzzle 发送 HTTPS 请求，使用 OpenSSL RSA256 签名；响应缺少签名或验签失败必须抛出异常
+- 依赖通过 `composer.json` 声明，核心依赖：`guzzlehttp/guzzle:^7.9`、`ext-json`、`ext-openssl`
+- `{baseNamespace}` 占位符替换为用户实际 base namespace（如 `Acme\Integration`），并同步 Composer PSR-4 前缀
+
 ## 签名算法
 
 所有 WF API 使用 RSA256 签名，签名内容格式：
@@ -251,10 +278,10 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 
 ### 测试代码规范
 
-1. **仅生成 Client 类的测试**：只为 `*Client.java` 生成对应的 `*ClientTest.java`
-2. **仅保留一个成功测试方法**：每个测试类只包含 `testXXX_Success()` 一个测试方法
-3. **真实HTTP调用**：不Mock HTTP响应，通过 `client.init()` 初始化真实调用WF API
-4. **配置使用占位符**：clientId、密钥路径等使用 `${wf.xxx}` 占位符，由用户自行配置
+1. **仅生成 Client 类的测试**：为各语言的 Client 生成对应集成测试，不为 Model 单独生成测试
+2. **仅保留一个成功测试方法**：每个测试类只包含一个成功场景测试方法
+3. **真实HTTP调用**：不Mock HTTP响应，通过对应语言的公共 HTTP Client 真实调用 WF API
+4. **配置使用安全的外部配置**：clientId、密钥路径等通过环境变量或语言对应的配置占位符注入，禁止写入真实密钥
 
 ## 代码生成后检查清单 (POST-GENERATION CHECKLIST)
 
@@ -267,9 +294,9 @@ POST {apiPath}\n{clientId}.{requestTime}.{requestBody}
 **检查步骤**：
 
 1. 遍历生成的所有 Model 类（位于 `model/domain/`、`model/request/`、`model/response/`）
-2. 对比每个生成的类与对应模板文件（[references/{module}/{interface}/{language}/model/](references/)，其中 `{language}` 为 `java`、`golang` 或 `python`）
+2. 对比每个生成的类与对应模板文件（[references/{module}/{interface}/{language}/](references/)，其中 `{language}` 为 `java`、`golang`、`python` 或 `php`）
 3. 检查字段数量、字段名称、字段类型是否一致
-4. Java：检查 Getter/Setter 方法是否完整；Python：检查 `dataclass` 字段或属性定义是否完整
+4. Java：检查 Getter/Setter 方法是否完整；Python：检查 `dataclass` 字段或属性定义是否完整；PHP：检查 `FIELDS` 与 `RELATIONS` 是否完整
 
 **检查命令示例**：
 
@@ -299,8 +326,8 @@ diff generated/FundMoveDetail.java references/statement-management/inquiry-state
 
 **检查要点**：
 
-- [ ]  Java：包名与用户提供的路径一致；Python：模块路径与项目结构一致
-- [ ]  无缺失的 import 语句（Python 中包括 `from ... import ...`）
+- [ ]  Java：包名与用户提供的路径一致；Python：模块路径与项目结构一致；PHP：namespace 与 PSR-4 路径一致
+- [ ]  无缺失的 import/use 语句（PHP 同时检查 Composer 自动加载前缀）
 - [ ]  无循环依赖
 
 ### 检查清单执行记录
@@ -377,12 +404,12 @@ diff generated/FundMoveDetail.java references/statement-management/inquiry-state
 
 | 接口             | 目录                                                                                                                                                    | 说明                                            | 官方文档                                                                                                                                                                     | 语言支持     |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| 查询卡模版       | [inquiry-template/](references/beneficiary/inquiry-template/) | 查询指定国家/币种/账户类型的卡模版字段要求      | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_template)                 | Java、Golang |
-| 绑定收款人       | [bind/](references/beneficiary/bind/)                         | 绑定收款人到 WF 账户，获取 beneficiaryToken     | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/bind_beneficiary)                 | Java、Golang |
-| 删除收款人       | [remove/](references/beneficiary/remove/)                     | 删除已绑定的收款人                              | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/remove_beneficiary)               | Java、Golang |
-| 编辑收款人       | [edit/](references/beneficiary/edit/)                         | 修改收款人昵称                                  | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/edit_beneficiary)                  | Java、Golang |
-| 查询收款人列表   | [inquiry-list/](references/beneficiary/inquiry-list/)         | 分页查询已绑定的收款人                          | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_beneficiary_list)         | Java、Golang |
-| 绑定收款人通知   | [notify-bind/](references/beneficiary/notify-bind/)           | 回调通知：接收收款人绑定结果通知（WF → 集成商） | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_bind_beneficiary)          | Java、Golang |
+| 查询卡模版       | [inquiry-template/](references/beneficiary/inquiry-template/) | 查询指定国家/币种/账户类型的卡模版字段要求      | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_template)                 | Java、Golang、PHP |
+| 绑定收款人       | [bind/](references/beneficiary/bind/)                         | 绑定收款人到 WF 账户，获取 beneficiaryToken     | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/bind_beneficiary)                 | Java、Golang、PHP |
+| 删除收款人       | [remove/](references/beneficiary/remove/)                     | 删除已绑定的收款人                              | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/remove_beneficiary)               | Java、Golang、PHP |
+| 编辑收款人       | [edit/](references/beneficiary/edit/)                         | 修改收款人昵称                                  | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/edit_beneficiary)                  | Java、Golang、PHP |
+| 查询收款人列表   | [inquiry-list/](references/beneficiary/inquiry-list/)         | 分页查询已绑定的收款人                          | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/inquiry_beneficiary_list)         | Java、Golang、PHP |
+| 绑定收款人通知   | [notify-bind/](references/beneficiary/notify-bind/)           | 回调通知：接收收款人绑定结果通知（WF → 集成商） | [📄](https://developers.worldfirst.com/docs/alipay-worldfirst/worldfirst_enterprise_service/notify_bind_beneficiary)          | Java、Golang、PHP |
 
 ### 账户管理（account-management）
 

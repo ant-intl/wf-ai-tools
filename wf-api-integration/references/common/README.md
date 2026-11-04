@@ -2,7 +2,7 @@
 
 Generates the shared foundation layer used by **all** WF API integration clients. This module provides configuration, RSA256 signing, HTTP communication, error handling, and common response models.
 
-**Note**: All Java template files use `{basePackage}` placeholder. Golang templates use `{moduleName}` placeholder. Python templates use `{basePackage}` placeholder in import paths. Replace with actual values when generating code.
+**Note**: All Java template files use `{basePackage}` placeholder. Golang templates use `{moduleName}` placeholder. Python templates use `{basePackage}` placeholder in import paths. PHP templates use `{baseNamespace}` in namespaces and Composer PSR-4 prefixes (for example `Acme\Integration`). Replace with actual values when generating code.
 
 ## Module Structure
 
@@ -34,20 +34,34 @@ common/
 │       │   └── wf_exception.go
 │       └── response/
 │           └── result.go
-└── python/
-    ├── requirements.txt
-    ├── config/
-    │   └── wf_config.py
-    ├── signer/
-    │   └── wf_signer.py
-    ├── util/
-    │   └── wf_http_client.py
-    └── model/
-        ├── exception/
-        │   ├── wf_error_code.py
-        │   └── wf_exception.py
-        └── response/
-            └── result.py
+├── python/
+│   ├── requirements.txt
+│   ├── config/
+│   │   └── wf_config.py
+│   ├── signer/
+│   │   └── wf_signer.py
+│   ├── util/
+│   │   └── wf_http_client.py
+│   └── model/
+│       ├── exception/
+│       │   ├── wf_error_code.py
+│       │   └── wf_exception.py
+│       └── response/
+│           └── result.py
+└── php/
+    ├── composer.json
+    ├── Config/WfConfig.php
+    ├── Signer/WfSigner.php
+    ├── Client/AbstractWfClient.php
+    ├── Util/
+    │   ├── WfHttpClient.php
+    │   └── WfWebhookHandler.php
+    └── Model/
+        ├── WfModel.php
+        ├── Exception/
+        │   ├── WfErrorCode.php
+        │   └── WfException.php
+        └── Response/Result.php
 ```
 
 ## Design Principle
@@ -67,14 +81,14 @@ common/
 | API base URL | `https://open-sea.worldfirst.com` |
 | Private key file path (PKCS#8) | `/path/to/private_key.pem` |
 | WF public key file path | `/path/to/wf_public_key.pem` |
-| Language (Java/Golang/Python) | Java |
-| Base package (Java/Python) or module name (Golang) | *(user input)* |
+| Language (Java/Golang/Python/PHP) | Java |
+| Base package (Java/Python), module name (Golang), or base namespace (PHP) | *(user input)* |
 
 ---
 
 ## Component 1: WfConfig
 
-**Package:** `{basePackage}.config` (Java) / `config` (Golang) / `{basePackage}.wf.config` (Python)
+**Package:** `{basePackage}.config` (Java) / `config` (Golang) / `{basePackage}.wf.config` (Python) / `{baseNamespace}\Wf\Config` (PHP)
 
 Holds all WF API configuration: client ID, base URL, key paths, and timeout settings.
 
@@ -114,11 +128,22 @@ Use `read_file` tool to view: `wf-api-integration/references/common/golang/confi
 
 Use `read_file` tool to view: `wf-api-integration/references/common/python/config/wf_config.py`
 
+### PHP Rules
+
+- PHP 8.1+ with `strict_types`; constructor parameters fall back to `WF_*` environment variables
+- Timeout units are **seconds**; `connectTimeout=10`, `readTimeout=30`
+- `__debugInfo()` redacts credentials and key paths
+- Composer dependencies: `guzzlehttp/guzzle:^7.9`, `ext-json`, `ext-openssl`
+
+### PHP Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/php/Config/WfConfig.php`
+
 ---
 
 ## Component 2: WfSigner
 
-**Package:** `{basePackage}.signer` (Java) / `signer` (Golang) / `{basePackage}.wf.signer` (Python)
+**Package:** `{basePackage}.signer` (Java) / `signer` (Golang) / `{basePackage}.wf.signer` (Python) / `{baseNamespace}\Wf\Signer` (PHP)
 
 Handles RSA256 request signing and response signature verification.
 
@@ -171,6 +196,20 @@ Use `read_file` tool to view: `wf-api-integration/references/common/python/signe
 - `generate_signature` returns `None` on any exception; caller MUST check before using
 - Uses Python `logging` module; signature content logged at DEBUG level
 
+### PHP Public Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `generateSignature(apiPath, requestTime, requestBody, clientId = null)` | `string` | Generate URL-encoded Base64 signature; throw `WfException` on failure |
+| `verifySignature(signatureHeader, apiPath, requestTime, responseBody, clientId = null)` | `bool` | Verify WF response or notification signature |
+| `getCurrentTimestamp()` | `string` | ISO 8601 timestamp in Asia/Shanghai timezone |
+
+### PHP Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/php/Signer/WfSigner.php`
+
+PHP uses OpenSSL with `OPENSSL_ALGO_SHA256`. Keys are loaded lazily from readable PEM files and are never logged.
+
 ### Key Rules
 
 - **Key format**: PKCS#8 only (not PKCS#1)
@@ -184,7 +223,7 @@ Use `read_file` tool to view: `wf-api-integration/references/common/python/signe
 
 ## Component 3: WfHttpClientUtil
 
-**Package:** `{basePackage}.util` (Java) / `util` (Golang) / `{basePackage}.wf.util` (Python)
+**Package:** `{basePackage}.util` (Java) / `util` (Golang) / `{basePackage}.wf.util` (Python) / `{baseNamespace}\Wf\Util` (PHP)
 
 Reusable HTTP layer for all WF API integrations. **Single responsibility**: all WF HTTP request logic lives here.
 
@@ -241,6 +280,25 @@ Every request MUST set these four headers:
 
 Use `read_file` tool to view: `wf-api-integration/references/common/python/util/wf_http_client.py`
 
+### PHP Design
+
+- `WfHttpClient` wraps Guzzle and supports `WfSigner` / `ClientInterface` dependency injection
+- `sendPostRequest(apiPath, requestBody)` signs the request and requires valid `Signature` + `Response-Time` response headers
+- `postJson(apiPath, request)` serializes `WfModel` or arrays and decodes the verified response
+- Only HTTPS base URLs are accepted; redirects are disabled
+- `WfWebhookHandler` verifies the raw notification body before JSON parsing and returns a signed success response
+- Each notification controller receives the actual callback request URI (path plus query string) from the framework router; the same URI is used for request verification and response signing
+- `AbstractWfClient` centralizes request validation, `resultStatus` handling, and `WfException` conversion
+
+### PHP Templates
+
+- `wf-api-integration/references/common/php/Util/WfHttpClient.php`
+- `wf-api-integration/references/common/php/Util/WfWebhookHandler.php`
+- `wf-api-integration/references/common/php/Client/AbstractWfClient.php`
+- `wf-api-integration/references/common/php/Model/WfModel.php`
+
+PHP Domain namespaces are module-specific (`Wf\Transfer\Model\Domain`, `Wf\Payout\Model\Domain`, `Wf\Beneficiary\Model\Domain`, `Wf\Account\Model\Domain`, `Wf\Statement\Model\Domain`, and `Wf\TradeOrder\Model\Domain`) so identically named models from different business modules can coexist under one Composer PSR-4 root.
+
 ### Rules
 
 - **Always** use `try-with-resources` for `CloseableHttpResponse` (Java)
@@ -259,7 +317,7 @@ Use `read_file` tool to view: `wf-api-integration/references/common/python/util/
 
 ## Component 4: WfErrorCode
 
-**Package:** `{basePackage}.model.exception` (Java) / `model/exception` (Golang) / `{basePackage}.wf.model.exception` (Python)
+**Package:** `{basePackage}.model.exception` (Java) / `model/exception` (Golang) / `{basePackage}.wf.model.exception` (Python) / `{baseNamespace}\Wf\Model\Exception` (PHP)
 
 Enumeration of all WF API error codes with retryability flag.
 
@@ -284,6 +342,10 @@ Use `read_file` tool to view: `wf-api-integration/references/common/golang/model
 
 Use `read_file` tool to view: `wf-api-integration/references/common/python/model/exception/wf_error_code.py`
 
+### PHP Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/php/Model/Exception/WfErrorCode.php`
+
 ### Rules
 
 - If `WfErrorCode` already exists, **append** new enum values — do NOT regenerate the entire file
@@ -293,7 +355,7 @@ Use `read_file` tool to view: `wf-api-integration/references/common/python/model
 
 ## Component 5: WfException
 
-**Package:** `{basePackage}.model.exception` (Java) / `model/exception` (Golang) / `{basePackage}.wf.model.exception` (Python)
+**Package:** `{basePackage}.model.exception` (Java) / `model/exception` (Golang) / `{basePackage}.wf.model.exception` (Python) / `{baseNamespace}\Wf\Model\Exception` (PHP)
 
 Unified exception type for all WF API errors.
 
@@ -309,11 +371,15 @@ Use `read_file` tool to view: `wf-api-integration/references/common/golang/model
 
 Use `read_file` tool to view: `wf-api-integration/references/common/python/model/exception/wf_exception.py`
 
+### PHP Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/php/Model/Exception/WfException.php`
+
 ---
 
 ## Component 6: Result
 
-**Package:** `{basePackage}.model.response` (Java) / `model/response` (Golang) / `{basePackage}.wf.model.response` (Python)
+**Package:** `{basePackage}.model.response` (Java) / `model/response` (Golang) / `{basePackage}.wf.model.response` (Python) / `{baseNamespace}\Wf\Model\Response` (PHP)
 
 Common response result object used by all WF API responses.
 
@@ -337,6 +403,10 @@ Use `read_file` tool to view: `wf-api-integration/references/common/golang/model
 
 Use `read_file` tool to view: `wf-api-integration/references/common/python/model/response/result.py`
 
+### PHP Template
+
+Use `read_file` tool to view: `wf-api-integration/references/common/php/Model/Response/Result.php`
+
 ---
 
 ## Common Issues
@@ -355,13 +425,14 @@ Use `read_file` tool to view: `wf-api-integration/references/common/python/model
 
 ## How to Generate
 
-1. Ask user for: project path, language (Java/Golang/Python)
+1. Ask user for: project path, language (Java/Golang/Python/PHP)
 2. If Golang: read `go.mod` to get module name, replace `{moduleName}`
 3. If Java: ask for base package, replace `{basePackage}`
 4. If Python: ask for base package, replace `{basePackage}` in import paths; generate `requirements.txt`
-5. Ask for credentials (clientID, userId, baseURL, key paths)
-6. Generate all 6 components in order: WfConfig → WfSigner → WfHttpClientUtil → WfErrorCode → WfException → Result
-7. Template files under `java/`, `golang/`, and `python/` are reference implementations
+5. If PHP: ask for base namespace (for example `Acme\Integration`), replace `{baseNamespace}` in namespaces and Composer PSR-4 prefixes; generate `composer.json`
+6. Ask for credentials (clientID, userId, baseURL, key paths)
+7. Generate shared components first: WfConfig → WfSigner → HTTP client → WfErrorCode → WfException → Result; PHP also generates WfModel, AbstractWfClient and WfWebhookHandler
+8. Template files under `java/`, `golang/`, `python/`, and `php/` are reference implementations
 
 ---
 
@@ -373,4 +444,19 @@ Python version requires `Python >= 3.10`. The `requirements.txt` includes:
 |---------|---------|---------|
 | `requests` | `>=2.28.0,<3.0.0` | HTTP client for sending signed requests |
 | `cryptography` | `>=41.0.0,<44.0.0` | RSA256 signing/verification (SHA256withRSA, PKCS1v15, PEM key loading) |
+
+---
+
+## PHP Dependencies
+
+PHP version requires `PHP >= 8.1`. The `composer.json` includes:
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `guzzlehttp/guzzle` | `^7.9` | HTTPS client with connect/read timeouts |
+| `ext-json` | `*` | JSON request/response serialization |
+| `ext-openssl` | `*` | RSA256 signing and verification |
+| `phpunit/phpunit` | `^10.5` (dev) | Integration tests |
+
+Run `composer install` after replacing `{baseNamespace}` and generating the selected endpoint templates.
 

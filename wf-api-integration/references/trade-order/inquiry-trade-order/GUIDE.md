@@ -76,7 +76,7 @@
 
 ## 示例代码
 
-参考同目录下 `java/` 和 `golang/` 中的模板代码。
+参考同目录下 `java/`、`golang/` 和 `php/` 中的模板代码。
 
 注意：inquiryTradeOrder 的方法集成在 TradeOrderManagementClient 中（与 submitTradeOrder 共用一个客户端类），客户端代码位于 `../submit-trade-order/java/client/TradeOrderManagementClient.java`。
 

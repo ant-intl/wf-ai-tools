@@ -144,7 +144,7 @@ createPayout 支持五种互斥的收款方式（paymentMethodType）：
 
 ## 示例代码
 
-参考同目录下 `java/` 和 `golang/` 中的模板代码。
+参考同目录下 `java/`、`golang/` 和 `php/` 中的模板代码。
 
 ### Java 模板结构
 

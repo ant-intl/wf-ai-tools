@@ -63,7 +63,7 @@
 
 ## 示例代码
 
-参考同目录下 `java/` 和 `golang/` 中的模板代码。
+参考同目录下 `java/`、`golang/` 和 `php/` 中的模板代码。
 
 注意：consultPayout 的方法集成在 PayoutClient 中（与 createPayout、inquiryPayout 共用一个客户端类），PayoutClient 代码位于 `../create-payout/java/client/PayoutClient.java`。
 
