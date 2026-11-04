@@ -10,13 +10,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](CHANGELOG.md)
-[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python%20|%20PHP-orange)](wf-api-integration/references/)
+[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python%20|%20PHP%20|%20Adaptive-orange)](wf-api-integration/references/)
 
 🌐 **Language / 语言:** [English](README.md) | [中文](README_zh.md)
 
 # WF API 集成技能
 
-一个用于将万里汇（WorldFirst）API 与 LLM 或 Agent 框架集成的技能。支持 Java、Golang、Python 和 PHP 代码生成，覆盖转账、全球分发、收款人管理、账户管理、账单管理和交易信息管理——内置 RSA256 签名和生产级模板。
+一个用于将万里汇（WorldFirst）API 与 LLM 或 Agent 框架集成的技能。原生支持 Java、Golang、Python 和 PHP，并可通过语言无关适配流程生成其他技术栈的代码，覆盖转账、全球分发、收款人管理、账户管理、账单管理和交易信息管理——内置 RSA256 签名、项目适配和生产级模板。
 
 **[快速开始](#快速开始)** | **[支持的模块](#支持的模块)** | **[浏览参考代码](wf-api-integration/references/)**
 
@@ -57,6 +57,8 @@
 | **交易信息管理（Trade Order）** | 提交交易订单（B2C 结算 / B2B 关联），查询结果，处理异步通知 | Java, Golang, PHP |
 
 > **注意**：Java、Golang 和 PHP 覆盖所有模块；Python 目前仅支持公共模块（`common/`）和账单管理（`statement-management/`）。PHP 要求 8.1+，使用 PSR-4、Guzzle 和 OpenSSL。
+>
+> **其他技术栈**：通过[语言无关适配流程](wf-api-integration/references/language-agnostic/README.md)，根据客户项目和现有示例生成。该模式要求目标技术栈具备 HTTPS、JSON、RSA256 和无损金额整数能力，并通过构建及签名验证，不承诺未经运行验证的“任意语言可用”。
 
 ## 快速开始
 
@@ -80,8 +82,8 @@
 代码生成前，你需要提供：
 
 - **项目路径** —— 代码生成的目标位置
-- **编程语言** —— Java、Golang、Python 或 PHP
-- **基础包名 / 模块名 / 基础命名空间** —— 例如 `com.example.project`（Java）、`github.com/example/project`（Go）、`wf_integration`（Python）、`Acme\Integration`（PHP）
+- **编程语言与技术栈** —— Java、Golang、Python、PHP，或其他语言、运行时和框架
+- **基础包名 / 模块名 / 基础命名空间 / 项目模块约定** —— 例如 `com.example.project`（Java）、`github.com/example/project`（Go）、`wf_integration`（Python）、`Acme\Integration`（PHP）；其他语言以现有项目为准
 - **WF 凭证** —— Client ID、User ID、API 基础 URL、RSA 密钥路径
 
 ### 4. 生成并验证
@@ -100,6 +102,8 @@ wf-api-integration/
     │   ├── java/
     │   ├── python/
     │   ├── php/
+    │   └── README.md
+    ├── language-agnostic/            # 其他技术栈的契约驱动适配流程
     │   └── README.md
     ├── transfer/                     # 转账模块
     │   ├── consult-transfer/

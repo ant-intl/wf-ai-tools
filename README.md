@@ -10,13 +10,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](CHANGELOG.md)
-[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python%20|%20PHP-orange)](wf-api-integration/references/)
+[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python%20|%20PHP%20|%20Adaptive-orange)](wf-api-integration/references/)
 
 🌐 **Language / 语言:** [English](README.md) | [中文](README_zh.md)
 
 # WF API Integration Skill
 
-A skill for integrating WorldFirst APIs with LLM or Agent frameworks. Supports Java, Golang, Python, and PHP code generation, covering Transfer, Payout, Beneficiary Management, Account Management, Statement Management, and Trade Order Management — with built-in RSA256 signing and production-grade templates.
+A skill for integrating WorldFirst APIs with LLM or Agent frameworks. Natively supports Java, Golang, Python, and PHP, and adapts the same API contracts to other technology stacks through project-aware generation. Covers Transfer, Payout, Beneficiary Management, Account Management, Statement Management, and Trade Order Management — with RSA256 signing, project adaptation, and production-grade templates.
 
 **[Quick Start](#quick-start)** | **[Supported Modules](#supported-modules)** | **[Browse References](wf-api-integration/references/)**
 
@@ -57,6 +57,8 @@ This skill packages WF API integration knowledge into standardized templates tha
 | **Trade Order** | Submit trade orders (B2C settlement / B2B association), query results, handle async notifications | Java, Golang, PHP |
 
 > **Note**: Java, Golang, and PHP support all modules. Python currently only supports the common module (`common/`) and Statement Management (`statement-management/`). PHP requires 8.1+ and uses PSR-4, Guzzle, and OpenSSL.
+>
+> **Other technology stacks**: Use the [language-agnostic adaptation workflow](wf-api-integration/references/language-agnostic/README.md) to generate code from the customer's project and existing reference implementations. The target stack must support HTTPS, JSON, RSA256, and lossless amount integers, and must pass build and signature verification. “Any language” does not mean unverified runtime support.
 
 ## Quick Start
 
@@ -80,8 +82,8 @@ Each module contains specific endpoints. See [Module Details](#module-details) b
 Before code generation, you need to provide:
 
 - **Project path** — Target location for generated code
-- **Programming language** — Java, Golang, Python, or PHP
-- **Base package / module name / base namespace** — e.g., `com.example.project` (Java), `github.com/example/project` (Go), `wf_integration` (Python), `Acme\Integration` (PHP)
+- **Programming language and stack** — Java, Golang, Python, PHP, or another language, runtime, and framework
+- **Base package / module name / base namespace / project module convention** — e.g., `com.example.project` (Java), `github.com/example/project` (Go), `wf_integration` (Python), `Acme\Integration` (PHP); use existing project conventions for other stacks
 - **WF credentials** — Client ID, User ID, API base URL, RSA key paths
 
 ### 4. Generate and Verify
@@ -100,6 +102,8 @@ wf-api-integration/
     │   ├── java/
     │   ├── python/
     │   ├── php/
+    │   └── README.md
+    ├── language-agnostic/            # Contract-driven adaptation for other stacks
     │   └── README.md
     ├── transfer/                     # Transfer module
     │   ├── consult-transfer/

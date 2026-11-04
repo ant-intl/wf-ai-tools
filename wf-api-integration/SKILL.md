@@ -1,12 +1,12 @@
 ---
 name: wf-api-integration
-description: Generate Java, Golang, Python, or PHP integration code for WorldFirst (WF) APIs including transfer, payout, beneficiary management, account (balance, quota, subuser, store, notifications), statement, and trade order management. Supports RSA256 signing, shared infrastructure reuse, and production-ready code generation with Alibaba coding standards.
+description: Generate Java, Golang, Python, or PHP integration code for WorldFirst (WF) APIs, and adapt the same API contracts to other technology stacks through project-aware, language-agnostic generation. Covers transfer, payout, beneficiary, account, statement, and trade order APIs with RSA256 signing, shared infrastructure reuse, security checks, and build verification.
 ---
 # WF API Integration Skill
 
-帮助用户对接万里汇(WorldFirst) API，支持 Java、Golang、Python 和 PHP 四种语言，涵盖转账、代发、收款人管理、账户管理（余额/额度/子账号/店铺/通知）、账单查询、交易订单管理等模块。
+帮助用户对接万里汇(WorldFirst) API，原生支持 Java、Golang、Python 和 PHP，并可通过语言无关适配层生成其他技术栈的集成代码，涵盖转账、代发、收款人管理、账户管理、账单查询、交易订单管理等模块。
 
-> **语言支持说明**：Java、Golang 和 PHP 覆盖所有模块；Python 目前仅支持公共模块（`common/`）和账单管理模块（`statement-management/`），其余模块暂无 Python 模板。PHP 要求 8.1+，使用 PSR-4、Guzzle 和 OpenSSL。
+> **语言支持说明**：Java、Golang 和 PHP 覆盖所有模块；Python 目前仅支持公共模块和账单管理。PHP 要求 8.1+。其他语言使用 [语言无关适配流程](references/language-agnostic/README.md)，以客户项目结构、GUIDE 契约和现有实现为依据，必须经过目标技术栈验证。
 
 ## 模块索引
 
@@ -116,13 +116,18 @@ description: Generate Java, Golang, Python, or PHP integration code for WorldFir
 
 ## 使用流程
 
-1. **确认模块**：确认用户需要对接的模块，读取对应模块的 `README.md` 了解接口列表
-2. **确认接口**：确认用户需要对接的具体接口，读取对应接口的 `GUIDE.md` 了解接口规范
-3. **加载公共代码**：读取 [references/common/](references/common/) 下的公共代码模板
-4. **加载接口代码**：读取对应接口目录下的代码模板
-5. **生成代码**：根据用户项目结构生成代码，替换 `{basePackage}`（Java/Python）、`{moduleName}`（Golang）或 `{baseNamespace}`（PHP）占位符
-6. **代码检查**：执行「代码生成后检查清单」中的各项检查
-7. **测试验证**：运行单元测试，确保代码可正常编译和运行
+1. **确认模块和接口**：读取模块 `README.md` 与接口 `GUIDE.md`，明确契约
+2. **选择生成模式**：四种原生语言读取公共层和接口模板；其他语言读取 [语言无关适配流程](references/language-agnostic/README.md)，检查客户项目并形成 Stack Profile
+3. **生成代码**：原生语言替换 `{basePackage}`、`{moduleName}` 或 `{baseNamespace}`；其他语言按接口契约和项目既有规范适配，不做机械翻译
+4. **代码检查**：执行「代码生成后检查清单」及目标技术栈的契约、安全检查
+5. **测试验证**：执行目标项目可用的构建、静态检查、单元测试和签名交叉验证；未执行的项目必须明确标注
+
+### 其他语言（Language-Agnostic Mode）
+
+- 触发条件：客户不使用 Java、Golang、Python、PHP，或明确要求沿用其他语言/框架
+- 必须先识别运行时、框架、HTTP、JSON、RSA、序列化、测试和构建方式，再选择最接近的参考实现
+- 必须满足 HTTPS、RSA256、64 位金额整数、原始 Webhook 请求体与实际 request URI 等能力边界
+- 禁止凭空选择依赖、硬编码密钥、浮点金额、跳过验签或未经验证就宣称支持
 
 ## Pre-Generation Questions (MUST ASK)
 
@@ -131,12 +136,13 @@ description: Generate Java, Golang, Python, or PHP integration code for WorldFir
 ### 基础信息
 
 1. **项目路径**：请问你的项目路径是什么？
-2. **语言选择**：你需要生成 Java、Golang、Python 还是 PHP 的代码？
-3. **Base Package / Module Name / Base Namespace**：
+2. **语言选择**：你需要生成 Java、Golang、Python、PHP，还是其他技术栈的代码？其他技术栈先检查项目并确认 Stack Profile
+3. **Base Package / Module Name / Base Namespace / 项目模块约定**：
    - Java：请提供 base package（如 `com.example.project`）
    - Golang：请提供 Go module name（如 `github.com/example/project`）
    - Python：请提供 base package（如 `wf_integration`），用于组织 import 路径
    - PHP：请提供 base namespace（如 `Acme\Integration`），用于 namespace 和 Composer PSR-4 自动加载
+   - 其他语言：确认项目现有的模块、命名空间、目录和依赖注入约定
 
 ### WfConfig 配置属性（用于生成 WfConfig 类，禁止使用占位符）
 
@@ -148,7 +154,7 @@ description: Generate Java, Golang, Python, or PHP integration code for WorldFir
 7. **私钥文件路径**：请提供 RSA 私钥文件路径（PKCS#8 格式），如 `/etc/wf/certs/private_key.pem`
 8. **公钥文件路径**：请提供万里汇 RSA 公钥文件路径，如 `/etc/wf/certs/wf_public_key.pem`
 
-> **重要**：用户提供的值直接填入生成的 WfConfig 代码中。如果用户表示暂时不确定某个值，应使用 Spring XML property placeholder（如 `${wf.clientId}`）、Go 环境变量读取（如 `os.Getenv("WF_CLIENT_ID")`）、Python 环境变量读取（如 `os.environ.get("WF_CLIENT_ID")`）或 PHP 环境变量读取（如 `getenv("WF_CLIENT_ID")`）而非硬编码占位符字符串。
+> **重要**：用户提供的值直接填入生成的 WfConfig 代码中。如果用户表示暂时不确定某个值，应使用 Spring XML property placeholder（如 `${wf.clientId}`）、Go 环境变量读取（如 `os.Getenv("WF_CLIENT_ID")`）、Python 环境变量读取（如 `os.environ.get("WF_CLIENT_ID")`）、PHP 环境变量读取（如 `getenv("WF_CLIENT_ID")`）或目标项目的安全配置机制，而非硬编码占位符字符串。
 
 ### 模块特定问题（按需询问）
 

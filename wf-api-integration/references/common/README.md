@@ -2,6 +2,8 @@
 
 Generates the shared foundation layer used by **all** WF API integration clients. This module provides configuration, RSA256 signing, HTTP communication, error handling, and common response models.
 
+For technology stacks without a native template, follow the [language-agnostic adaptation workflow](../language-agnostic/README.md) instead of mechanically translating these files.
+
 **Note**: All Java template files use `{basePackage}` placeholder. Golang templates use `{moduleName}` placeholder. Python templates use `{basePackage}` placeholder in import paths. PHP templates use `{baseNamespace}` in namespaces and Composer PSR-4 prefixes (for example `Acme\Integration`). Replace with actual values when generating code.
 
 ## Module Structure
