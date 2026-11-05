@@ -11,12 +11,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Skills](https://img.shields.io/badge/Skills-2-green)](#which-skill-do-i-need)
 [![Endpoints](https://img.shields.io/badge/Endpoints-85-orange)](#which-skill-do-i-need)
+[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python%20|%20PHP%20|%20Adaptive-orange)](wf-api-integration/references/)
 
 🌐 **Language / 语言:** [English](README.md) | [中文](README_zh.md)
 
 # WorldFirst API Integration Skills
 
-Packaged WorldFirst (WF) API integration knowledge — endpoint specs, RSA256 signing, request/response models, and production-grade code templates — that an AI coding agent reads to generate working integration code from a natural-language requirement.
+Packaged WorldFirst (WF) API integration knowledge — endpoint specs, RSA256 signing, request/response models, and production-grade code templates — that an AI coding agent reads to generate working integration code from a natural-language requirement. The classic skill natively supports Java, Golang, Python, and PHP, and adapts the same API contracts to other technology stacks through project-aware generation.
 
 This repository ships **two skills**. Pick by the API version your account is onboarded to.
 
@@ -26,9 +27,9 @@ This repository ships **two skills**. Pick by the API version your account is on
 |---|---|---|
 | Directory | [`wf-api-integration/`](wf-api-integration/) | [`wf-api-integration-upgrade/`](wf-api-integration-upgrade/) |
 | API surface | `/api/v1/business/*` | `/api/open/v1/*` (Enhanced API) |
-| Languages | Java, Golang (Python: common + statement) | Java |
+| Languages | Java, Golang, PHP (Python: common + statement) | Java |
 | Modules / endpoints | 6 / 26 | 18 / 59 |
-| Extra scope | — | FX trading, card issuing, OAuth2, files, confirmation letters |
+| Extra scope | language-agnostic adaptation | FX trading, card issuing, OAuth2, files, confirmation letters |
 | Entry point | [SKILL.md](wf-api-integration/SKILL.md) | [SKILL.md](wf-api-integration-upgrade/SKILL.md) |
 
 > Unsure which prefix applies to you? Check the credentials and endpoint host in your WF onboarding material — each skill's `SKILL.md` lists the exact base URLs.
@@ -37,7 +38,7 @@ This repository ships **two skills**. Pick by the API version your account is on
 
 ## WF API Integration
 
-Fund flows and account operations on `/api/v1/business/*`. Java and Golang cover every module; Python covers `common` and Statement only.
+Fund flows and account operations on `/api/v1/business/*`. Java, Golang, and PHP cover every module; Python covers `common` and Statement only.
 
 | Domain | Module | Endpoints | Covers |
 |---|---|---|---|
@@ -45,7 +46,7 @@ Fund flows and account operations on `/api/v1/business/*`. Java and Golang cover
 | Payout | [Payout](wf-api-integration/references/payout/README.md) | 4 | Consult, pay to bank card or e-wallet, inquiry, result notification |
 | Beneficiary | [Beneficiary](wf-api-integration/references/beneficiary/README.md) | 6 | Card-template inquiry, bind / remove / edit / list, bind notification |
 | Accounts | [Account Management](wf-api-integration/references/account-management/README.md) | 7 | Account info, balance, FX quota, sub-users, stores, vostro & balance-change notifications |
-| Statements & Reports | [Statement Management](wf-api-integration/references/statement-management/README.md) | 2 | Statement list and detail (Java, Golang, Python) |
+| Statements & Reports | [Statement Management](wf-api-integration/references/statement-management/README.md) | 2 | Statement list and detail (Java, Golang, Python, PHP) |
 | Trade Documents | [Trade Order](wf-api-integration/references/trade-order/README.md) | 3 | Submit trade orders (B2C settlement / B2B association), query, notify |
 
 Endpoint-level parameters, examples and error codes live in each module's `<endpoint>/GUIDE.md`; module-level flows and enums live in the module `README.md`.
@@ -85,7 +86,7 @@ The [module & endpoint index](wf-api-integration-upgrade/SKILL.md#模块与接�
 
 1. **Route to a module** — describe the business outcome (e.g. "pay a supplier's bank card") and let the skill's decision tree pick the module, or start from a module README above.
 2. **Read the endpoint guide** — `<module>/<endpoint>/GUIDE.md` holds the endpoint path, request/response fields, enums, error codes and samples. Endpoint directory names follow the module README's endpoint table, not the interface name.
-3. **Supply environment inputs** — target project path, language, base package (`{basePackage}` is replaced during generation), plus clientId, base URL and RSA private/public key file paths. Keys are always loaded from paths or environment variables, never inlined.
+3. **Supply environment inputs** — target project path, language (Java, Golang, Python, PHP, or another stack via the [language-agnostic adaptation workflow](wf-api-integration/references/language-agnostic/README.md)), base package (`{basePackage}` is replaced during generation), plus clientId, base URL and RSA private/public key file paths. Keys are always loaded from paths or environment variables, never inlined.
 4. **Generate, then verify** — the skill runs a post-generation checklist (model field parity, compile, package/import check). Review the generated code before it reaches production.
 
 ## Repository Layout
@@ -95,8 +96,9 @@ The [module & endpoint index](wf-api-integration-upgrade/SKILL.md#模块与接�
 ├── wf-api-integration/                 # Skill 1 — /api/v1/business/*
 │   ├── SKILL.md                        # routing, flows, security rules
 │   └── references/
-│       ├── common/                     # config, signer, HTTP client, models (Java/Golang/Python)
-│       └── <module>/<endpoint>/        # GUIDE.md + java/ golang/ python/
+│       ├── common/                     # config, signer, HTTP client, models (Java/Golang/Python/PHP)
+│       ├── language-agnostic/          # contract-driven adaptation for other stacks
+│       └── <module>/<endpoint>/        # GUIDE.md + java/ golang/ python/ php/
 └── wf-api-integration-upgrade/         # Skill 2 — /api/open/v1/*
     ├── SKILL.md                        # decision tree, keyword routing, module index
     └── references/

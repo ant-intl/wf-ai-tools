@@ -11,12 +11,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![技能数量](https://img.shields.io/badge/%E6%8A%80%E8%83%BD-2%20%E4%B8%AA-green)](#%E8%AF%A5%E9%80%89%E5%93%AA%E4%B8%AA%E6%8A%80%E8%83%BD)
 [![接口数量](https://img.shields.io/badge/%E6%8E%A5%E5%8F%A3-85%20%E4%B8%AA-orange)](#%E8%AF%A5%E9%80%89%E5%93%AA%E4%B8%AA%E6%8A%80%E8%83%BD)
+[![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python%20|%20PHP%20|%20Adaptive-orange)](wf-api-integration/references/)
 
 🌐 **语言 / Language:** [English](README.md) | [中文](README_zh.md)
 
 # WorldFirst API 集成技能
 
-把万里汇（WorldFirst，下称 WF）API 的集成知识——接口规格、RSA256 加验签、请求响应模型、生产级代码模板——打包成 AI 编码助手可读的技能，用自然语言描述需求即可生成可用的集成代码。
+把万里汇（WorldFirst，下称 WF）API 的集成知识——接口规格、RSA256 加验签、请求响应模型、生产级代码模板——打包成 AI 编码助手可读的技能，用自然语言描述需求即可生成可用的集成代码。经典技能原生支持 Java、Golang、Python 和 PHP，并可通过项目感知生成将同一套 API 契约适配到其他技术栈。
 
 本仓库包含**两个技能**，按你账号所对接的 API 版本选择。
 
@@ -26,9 +27,9 @@
 |---|---|---|
 | 目录 | [`wf-api-integration/`](wf-api-integration/) | [`wf-api-integration-upgrade/`](wf-api-integration-upgrade/) |
 | 接口前缀 | `/api/v1/business/*` | `/api/open/v1/*`（Enhanced API） |
-| 支持语言 | Java、Golang（Python 仅 common 与账单） | Java |
+| 支持语言 | Java、Golang、PHP（Python 仅 common 与账单） | Java |
 | 模块 / 接口 | 6 / 26 | 18 / 59 |
-| 额外覆盖 | — | 外汇交易、发卡、OAuth 授权、文件、确认函 |
+| 额外覆盖 | 语言无关适配 | 外汇交易、发卡、OAuth 授权、文件、确认函 |
 | 技能入口 | [SKILL.md](wf-api-integration/SKILL.md) | [SKILL.md](wf-api-integration-upgrade/SKILL.md) |
 
 > 不确定自己走哪个前缀？查一下 WF 开户材料里的 endpoint 与凭证；两个技能的 `SKILL.md` 都列明了各自的 base URL。
@@ -37,7 +38,7 @@
 
 ## WF API Integration
 
-面向 `/api/v1/business/*` 的资金与账户能力。Java、Golang 覆盖全部模块；Python 仅覆盖 `common` 与账单管理。
+面向 `/api/v1/business/*` 的资金与账户能力。Java、Golang、PHP 覆盖全部模块；Python 仅覆盖 `common` 与账单管理。
 
 | 业务域 | 模块 | 接口数 | 能力 |
 |---|---|---|---|
@@ -45,7 +46,7 @@
 | 付款 | [全球分发](wf-api-integration/references/payout/README.md) | 4 | 代发咨询、付款到银行卡/电子钱包、结果查询、结果通知 |
 | 收款人 | [收款人管理](wf-api-integration/references/beneficiary/README.md) | 6 | 卡模板查询、绑定/删除/编辑、列表查询、绑定结果通知 |
 | 账户 | [账户管理](wf-api-integration/references/account-management/README.md) | 7 | 账户信息、余额、结汇额度、子账号、店铺，及充值与余额变动通知 |
-| 账单与报告 | [账单管理](wf-api-integration/references/statement-management/README.md) | 2 | 交易流水列表与详情（Java、Golang、Python） |
+| 账单与报告 | [账单管理](wf-api-integration/references/statement-management/README.md) | 2 | 交易流水列表与详情（Java、Golang、Python、PHP） |
 | 贸易单证 | [交易信息管理](wf-api-integration/references/trade-order/README.md) | 3 | 上传交易订单（B2C 结汇 / B2B 关联）、结果查询、异步通知 |
 
 接口级参数、示例与错误码见各模块下 `<接口>/GUIDE.md`；模块级流程、枚举与注意事项见模块 `README.md`。
@@ -85,7 +86,7 @@
 
 1. **定位模块** — 用一句话描述业务目标（如"给供应商银行卡付款"），让技能的决策树选出模块，或直接从上面的模块表进入。
 2. **读接口指引** — `<模块>/<接口>/GUIDE.md` 给出 endpoint、请求响应字段、枚举、错误码与示例。接口目录名以模块 README 的接口列表为准，不要按接口名直译拼路径。
-3. **提供环境信息** — 目标工程路径、语言、基础包名（生成时替换 `{basePackage}` 占位符），以及 clientId、base URL、RSA 公私钥文件路径。密钥一律通过路径或环境变量注入，不写入代码。
+3. **提供环境信息** — 目标工程路径、语言（Java、Golang、Python、PHP，或其他技术栈走[语言无关适配流程](wf-api-integration/references/language-agnostic/README.md)）、基础包名（生成时替换 `{basePackage}` 占位符），以及 clientId、base URL、RSA 公私钥文件路径。密钥一律通过路径或环境变量注入，不写入代码。
 4. **生成后验收** — 技能会执行生成后检查（模型字段一致性、编译、包名与 import）。上生产前请自行复核业务逻辑。
 
 ## 仓库结构
@@ -95,8 +96,9 @@
 ├── wf-api-integration/                 # 技能一 — /api/v1/business/*
 │   ├── SKILL.md                        # 路由、流程、安全规则
 │   └── references/
-│       ├── common/                     # 配置、加验签、HTTP 客户端、模型（Java/Golang/Python）
-│       └── <模块>/<接口>/              # GUIDE.md + java/ golang/ python/
+│       ├── common/                     # 配置、加验签、HTTP 客户端、模型（Java/Golang/Python/PHP）
+│       ├── language-agnostic/          # 其他技术栈的契约驱动适配流程
+│       └── <模块>/<接口>/              # GUIDE.md + java/ golang/ python/ php/
 └── wf-api-integration-upgrade/         # 技能二 — /api/open/v1/*
     ├── SKILL.md                        # 决策树、关键词路由、模块索引
     └── references/

@@ -76,7 +76,7 @@
 
 ## 示例代码
 
-参考同目录下 `java/`、`golang/` 和 `python/` 中的模板代码。
+参考同目录下 `java/`、`golang/`、`python/` 和 `php/` 中的模板代码。
 
 ### Java 模板结构
 

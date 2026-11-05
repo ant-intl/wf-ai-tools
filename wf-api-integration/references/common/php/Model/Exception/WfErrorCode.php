@@ -1,0 +1,55 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {baseNamespace}\Wf\Model\Exception;
+
+enum WfErrorCode: string
+{
+    case PARAM_ILLEGAL = 'PARAM_ILLEGAL';
+    case OAUTH_FAIL = 'OAUTH_FAIL';
+    case INVALID_API = 'INVALID_API';
+    case INVALID_CLIENT = 'INVALID_CLIENT';
+    case INVALID_SIGNATURE = 'INVALID_SIGNATURE';
+    case METHOD_NOT_SUPPORTED = 'METHOD_NOT_SUPPORTED';
+    case USER_NOT_EXIST = 'USER_NOT_EXIST';
+    case ACCOUNT_NOT_EXIST = 'ACCOUNT_NOT_EXIST';
+    case SYSTEM_ERROR = 'SYSTEM_ERROR';
+    case SERVICE_NOT_ALLOWED = 'SERVICE_NOT_ALLOWED';
+    case CURRENCY_NOT_SUPPORT = 'CURRENCY_NOT_SUPPORT';
+    case CONTRACT_CHECK_FAIL = 'CONTRACT_CHECK_FAIL';
+    case ACCESS_TOKEN_EXPIRED = 'ACCESS_TOKEN_EXPIRED';
+    case AUTHORIZATION_NOT_EXIST = 'AUTHORIZATION_NOT_EXIST';
+    case PROCESS_FAIL = 'PROCESS_FAIL';
+    case UN_SUPPORT_BUSINESS = 'UN_SUPPORT_BUSINESS';
+    case USER_NO_PERMISSION = 'USER_NO_PERMISSION';
+    case USER_ACCOUNT_ABNORMAL = 'USER_ACCOUNT_ABNORMAL';
+    case REPEAT_REQ_INCONSISTENT = 'REPEAT_REQ_INCONSISTENT';
+    case USER_STATUS_ABNORMAL = 'USER_STATUS_ABNORMAL';
+    case BALANCE_NOT_ENOUGH = 'BALANCE_NOT_ENOUGH';
+    case AMOUNT_EXCEED_LIMIT = 'AMOUNT_EXCEED_LIMIT';
+    case QUOTE_EXPIRED = 'QUOTE_EXPIRED';
+    case RISK_REJECT = 'RISK_REJECT';
+    case CARD_INFO_NOT_MATCH = 'CARD_INFO_NOT_MATCH';
+    case ORDER_IS_REVERSED = 'ORDER_IS_REVERSED';
+    case ORDER_IS_CLOSED = 'ORDER_IS_CLOSED';
+    case UNKNOWN_EXCEPTION = 'UNKNOWN_EXCEPTION';
+    case REQUEST_TRAFFIC_EXCEED_LIMIT = 'REQUEST_TRAFFIC_EXCEED_LIMIT';
+    case HTTP_REQUEST_FAILED = 'HTTP_REQUEST_FAILED';
+    case INVALID_RESPONSE_FORMAT = 'INVALID_RESPONSE_FORMAT';
+    case SIGNATURE_GENERATION_FAILED = 'SIGNATURE_GENERATION_FAILED';
+    case UNKNOWN = 'UNKNOWN';
+
+    public function isRetryable(): bool
+    {
+        return match ($this) {
+            self::UNKNOWN_EXCEPTION, self::REQUEST_TRAFFIC_EXCEED_LIMIT => true,
+            default => false,
+        };
+    }
+
+    public static function fromCode(?string $code): self
+    {
+        return $code === null ? self::UNKNOWN : (self::tryFrom($code) ?? self::UNKNOWN);
+    }
+}

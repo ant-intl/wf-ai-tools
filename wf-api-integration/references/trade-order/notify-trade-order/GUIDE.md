@@ -71,7 +71,7 @@ WF 在处理完成后主动 POST 到集成商的 `notifyUrl`。**仅适用于 PA
 
 ## 示例代码
 
-参考同目录下 `java/` 和 `golang/` 中的模板代码。
+参考同目录下 `java/`、`golang/` 和 `php/` 中的模板代码。
 
 ### Java 模板结构
 
