@@ -41,7 +41,7 @@
 
 ## 示例代码
 
-参考同目录下 `java/` 和 `golang/` 中的模板代码。
+参考同目录下 `java/`、`golang/` 和 `php/` 中的模板代码。
 
 注意：BeneficiaryManagementClient 统一包含 5 个接口方法，代码位于 `java/client/BeneficiaryManagementClient.java`。
 

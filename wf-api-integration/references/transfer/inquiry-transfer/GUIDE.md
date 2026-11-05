@@ -105,7 +105,9 @@ RSA256 Signature — 参见 `references/common/` 下的签名工具代码。
 
 ## 示例代码
 
-参考同目录下 `java/` 和 `golang/` 中的模板代码。
+参考同目录下 `java/`、`golang/` 和 `php/` 中的模板代码。
+
+> PHP 的 `TransferClient` 集中在 `consult-transfer/php/Client/TransferClient.php`，统一包含 consult/create/inquiry 三个方法。
 
 ### Java 模板结构
 

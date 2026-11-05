@@ -115,6 +115,18 @@ golang/
 
 > 注意：`InquiryAccountInfoClient` 位于 `inquiry-balance/golang/client/` 下。
 
+### PHP 模板结构
+
+```
+php/
+└── Model/
+    ├── Domain/Amount.php
+    ├── Request/InquiryAvailableQuotaRequest.php
+    └── Response/InquiryAvailableQuotaResponse.php
+```
+
+> 注意：PHP 的 `InquiryAccountInfoClient` 位于 `inquiry-balance/php/Client/` 下，统一包含五个账户查询方法。
+
 ## 四种累计方式说明
 
 ### 1. USER_ID（按用户ID累计）
