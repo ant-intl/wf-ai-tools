@@ -123,7 +123,7 @@ if ("S".equals(listResponse.getResult().getResultStatus())) {
 - 响应字段根据结算状态有条件返回：
   - `dealId`：仅 FORWARD 和 UNFUNDED_SPOT 结算返回
   - `beneficiary`：仅涉及银行账户出金时返回
-  - `feeAmount`：嵌套在 `memo` 的 `validValues` 中，表示结算手续费
+  - `feeAmount`：响应顶层的 `Amount` 对象，表示结算手续费；与字符串字段 `memo` 同级
   - `settledAt`：仅结算成功后返回
   - `failedAt`/`failureCode`/`failureMessage`：仅状态为 FAILED 时返回
 

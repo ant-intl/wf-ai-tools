@@ -172,7 +172,9 @@ if ("S".equals(dailyResponse.getResult().getResultStatus())) {
 - `requestId`、`id`、`balanceType`、`amount` 均为必填；`amount.value` 须大于 0
 - `balanceType` 为入金**来源**余额账户类型：`NORMAL_BALANCE`（普通余额，即电商余额，默认）、`SAME_NAME_TOP_UP_BALANCE`（同名充值余额）
 - 仅 `ACTIVE` 预算账户可入金，否则返回 `BUDGET_ACCOUNT_STATUS_INACTIVE`；来源账户资金不足返回 `BALANCE_NOT_ENOUGH`
-- 资金变动操作：`resultStatus=U` 时先用同一 `requestId` + 完全相同参数重试，仍不确定则用 `query_a_budget` 核对余额，**禁止换新 `requestId` 重发**（会重复扣款）
+- 资金变动操作：`resultStatus=U` 表示结果未知，不能判定成功或失败；稍后用原 `requestId` + 完全相同的业务参数重试，最多重试 3 次（不含首次请求），仍未知则保留未知结果并携带 `requestId` 和时间戳联系 WorldFirst 技术支持。**禁止为重试同一笔操作生成新 `requestId`**。
+- 依据：[官方 Result 通用错误规则](https://docs.worldfirst.com/wfdocs/api-sdk/result)及入金/出金接口错误表；`PROCESS_FAIL` 不重试。`BudgetService` 仅封装单次调用，重试由调用方安排。
+- 集成建议：`query_a_budget` 可辅助核对余额，但余额变化不能单独证明某笔操作成功，不将查余额作为官方规定的重试前置步骤。
 
 ### withdraw_from_a_budget
 - `requestId`、`id`、`amount` 均为必填；`amount.value` 须大于 0，币种须与被出金预算账户一致

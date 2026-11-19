@@ -276,6 +276,80 @@ public enum WfErrorCode {
     /** 预算账户非 ACTIVE 状态，无法入金或出金 */
     BUDGET_ACCOUNT_STATUS_INACTIVE("BUDGET_ACCOUNT_STATUS_INACTIVE", false),
 
+    // ====================== Batch / Cards / Transactions / Reports / RFI ======================
+
+    /** The account status is abnormal 具体处理见目标接口 GUIDE。 */
+    ACCOUNT_STATUS_ABNORMAL("ACCOUNT_STATUS_ABNORMAL", false),
+
+    /** Card number decryption error. 具体处理见目标接口 GUIDE。 */
+    ASSET_CARD_DECRYPT_ERROR("ASSET_CARD_DECRYPT_ERROR", true),
+
+    /** Asset does not exist. 具体处理见目标接口 GUIDE。 */
+    ASSET_NOT_EXIT("ASSET_NOT_EXIT", false),
+
+    /** Insufficient balance. 具体处理见目标接口 GUIDE。 */
+    BALANCE_INSUFFICIENT("BALANCE_INSUFFICIENT", false),
+
+    /** The batch payout contains no items. 具体处理见目标接口 GUIDE。 */
+    BATCH_EMPTY("BATCH_EMPTY", false),
+
+    /** An item in the batch payout failed validation. 具体处理见目标接口 GUIDE。 */
+    BATCH_HAS_INVALID_ITEM("BATCH_HAS_INVALID_ITEM", false),
+
+    /** No item in the batch payout. 具体处理见目标接口 GUIDE。 */
+    BATCH_ITEM_EMPTY("BATCH_ITEM_EMPTY", false),
+
+    /** Item status does not support this operation 具体处理见目标接口 GUIDE。 */
+    BATCH_ITEM_STATUS_NOT_SUPPORTED("BATCH_ITEM_STATUS_NOT_SUPPORTED", false),
+
+    /** The batch payout does not exist. 具体处理见目标接口 GUIDE。 */
+    BATCH_NOT_EXIST("BATCH_NOT_EXIST", false),
+
+    /** Batch payout not found 具体处理见目标接口 GUIDE。 */
+    BATCH_PAYOUT_NOT_FOUND("BATCH_PAYOUT_NOT_FOUND", false),
+
+    /** Batch status does not support this operation 具体处理见目标接口 GUIDE。 */
+    BATCH_PAYOUT_STATUS_NOT_SUPPORTED("BATCH_PAYOUT_STATUS_NOT_SUPPORTED", false),
+
+    /** Items can only be removed when the batch payout is in INIT status. 具体处理见目标接口 GUIDE。 */
+    BATCH_STATUS_INVALID("BATCH_STATUS_INVALID", false),
+
+    /** Card certificate info is missing 具体处理见目标接口 GUIDE。 */
+    CARD_CERTIFICATE_INFO_MISS("CARD_CERTIFICATE_INFO_MISS", false),
+
+    /** Card {id} not found. 具体处理见目标接口 GUIDE。 */
+    CARD_NOT_FOUND("CARD_NOT_FOUND", false),
+
+    /** Card status is invalid 具体处理见目标接口 GUIDE。 */
+    CARD_STATUS_INVALID("CARD_STATUS_INVALID", false),
+
+    /** The contract does not exist. 具体处理见目标接口 GUIDE。 */
+    CONTRACT_NOT_EXIST("CONTRACT_NOT_EXIST", false),
+
+    /** The maximum count limit has been exceeded. 具体处理见目标接口 GUIDE。 */
+    EXCEED_MAX_COUNT_LIMIT("EXCEED_MAX_COUNT_LIMIT", false),
+
+    /** No item passed validation. 具体处理见目标接口 GUIDE。 */
+    NO_VALID_ITEM("NO_VALID_ITEM", false),
+
+    /** Business partner info does not exist. 具体处理见目标接口 GUIDE。 */
+    PARTNER_INFO_NOT_EXIST("PARTNER_INFO_NOT_EXIST", false),
+
+    /** Business partner status is invalid. 具体处理见目标接口 GUIDE。 */
+    PARTNER_STATUS_INVALID("PARTNER_STATUS_INVALID", false),
+
+    /** The RFI is not in ACTION_REQUIRED status and cannot be responded to. 具体处理见目标接口 GUIDE。 */
+    RFI_INVALID_STATUS("RFI_INVALID_STATUS", false),
+
+    /** The requested RFI does not exist. Please verify the id and retry. 具体处理见目标接口 GUIDE。 */
+    RFI_NOT_FOUND("RFI_NOT_FOUND", false),
+
+    /** The trade amount is not enough. 具体处理见目标接口 GUIDE。 */
+    TRADE_AMOUNT_IS_NOT_ENOUGH("TRADE_AMOUNT_IS_NOT_ENOUGH", false),
+
+    /** The user account status is abnormal 具体处理见目标接口 GUIDE。 */
+    USER_ACCOUNT_ABNORMAL("USER_ACCOUNT_ABNORMAL", false),
+
     // ====================== 客户端内部错误码 ======================
 
     /** 响应格式无效 */

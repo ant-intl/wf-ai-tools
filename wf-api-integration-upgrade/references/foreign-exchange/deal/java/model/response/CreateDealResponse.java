@@ -39,13 +39,13 @@ public class CreateDealResponse {
     /** 结算周期信息，UNFUNDED_SPOT 和 FORWARD 交易返回 */
     private SettlementPeriod settlementPeriod;
 
-    /** 未结算买入金额，UNFUNDED_SPOT 和 FORWARD 交易在 PROCESSING 或 CANCELED 状态时返回 */
+    /** 未结算买入金额，UNFUNDED_SPOT 和 FORWARD 交易在 PROCESSING 或 CANCELLED 状态时返回 */
     private Amount unSettleBuyAmount;
 
-    /** 未结算卖出金额，UNFUNDED_SPOT 和 FORWARD 交易在 PROCESSING 或 CANCELED 状态时返回 */
+    /** 未结算卖出金额，UNFUNDED_SPOT 和 FORWARD 交易在 PROCESSING 或 CANCELLED 状态时返回 */
     private Amount unSettleSellAmount;
 
-    /** 取消费用金额，当 status 为 CANCELED 时返回 */
+    /** 取消费用金额，当 status 为 CANCELLED 时返回 */
     private Amount cancelFeeAmount;
 
     /** 当前交易状态 */

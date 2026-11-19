@@ -124,7 +124,7 @@ public class DealService {
      * 取消交易。
      * <p>
      * 取消尚未结算的交易。仅处于 PROCESSING 状态的交易可被取消。
-     * 取消成功后交易状态变为 CANCELED，根据交易类型可能收取取消费用。
+     * 取消成功后交易状态变为 CANCELLED，根据交易类型可能收取取消费用。
      * <p>
      * 对应 WF API: POST /api/open/v1/fx/deals/cancel
      *

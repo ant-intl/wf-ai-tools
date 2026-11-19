@@ -9,8 +9,8 @@
 </p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![技能数量](https://img.shields.io/badge/%E6%8A%80%E8%83%BD-2%20%E4%B8%AA-green)](#%E8%AF%A5%E9%80%89%E5%93%AA%E4%B8%AA%E6%8A%80%E8%83%BD)
-[![接口数量](https://img.shields.io/badge/%E6%8E%A5%E5%8F%A3-85%20%E4%B8%AA-orange)](#%E8%AF%A5%E9%80%89%E5%93%AA%E4%B8%AA%E6%8A%80%E8%83%BD)
+[![技能数量](https://img.shields.io/badge/%E6%8A%80%E8%83%BD-3%20%E4%B8%AA-green)](#%E8%AF%A5%E9%80%89%E5%93%AA%E4%B8%AA%E6%8A%80%E8%83%BD)
+[![接口数量](https://img.shields.io/badge/%E6%8E%A5%E5%8F%A3-106%20%E4%B8%AA-orange)](#%E8%AF%A5%E9%80%89%E5%93%AA%E4%B8%AA%E6%8A%80%E8%83%BD)
 [![Languages](https://img.shields.io/badge/Languages-Java%20|%20Golang%20|%20Python%20|%20PHP%20|%20Adaptive-orange)](wf-api-integration/references/)
 
 🌐 **语言 / Language:** [English](README.md) | [中文](README_zh.md)
@@ -19,16 +19,19 @@
 
 把万里汇（WorldFirst，下称 WF）API 的集成知识——接口规格、RSA256 加验签、请求响应模型、生产级代码模板——打包成 AI 编码助手可读的技能，用自然语言描述需求即可生成可用的集成代码。经典技能原生支持 Java、Golang、Python 和 PHP，并可通过项目感知生成将同一套 API 契约适配到其他技术栈。
 
-本仓库包含**两个技能**，按你账号所对接的 API 版本选择。
+本仓库包含**三个技能**：两个按 API 版本区分的代码生成技能，以及一个从创建应用到生产上线的端到端集成流水线技能。
 
 ## 该选哪个技能
+
+- 想在自己的 AI 助手里（不使用 Developer Harness 控制台）通过 worldfirst CLI 走完创建应用 → 集成 → 验收 → 上线的全流程：用 [WF API Integration Pipeline](#wf-api-integration-pipeline)。
+- 只需要为指定接口生成集成代码：按下表选择。
 
 | | **WF API Integration** | **WF API Integration Upgrade** |
 |---|---|---|
 | 目录 | [`wf-api-integration/`](wf-api-integration/) | [`wf-api-integration-upgrade/`](wf-api-integration-upgrade/) |
 | 接口前缀 | `/api/v1/business/*` | `/api/open/v1/*`（Enhanced API） |
 | 支持语言 | Java、Golang、PHP（Python 仅 common 与账单） | Java |
-| 模块 / 接口 | 6 / 26 | 18 / 59 |
+| 模块 / 接口 | 6 / 26 | 23 / 80 |
 | 额外覆盖 | 语言无关适配 | 外汇交易、发卡、OAuth 授权、文件、确认函 |
 | 技能入口 | [SKILL.md](wf-api-integration/SKILL.md) | [SKILL.md](wf-api-integration-upgrade/SKILL.md) |
 
@@ -77,8 +80,33 @@
 | 支撑服务 | [file](wf-api-integration-upgrade/references/supporting-service/file/README.md) | 2 | base64 上传文件、获取临时下载链接 |
 | 支撑服务 | [confirmation-letters](wf-api-integration-upgrade/references/supporting-service/confirmation-letters/README.md) | 2 | 创建确认函下载任务、查询任务状态与链接 |
 | 贸易单证 | [tradeOrders](wf-api-integration-upgrade/references/supporting-service/tradeOrders/README.md) | 3 | 提交贸易订单批次、查询处理状态、查询可用结算额度 |
+| payouts | [batch-payouts](wf-api-integration-upgrade/references/payouts/batch-payouts/README.md) | 9 | 批量代发 |
+| issuing | [cards-management](wf-api-integration-upgrade/references/issuing/cards-management/README.md) | 5 | 卡片管理 |
+| issuing | [transactions](wf-api-integration-upgrade/references/issuing/transactions/README.md) | 1 | 卡交易记录 |
+| reporting | [download-report](wf-api-integration-upgrade/references/reporting/download-report/README.md) | 3 | 报表下载 |
+| supporting-service | [request-for-information](wf-api-integration-upgrade/references/supporting-service/request-for-information/README.md) | 3 | 补充资料 RFI |
 
 `SKILL.md` 中的[模块与接口索引](wf-api-integration-upgrade/SKILL.md#模块与接口索引)是权威路由表；[快速决策树](wf-api-integration-upgrade/SKILL.md#快速决策树)把业务问题映射到模块，模块 `README.md` 的接口列表再把模块映射到具体接口目录。
+
+---
+
+## WF API Integration Pipeline
+
+把 Developer Harness（本地 Web 控制台）的整条集成流水线做成一个技能：客户在自己的 AI 编程助手（Claude Code、Codex、Cursor、Qoder 等）里对话，AI 依据技能编排流程、调用 `worldfirst` CLI 完成真实操作，达到与 Harness 相同的集成效果。仅支持 V2（Enhanced，`/api/open/v1/*`）应用。
+
+| 阶段 | 节点 | 主要 CLI 命令 |
+|---|---|---|
+| 应用创建 | 基础信息（API 选型 → 服务协议签约 → 创建应用）、Webhook 订阅、安全设置 | `app catalog`、`contract`、`app create`、`webhooks`、`app set-key` / `set-ip-whitelist` |
+| 应用集成 | 工程设置（Git 准备、环境识别）、系分设计、编码 | `app overview`，接口定义从官方文档实时获取 |
+| 集成测试 | 集成用例规划（服务端必过用例 1:1）、执行集成用例 | `acceptance cases/start/detail/cancel`、`logs api` |
+| 应用发布 | 提交发布（KYB L3 → Go-Live 审批 → 上线）、生产配置 | `whoami --verify`、`app approval`、`app prod-config` |
+
+- **入口**：[SKILL.md](wf-api-integration-pipeline/SKILL.md) 负责总览、启动与续跑、交互约定、安全红线；[references/nodes/](wf-api-integration-pipeline/references/nodes/) 下 10 个节点文件与 Harness 节点一一对应；[cli.md](wf-api-integration-pipeline/references/cli.md) 是命令速查与错误码处置，[state.md](wf-api-integration-pipeline/references/state.md) 定义进度文件与续跑规则。
+- **前置条件**：已安装 worldfirst CLI 并完成 `worldfirst login`。技能发布到技能索引后，可用 `worldfirst agent skills install --skill wf-api-integration-pipeline --yes` 安装到本机 AI 工具。
+- **进度续跑**：进度保存在客户工程的 `.worldfirst/pipeline-state.json`（自动写入 `.git/info/exclude`，不进版本库、不含任何密钥），每次续跑先用服务端事实校准。
+- **密钥安全**：AI 不执行任何会输出密钥明文的命令（如 `app api-key info/reveal`），由客户在自己的终端查看；私钥只留在客户本地。
+
+维护说明：节点规则与 Harness 各节点 skill 对应——`wf-api-intent-recognition`（基础信息）、`wf-webhook-setting`、`wf-security-setting`、`wf-dev-setting`、`wf-sys-analysis`、`wf-coding`、`wf-integration-case`、执行集成用例（Harness 前端面板）、`wf-release-submit`、`wf-prod-config`。修改任一节点规则时，同步更新对应的节点文件与 `version`。
 
 ---
 
@@ -99,11 +127,17 @@
 │       ├── common/                     # 配置、加验签、HTTP 客户端、模型（Java/Golang/Python/PHP）
 │       ├── language-agnostic/          # 其他技术栈的契约驱动适配流程
 │       └── <模块>/<接口>/              # GUIDE.md + java/ golang/ python/ php/
-└── wf-api-integration-upgrade/         # 技能二 — /api/open/v1/*
-    ├── SKILL.md                        # 决策树、关键词路由、模块索引
+├── wf-api-integration-upgrade/         # 技能二 — /api/open/v1/*
+│   ├── SKILL.md                        # 决策树、关键词路由、模块索引
+│   └── references/
+│       ├── common/java/                # WfClientConfig、WfSignatureUtil、WfApiClient、Result、WfErrorCode、WfException、Amount/Address/UserName
+│       └── <业务域>/<模块>/            # GUIDE.md + java/{service,model/{domain,request,response}}
+└── wf-api-integration-pipeline/        # 技能三 — 端到端集成流水线（经 worldfirst CLI）
+    ├── SKILL.md                        # 流水线总览、启动与续跑、交互约定、安全红线
     └── references/
-        ├── common/java/                # WfClientConfig、WfSignatureUtil、WfApiClient、Result、WfErrorCode、WfException、Amount/Address/UserName
-        └── <业务域>/<模块>/            # GUIDE.md + java/{service,model/{domain,request,response}}
+        ├── cli.md                      # CLI 调用约定、错误码处置、命令速查
+        ├── state.md                    # 本地进度文件结构与续跑推导
+        └── nodes/                      # 01-basic-info … 10-prod-config，与 Harness 节点一一对应
 ```
 
 ## 共同底座
@@ -124,5 +158,7 @@
 - 新增模块或接口放在所属技能的 `references/` 下，记得同步更新该技能 `SKILL.md` 的决策树、关键词表与模块索引。
 
 ## 许可
+
+维护者可运行 `python3 tests/upgrade-modules/validate.py` 验证本次新增的五个 Enhanced API 模块；依赖、覆盖范围与边界见[模板验证说明](tests/upgrade-modules/README.md)。
 
 [MIT](LICENSE)

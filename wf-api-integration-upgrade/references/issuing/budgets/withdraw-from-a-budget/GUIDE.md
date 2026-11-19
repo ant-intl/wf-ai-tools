@@ -4,7 +4,7 @@
 
 将预算账户资金退回余额账户（出金）。仅 `ACTIVE` 状态的预算账户可出金，否则返回 `BUDGET_ACCOUNT_STATUS_INACTIVE`；预算账户可用余额不足时返回 `BALANCE_NOT_ENOUGH`。出金不指定目标账户类型，资金退回余额账户。
 
-> **资金变动接口**：`requestId` 必填且在 `partnerId` 内唯一，重试必须复用同一取值以免重复出金；结果不确定（`U`）时须先查询确认再决定是否重试。
+> **资金变动接口**：`requestId` 必填且在 `partnerId` 内唯一，重试必须复用同一取值以免重复出金；结果不确定（`U`）时稍后用原 `requestId` 和完全相同的业务参数重试，最多重试 3 次（不含首次请求）；仍未知则保留未知结果并联系 WorldFirst 技术支持。
 
 ## 官方文档
 
@@ -93,7 +93,7 @@
 | `REPEAT_REQ_INCONSISTENT` | F | 相同 `requestId` 参数不一致 | 保持参数完全一致，或改用新的 `requestId` |
 | `PARAM_ILLEGAL` | F | 参数非法 | 核对 `amount.value`（>0、最小货币单位）与币种 |
 | `PROCESS_FAIL` | F | 通用业务失败 | **不要重试**，联系万里汇支持 |
-| `UNKNOWN_EXCEPTION` | U | 未知异常 | 用相同 `requestId` + 相同参数重试；持续异常用 `query_a_budget` 核对余额后再判断 |
+| `UNKNOWN_EXCEPTION` | U | 未知异常 | 稍后用原 `requestId` + 相同参数重试，最多重试 3 次；仍未知则携带 `requestId` 和时间戳联系 WorldFirst 技术支持，不换新幂等键 |
 
 ## 示例代码
 
@@ -123,7 +123,7 @@ BudgetService 采用薄封装模式：不做参数校验，验签后自动反序
 1. 通过 `query_a_budget` 确认预算账户为 `ACTIVE`，且对应币种余额充足
 2. 生成唯一 `requestId`，构造 `WithdrawFromBudgetRequest`（`amount.value` 用最小货币单位）
 3. 调用 `BudgetService.withdrawFromBudget(request)` 获取响应（内部已强制验签）
-4. 检查 `result.resultStatus`：`S` 表示受理成功；`F` 按错误码语义处理；`U` 表示结果未知，**必须先用同一 `requestId` 重试或用 `query_a_budget` 核对余额确认，禁止换新 `requestId` 直接重发**
+4. 检查 `result.resultStatus`：`S` 表示成功；`F` 按错误码语义处理（`PROCESS_FAIL` 不重试）；`resultStatus=U` 表示结果未知，不能判定成功或失败；稍后用原 `requestId` + 完全相同的业务参数重试，最多重试 3 次（不含首次请求），仍未知则保留未知结果并携带 `requestId` 和时间戳联系 WorldFirst 技术支持。**禁止为重试同一笔操作生成新 `requestId`**。
 
 ### 业务代码示例
 
@@ -151,23 +151,34 @@ if ("S".equals(response.getResult().getResultStatus())) {
 
 ### 结果未知时的处置
 
+依据：[官方 Result 通用错误规则](https://docs.worldfirst.com/wfdocs/api-sdk/result)及本接口错误表。
+`BudgetService` 仅封装单次调用；调用方对 `UNKNOWN_EXCEPTION / U` 安排最多 3 次延迟重试，复用原 requestId 和业务参数。
+下面使用阻塞等待演示调用顺序，1 秒仅为示例间隔，并非官网规定；应用可使用调度器实现。
+
 ```java
-String requestId = "req_withdraw_20260808_001";      // 固定幂等键，参数保持完全一致
-request.setRequestId(requestId);
-
+// request 已包含本笔操作的唯一 requestId；后续重试不得修改它或其他业务参数。
+String requestId = request.getRequestId();
+String firstAttemptAt = java.time.OffsetDateTime.now().toString();
 WithdrawFromBudgetResponse response = budgetService.withdrawFromBudget(request);
-
-if ("U".equals(response.getResult().getResultStatus())) {
-    // 1) 相同 requestId + 相同参数重试
+for (int retry = 0; retry < 3
+        && "U".equals(response.getResult().getResultStatus())
+        && "UNKNOWN_EXCEPTION".equals(response.getResult().getResultCode()); retry++) {
+    try {
+        Thread.sleep(1000L); // 示例间隔，可改为应用调度器的延迟策略
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        break; // 中断后停止重试，保留未知结果
+    }
     response = budgetService.withdrawFromBudget(request);
 }
 if ("U".equals(response.getResult().getResultStatus())) {
-    // 2) 仍未知：查询余额确认是否已扣减，严禁换新 requestId 重复发起（会重复出金）
-    QueryBudgetRequest q = new QueryBudgetRequest();
-    q.setId(request.getId());
-    System.out.println("当前余额: " + budgetService.queryBudget(q).getBalanceAmounts());
+    System.err.println("结果仍未知，请联系 WorldFirst 技术支持。requestId="
+        + requestId + ", timestamp=" + firstAttemptAt);
 }
+// S/F 按本接口结果处理；PROCESS_FAIL 不重试，U 不得当作成功或确定失败。
 ```
+
+集成建议：查询预算余额仅用于辅助核对，不能仅凭余额变化确认本笔入金/出金成功，也不应将其设为重试前置条件。
 
 > **Spring Boot 项目**：通过 `@Autowired` 注入 BudgetService，无需手动构建配置。
 >

@@ -6,7 +6,7 @@
 
 ## 组件职责
 
-本模块共包含 9 个 Java 组件：
+本模块共包含 10 个公共 Java 组件（另有 Spring Boot 配置参考）：
 
 | # | 组件 | 包路径 | 职责 |
 |---|------|--------|------|
@@ -19,6 +19,7 @@
 | 7 | `Amount` | `{basePackage}.wf.model.domain` | 通用金额对象（currency + value），以最小货币单位表示 |
 | 8 | `Address` | `{basePackage}.wf.model.domain` | 通用地址对象（region / state / city / address1 / address2 / zipCode） |
 | 9 | `UserName` | `{basePackage}.wf.model.domain` | 通用姓名对象（firstName / middleName / lastName / fullName） |
+| 10 | `WfRequestContext` | `{basePackage}.wf.client` | 不可变的请求级账户上下文，account-id / access-token 二选一 |
 
 ## 包结构
 
@@ -30,7 +31,8 @@ common/
     ├── security/
     │   └── WfSignatureUtil.java         # 签名与验签工具类
     ├── client/
-    │   └── WfApiClient.java             # HTTP 客户端 + WfApiResponse 内部类
+    │   ├── WfApiClient.java             # HTTP 客户端 + WfApiResponse 内部类
+    │   └── WfRequestContext.java        # 单次请求的代理账户上下文
     ├── model/
     │   ├── domain/
     │   │   ├── Amount.java              # 通用金额对象
@@ -240,3 +242,15 @@ ISO 8601 格式：`2026-07-07T10:00:00+08:00`（由 `ZonedDateTime.now().format(
 3. **适配代码风格**：根据客户项目是否使用 Lombok，决定是否用 `@Data` / `@Builder` 注解替代手写 getter/setter/Builder
 4. **适配 JSON 库**：根据客户项目依赖，选择 fastjson2 或 Jackson 进行 JSON 序列化
 5. **适配日志方案**：参考代码不包含日志输出，Agent 可根据客户项目使用的日志框架（SLF4J / Logback / Log4j2）在 Service 和 Client 中添加关键操作日志
+
+## 单次请求的代理账户上下文
+
+新增模块可使用 [WfRequestContext](java/client/WfRequestContext.java)。它是不可变的单次调用参数，不会改变共享客户端的账户状态。`account-id` 与 `access-token` 每次只能发送一个，规则来源：[官方 Authentication](https://docs.worldfirst.com/wfdocs/api-sdk/authentication)。不代理账户时沿用原三参数 `post`。
+
+```java
+WfRequestContext context = WfRequestContext.forAccount(targetAccountId);
+// 或 WfRequestContext.forAccessToken(accessToken)，不要同时发送两种头。
+RetrieveRfiResponse response = new RfiService(apiClient).retrieveRfi(request, context);
+```
+
+这两个头不放入业务请求 JSON，不覆盖 Client-Id/Request-Time/Signature。该客户端仍使用 RSA；不能添加 Bearer API Key 后关闭验签。OAuth 令牌接口不发送代理头；Connected Accounts 等接口不支持 account-id，仍按各自 GUIDE 处理。

@@ -47,9 +47,9 @@
 | `buyAmount` | Amount | 买入金额 |
 | `creditSupport` | CreditSupport | 信用支持信息，仅当 `dealType` 为 FORWARD 时返回 |
 | `settlementPeriod` | SettlementPeriod | 结算周期信息，当 `dealType` 为 UNFUNDED_SPOT 或 FORWARD 时返回 |
-| `unSettleBuyAmount` | Amount | 未结算买入金额，当 `dealType` 为 UNFUNDED_SPOT/FORWARD 且 `status` 为 PROCESSING/CANCELED 时返回 |
-| `unSettleSellAmount` | Amount | 未结算卖出金额，当 `dealType` 为 UNFUNDED_SPOT/FORWARD 且 `status` 为 PROCESSING/CANCELED 时返回 |
-| `cancelFeeAmount` | Amount | 取消费用金额，当 `status` 为 CANCELED 时返回 |
+| `unSettleBuyAmount` | Amount | 未结算买入金额，当 `dealType` 为 UNFUNDED_SPOT/FORWARD 且 `status` 为 PROCESSING/CANCELLED 时返回 |
+| `unSettleSellAmount` | Amount | 未结算卖出金额，当 `dealType` 为 UNFUNDED_SPOT/FORWARD 且 `status` 为 PROCESSING/CANCELLED 时返回 |
+| `cancelFeeAmount` | Amount | 取消费用金额，当 `status` 为 CANCELLED 时返回 |
 | `status` | string | 当前交易状态 |
 | `createdAt` | datetime | 交易创建时间（ISO 8601 格式） |
 | `settledAt` | datetime | 交易结算时间（ISO 8601 格式），仅结算后返回 |
@@ -180,7 +180,7 @@ if ("S".equals(response.getResult().getResultStatus())) {
         case "SUCCESS":
             System.out.println("交易已结算: " + response.getSettledAt());
             break;
-        case "CANCELED":
+        case "CANCELLED":
             System.out.println("交易已取消: " + response.getCancelledAt());
             if (response.getCancelFeeAmount() != null) {
                 System.out.println("取消费用: " + response.getCancelFeeAmount().getValue());
@@ -234,7 +234,7 @@ for (int i = 0; i < maxRetries; i++) {
         if ("SUCCESS".equals(status)) {
             System.out.println("交易已结算: " + queryResponse.getSettledAt());
             break;
-        } else if ("CANCELED".equals(status) || "FAILED".equals(status)) {
+        } else if ("CANCELLED".equals(status) || "FAILED".equals(status)) {
             System.out.println("交易终止: " + status);
             break;
         }

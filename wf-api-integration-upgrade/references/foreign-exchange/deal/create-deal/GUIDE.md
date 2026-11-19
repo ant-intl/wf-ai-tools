@@ -49,9 +49,9 @@
 | `buyAmount` | Amount | 买入金额 |
 | `creditSupport` | CreditSupport | 信用支持信息，仅 FORWARD 交易返回 |
 | `settlementPeriod` | SettlementPeriod | 结算周期信息，UNFUNDED_SPOT 和 FORWARD 交易返回 |
-| `unSettleBuyAmount` | Amount | 未结算买入金额，UNFUNDED_SPOT/FORWARD 且状态为 PROCESSING/CANCELED 时返回 |
-| `unSettleSellAmount` | Amount | 未结算卖出金额，UNFUNDED_SPOT/FORWARD 且状态为 PROCESSING/CANCELED 时返回 |
-| `cancelFeeAmount` | Amount | 取消费用金额，当 status 为 CANCELED 时返回 |
+| `unSettleBuyAmount` | Amount | 未结算买入金额，UNFUNDED_SPOT/FORWARD 且状态为 PROCESSING/CANCELLED 时返回 |
+| `unSettleSellAmount` | Amount | 未结算卖出金额，UNFUNDED_SPOT/FORWARD 且状态为 PROCESSING/CANCELLED 时返回 |
+| `cancelFeeAmount` | Amount | 取消费用金额，当 status 为 CANCELLED 时返回 |
 | `status` | string | 当前交易状态 |
 | `createdAt` | datetime | 交易创建时间（ISO 8601 格式） |
 | `settledAt` | datetime | 交易结算时间（ISO 8601 格式），仅结算后返回 |
