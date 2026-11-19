@@ -2,7 +2,7 @@
 name: wf-api-integration-upgrade
 description: |
   WorldFirst Enhanced API 自动集成技能。当客户需要将 WorldFirst API 集成到其 Java 项目时触发。
-  Agent 自动检测客户代码环境，生成适配客户项目的生产级集成代码，包含 RSA256 签名验签、HTTP 客户端、Service 和数据模型。不生成测试代码。
+  Agent 自动检测客户代码环境，生成适配客户项目的生产级集成代码，包含 RSA256 签名验签、HTTP 客户端、Service 和数据模型，支持批量代发、卡片管理与卡交易、报表下载、RFI 补充资料等模块。不生成测试代码。
 ---
 # WF API Integration Upgrade Skill
 
@@ -30,6 +30,42 @@ description: |
         |       +-- 发起 OAuth 授权流程（浏览器重定向）？ --> authorize
         |       +-- 使用授权码或刷新令牌换取访问令牌？ --> request_a_token
         |       +-- 撤销访问令牌？ --> revoke_a_token
+        |
+        +-- 批量代发？ --> Batch Payouts（payouts/batch-payouts）
+        |       |
+        |       +-- create_a_batch_payout
+        |       +-- add_items_to_a_batch_payout
+        |       +-- remove_items_from_a_batch_payout
+        |       +-- list_batch_payout_items
+        |       +-- calculate_a_batch_payout
+        |       +-- submit_a_batch_payout
+        |       +-- query_a_batch_payout
+        |       +-- delete_a_batch_payout
+        |       +-- cancel_a_batch_payout
+        |
+        +-- 卡片管理？ --> Cards Management（issuing/cards-management）
+        |       |
+        |       +-- create_a_card
+        |       +-- query_a_card
+        |       +-- list_cards
+        |       +-- query_card_sensitive_info
+        |       +-- update_a_card
+        |
+        +-- 卡交易记录？ --> Transactions（issuing/transactions）
+        |       |
+        |       +-- list_card_transactions
+        |
+        +-- 报表下载？ --> Download Report（reporting/download-report）
+        |       |
+        |       +-- create_a_report
+        |       +-- query_a_report
+        |       +-- list_reports
+        |
+        +-- 补充资料 RFI？ --> Request for Information（supporting-service/request-for-information）
+        |       |
+        |       +-- retrieve_an_rfi
+        |       +-- response_to_an_rfi
+        |       +-- list_rfis
         |
         +-- 查询账户余额或余额变动历史？ --> 余额模块（accounts/balance）
         |       |
@@ -143,10 +179,15 @@ description: |
 
 ## 场景关键词匹配
 
-关键词匹配为**模块级路由**，Agent 匹配到模块后，读取模块 README 进一步确定具体接口：
+关键词匹配为**模块级路由**，Agent 匹配到模块后，读取模块 README 进一步确定具体接口。优先匹配具体业务词：批量代发优先于单笔代发，卡交易优先于普通“交易/对账单”，报表下载优先于通用文件下载；RFI 补件优先于开户/KYC。若仍有歧义，按用户实际操作细分，不按泛化词命中第一个模块：
 
 | 关键词 | 路由模块 |
 |--------|----------|
+| 批量代发、batch payout、batchPayouts、批次付款、批量付款、薪资发放、批次审批、create_a_batch_payout、add_items_to_a_batch_payout、remove_items_from_a_batch_payout、list_batch_payout_items、calculate_a_batch_payout、submit_a_batch_payout、query_a_batch_payout、delete_a_batch_payout、cancel_a_batch_payout | 批量代发（payouts/batch-payouts） |
+| 卡片管理、cards management、创建卡片、开卡、冻结卡、解冻卡、取消卡、卡限额、卡敏感信息、CVV、create_a_card、query_a_card、list_cards、query_card_sensitive_info、update_a_card | 卡片管理（issuing/cards-management） |
+| 卡交易、card transaction、卡交易记录、卡支付、卡退款、账单类型、CARD_PAYMENT、CARD_REFUND、list_card_transactions | 卡交易记录（issuing/transactions） |
+| 报表下载、download report、导出报表、创建报表、报表任务、CSV 报表、PDF 报表、XLSX 报表、create_a_report、query_a_report、list_reports | 报表下载（reporting/download-report） |
+| RFI、request for information、补充资料、补充材料、合规问答、回答问题、KYC 补件、CDD 补件、retrieve_an_rfi、response_to_an_rfi、list_rfis | 补充资料 RFI（supporting-service/request-for-information） |
 | OAuth、授权、authorize、request_a_token、revoke_a_token、access token、refresh token、授权码、令牌、撤销令牌、OAuth2、scope、权限范围、authCode、回调授权 | 授权（authorization/oauth2） |
 | 余额、账户余额、balance、查余额、query_balance、账户可用余额、币种余额、余额查询、余额变动、余额历史、balance history、list_balance_history、动账记录、余额流水 | 余额（accounts/balance） |
 | 全球账户、global account、create_a_global_account、query_a_global_account、list_global_accounts、update_a_global_account、close_a_global_account、开立账户、关闭账户、收款账户、全球收款 | 全局账户（accounts/global-accounts） |
@@ -156,7 +197,7 @@ description: |
 | 关联账户、connected account、create_a_connected_account、query_a_connected_account、list_connected_accounts、创建关联账户、查询关联账户、关联账户列表、商户入驻、KYC、KYB、referenceAccountId | 关联账户（connected/connected-accounts） |
 | 对账单、statement、list_statements、query_a_statement、交易记录、账单查询、对账记录、statement report、交易流水、资金流水、reconciliation | 对账单（reporting/statement-report） |
 | 汇率、exchange rate、query_rates、query_rate_history、create_quote、实时汇率、历史汇率、报价、FX quote、currency pair、货币对、spot deal、forward deal、即期、远期、外汇 | 外汇报价（foreign-exchange/quote） |
-| 交易、deal、create_deal、query_deal、cancel_deal、list_deals、list_margin_charge_records、外汇交易、创建交易、查询交易、取消交易、deal status、交易状态、PROCESSING、SUCCESS、CANCELED、FAILED、保证金、margin、保证金追缴、margin charge、保证金冻结、保证金释放、MarginScene、MarginChargeStatus、初始保证金、追加保证金、强平、CLOSED_OUT、交易列表、分页查询交易、交易对账 | 外汇交易（foreign-exchange/deal） |
+| 交易、deal、create_deal、query_deal、cancel_deal、list_deals、list_margin_charge_records、外汇交易、创建交易、查询交易、取消交易、deal status、交易状态、PROCESSING、SUCCESS、CANCELLED、FAILED、保证金、margin、保证金追缴、margin charge、保证金冻结、保证金释放、MarginScene、MarginChargeStatus、初始保证金、追加保证金、强平、CLOSED_OUT、交易列表、分页查询交易、交易对账 | 外汇交易（foreign-exchange/deal） |
 | 结算、settlement、create_settlement、query_settlement、list_settlements、创建结算、查询结算、结算状态、settlement status、PROCESSING、SUCCESS、FAILED、SPOT、FORWARD、UNFUNDED_SPOT、结算列表、分页查询结算、交割核对 | 外汇结算（foreign-exchange/settlement） |
 | 交易日历、trading calendar、query_calendar、queryCalendar、可用日期、availableDates、交易日、结算日、DEAL_CALENDAR、SETTLEMENT_CALENDAR、calendarType、参考数据、reference、query_supported_currencies、支持币种、支持的货币对、supported currencies、币种支持 | 外汇参考数据（foreign-exchange/reference） |
 | 文件上传、文件下载、upload_a_file、download_a_file、upload file、download file、base64 文件、fileContent、fileName、fileId、下载链接、downloadUrl、KYC 材料、开户附件、supporting file | 文件（supporting-service/file） |
@@ -172,6 +213,11 @@ Agent 通过 `references/` 目录结构发现可用模块和接口。每个接�
 
 | 模块 | 目录 | 接口 |
 |------|------|------|
+| 批量代发 | references/payouts/batch-payouts | create_a_batch_payout, add_items_to_a_batch_payout, remove_items_from_a_batch_payout, list_batch_payout_items, calculate_a_batch_payout, submit_a_batch_payout, query_a_batch_payout, delete_a_batch_payout, cancel_a_batch_payout |
+| 卡片管理 | references/issuing/cards-management | create_a_card, query_a_card, list_cards, query_card_sensitive_info, update_a_card |
+| 卡交易记录 | references/issuing/transactions | list_card_transactions |
+| 报表下载 | references/reporting/download-report | create_a_report, query_a_report, list_reports |
+| 补充资料 RFI | references/supporting-service/request-for-information | retrieve_an_rfi, response_to_an_rfi, list_rfis |
 | 授权 | references/authorization/oauth2 | authorize, request_a_token, revoke_a_token |
 | 余额 | references/accounts/balance | query_balance, list_balance_history |
 | 全局账户 | references/accounts/global-accounts | create_a_global_account, query_a_global_account, list_global_accounts, update_a_global_account, close_a_global_account |
@@ -288,7 +334,7 @@ Agent 必须分析客户项目的包组织结构，确定 WF 集成代码的目�
 
 代码统一放入 `{wfPackage}.*` 包下（`{wfPackage}` 由 Phase 1 的「目标代码路径检测规则」确定），分两层生成：
 
-1. 读取 `references/common/java/` 中的参考实现，生成公共基础设施（WfClientConfig、WfSignatureUtil、WfApiClient、Result、WfErrorCode、WfException、Amount、Address、UserName）到客户项目
+1. 读取 `references/common/java/` 中的参考实现，生成公共基础设施（WfClientConfig、WfSignatureUtil、WfApiClient、WfRequestContext、Result、WfErrorCode、WfException、Amount、Address、UserName）到客户项目
 2. 读取 `references/{目标模块}/java/` 中的参考实现，生成模块 Service 和数据模型
 3. 读取目标接口的 GUIDE.md（接口目录名见目标模块 README 的「接口列表」）获取 API endpoint 和参数规格
 4. 根据环境适配规则调整生成的代码
@@ -298,8 +344,8 @@ Agent 必须分析客户项目的包组织结构，确定 WF 集成代码的目�
 
 - **Spring Boot 项目**：参考 `references/common/java/spring/WfAutoConfiguration.java`，生成 `@Configuration` + `@Bean` 配置，在 `application.yml` 中添加 wf 配置项模板；Service 可加 `@Service` 注解，通过依赖注入使用
 - **普通 Java 项目**：使用 Builder 手动构建 WfClientConfig，配置通过代码中的 Builder 或外部配置文件管理
-- **Lombok 项目**：模型类使用 `@Data` + `@Builder` 注解，移除手写 getter/setter 和 ToStringBuilder
-- **非 Lombok 项目**：标准 POJO + 手写 getter/setter + ToStringBuilder（Apache Commons Lang）
+- **Lombok 项目**：模型类使用 `@Data` + `@Builder` 注解，移除手写 getter/setter 和 ToStringBuilder；含卡号/CVV/令牌/金融资料的模型保留脱敏 toString，不能让 @Data 重新输出敏感字段
+- **非 Lombok 项目**：标准 POJO + 手写 getter/setter；普通模型可用 ToStringBuilder（Apache Commons Lang），敏感模型保留模板的脱敏 toString
 - **JSON 库适配**：如果客户已有 Jackson 而非 fastjson2，Agent 可选择适配为 ObjectMapper，或仍添加 fastjson2 依赖
 - **包名适配**：使用 Phase 1 检测到的 `{wfPackage}`（目标代码路径），替换参考代码中的 `{basePackage}.wf` 占位符，直接用实际包名（如 `com.example.infrastructure.adapter.port.worldfirst`）
 
@@ -363,7 +409,7 @@ mvn compile -q
 
 ## 签名算法
 
-所有 WF Enhanced API 使用 RSA256（SHA256withRSA）签名。详细签名流程与密钥格式见 `references/common/README.md`，此处仅列关键要点。
+本 Skill 的 Java 模板采用官网仍支持的 RSA256（SHA256withRSA）模式，强制验签响应。官网也支持 API Key 模式；本模板未实现该模式，不将 Bearer API Key 与 RSA 签名混用。详细签名流程与密钥格式见 `references/common/README.md`，此处仅列关键要点。
 
 ### 请求签名
 
@@ -412,7 +458,7 @@ POST {endpoint}
 
 参考实现代码位于 `references/` 目录，Agent 应将这些作为参考模式，根据环境检测结果适配后生成到客户项目中：
 
-- `references/common/java/` — 公共基础设施（WfClientConfig, WfSignatureUtil, WfApiClient, Result, WfErrorCode, WfException, Amount, Address, UserName）
+- `references/common/java/` — 公共基础设施（WfClientConfig, WfSignatureUtil, WfApiClient, WfRequestContext, Result, WfErrorCode, WfException, Amount, Address, UserName）
 - `references/common/java/spring/WfAutoConfiguration.java` — Spring Boot 自动配置参考
 - `references/{模块}/java/` — 模块 Service 和数据模型
 - `references/{模块}/{接口目录}/GUIDE.md` — 接口 API 规格和集成指引；接口目录名以模块 README 的接口列表为准（见上方「模块与接口索引」的说明）
@@ -421,13 +467,14 @@ POST {endpoint}
 
 ### 公共代码复用规则
 
-以下 9 个公共组件为共享基础设施，遵循不同的复用策略：
+以下 10 个公共组件为共享基础设施，遵循不同的复用策略：
 
 | 组件 | 复用策略 |
 |------|----------|
 | `WfClientConfig` | 仅首次生成，已存在则复用。如客户项目已有等效配置类，可直接适配复用 |
 | `WfSignatureUtil` | 仅首次生成，已存在则复用 |
-| `WfApiClient` | 仅首次生成，已存在则复用 |
+| `WfApiClient` | 仅首次生成，已存在则复用；需要代理账户时，补充带 WfRequestContext 的 post 重载，保留原方法及强制验签 |
+| `WfRequestContext` | 按需生成；使用不可变的单次调用上下文设置 account-id 或 access-token，二者互斥。不得修改共享客户端的全局账户配置 |
 | `Result` | 仅首次生成，已存在则复用 |
 | `WfErrorCode` | **追加模式**：新接口的错误码追加到已有枚举文件末尾，不重复生成整个文件，不覆盖已有错误码 |
 | `WfException` | 仅首次生成，已存在则复用 |

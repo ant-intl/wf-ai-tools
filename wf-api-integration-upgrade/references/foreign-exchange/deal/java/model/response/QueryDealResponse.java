@@ -39,13 +39,13 @@ public class QueryDealResponse {
     /** 结算周期信息，当 dealType 为 UNFUNDED_SPOT 或 FORWARD 时返回 */
     private SettlementPeriod settlementPeriod;
 
-    /** 未结算买入金额，当 dealType 为 UNFUNDED_SPOT 或 FORWARD 且 status 为 PROCESSING 或 CANCELED 时返回 */
+    /** 未结算买入金额，当 dealType 为 UNFUNDED_SPOT 或 FORWARD 且 status 为 PROCESSING 或 CANCELLED 时返回 */
     private Amount unSettleBuyAmount;
 
-    /** 未结算卖出金额，当 dealType 为 UNFUNDED_SPOT 或 FORWARD 且 status 为 PROCESSING 或 CANCELED 时返回 */
+    /** 未结算卖出金额，当 dealType 为 UNFUNDED_SPOT 或 FORWARD 且 status 为 PROCESSING 或 CANCELLED 时返回 */
     private Amount unSettleSellAmount;
 
-    /** 取消费用金额，当 status 为 CANCELED 时返回 */
+    /** 取消费用金额，当 status 为 CANCELLED 时返回 */
     private Amount cancelFeeAmount;
 
     /** 当前交易状态 */

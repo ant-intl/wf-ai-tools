@@ -1,0 +1,1708 @@
+{
+  "sourceDate": "2026-11-18",
+  "contracts": [
+    {
+      "api": "create_a_batch_payout",
+      "module": "payouts/batch-payouts",
+      "service": "BatchPayoutService",
+      "method": "createBatchPayout",
+      "endpoint": "/api/open/v1/batchPayouts/create",
+      "requestClass": "CreateBatchPayoutRequest",
+      "responseClass": "CreateBatchPayoutResponse",
+      "request": {
+        "requestId": "req_batch_20260808_0001",
+        "batchName": "Payroll 2026-08",
+        "transferMemo": "August payroll run"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "id": "bp_20260808****",
+        "status": "INIT",
+        "requestId": "req_batch_20260808_0001",
+        "batchName": "Payroll 2026-08",
+        "transferMemo": "August payroll run",
+        "totalItemCount": 0,
+        "validItemCount": 0,
+        "createdAt": "2026-08-08T10:00:00+08:00",
+        "updatedAt": "2026-08-08T10:00:00+08:00"
+      }
+    },
+    {
+      "api": "add_items_to_a_batch_payout",
+      "module": "payouts/batch-payouts",
+      "service": "BatchPayoutService",
+      "method": "addItemsToBatchPayout",
+      "endpoint": "/api/open/v1/batchPayouts/addItems",
+      "requestClass": "AddItemsToBatchPayoutRequest",
+      "responseClass": "AddItemsToBatchPayoutResponse",
+      "request": {
+        "id": "bp_20260808****",
+        "items": [
+          {
+            "requestId": "req_item_20260808_0001",
+            "businessSceneCode": "THIRD_PARTY_PAYOUT",
+            "beneficiary": {
+              "accountType": "BANK_ACCOUNT",
+              "beneficiaryId": "ben_9f7c****"
+            },
+            "payoutAmount": {
+              "value": 500000,
+              "currency": "USD"
+            },
+            "purposeCode": "SAL",
+            "reference": "Salary August 2026",
+            "transferMemo": "Employee ID E1001"
+          }
+        ]
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "id": "bp_20260808****",
+        "status": "INIT",
+        "createdAt": "2026-08-08T10:00:00+08:00",
+        "updatedAt": "2026-08-08T10:05:00+08:00",
+        "requestId": "req_batch_20260808_0001",
+        "batchName": "Payroll 2026-08",
+        "transferMemo": "August payroll run",
+        "totalItemCount": 2,
+        "validItemCount": 0,
+        "items": [
+          {
+            "requestId": "req_item_20260808_0001",
+            "itemId": "item_20260808_0001",
+            "status": "INVALID",
+            "failureCode": "BENEFICIARY_INACTIVE",
+            "failureMessage": "The referenced beneficiary is not ACTIVE. Activate the beneficiary or use an active beneficiary."
+          }
+        ]
+      }
+    },
+    {
+      "api": "remove_items_from_a_batch_payout",
+      "module": "payouts/batch-payouts",
+      "service": "BatchPayoutService",
+      "method": "removeItemsFromBatchPayout",
+      "endpoint": "/api/open/v1/batchPayouts/removeItems",
+      "requestClass": "RemoveItemsFromBatchPayoutRequest",
+      "responseClass": "RemoveItemsFromBatchPayoutResponse",
+      "request": {
+        "id": "20260808BATCH00001",
+        "itemIds": [
+          "item_20260808_0002",
+          "item_20260808_0005"
+        ]
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultStatus": "S",
+          "resultMessage": "success"
+        },
+        "id": "20260808BATCH00001",
+        "status": "INIT",
+        "createdAt": "2026-08-08T09:15:00+08:00",
+        "updatedAt": "2026-08-08T10:20:00+08:00",
+        "requestId": "req_batch_20260808_0001",
+        "batchName": "Aug 8 supplier payouts",
+        "totalItemCount": 3,
+        "validItemCount": 3
+      }
+    },
+    {
+      "api": "list_batch_payout_items",
+      "module": "payouts/batch-payouts",
+      "service": "BatchPayoutService",
+      "method": "listBatchPayoutItems",
+      "endpoint": "/api/open/v1/batchPayouts/listItems",
+      "requestClass": "ListBatchPayoutItemsRequest",
+      "responseClass": "ListBatchPayoutItemsResponse",
+      "request": {
+        "id": "20260808BATCH00001",
+        "limit": 20,
+        "status": "FAILED"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultStatus": "S",
+          "resultMessage": "success"
+        },
+        "items": [
+          {
+            "requestId": "req_item_20260808_0003",
+            "itemId": "item_20260808_0003",
+            "status": "FAILED",
+            "businessSceneCode": "THIRD_PARTY_PAYOUT",
+            "payer": {
+              "balanceType": "BALANCE",
+              "region": "SG"
+            },
+            "beneficiary": {
+              "accountType": "BANK_ACCOUNT",
+              "beneficiaryId": "ben_****0003"
+            },
+            "sourceAmount": {
+              "value": 300000,
+              "currency": "USD"
+            },
+            "payoutAmount": {
+              "value": 300000,
+              "currency": "USD"
+            },
+            "feeAmount": {
+              "value": 500,
+              "currency": "USD"
+            },
+            "purposeCode": "SAL",
+            "reference": "PAYROLL-2026-08-003",
+            "failureCode": "INSUFFICIENT_BALANCE",
+            "failureMessage": "Insufficient balance to fund this payout. Top up the account and create a new batch for the failed items."
+          }
+        ],
+        "nextCursor": "eyJpdGVtU2VxIjoyMH0="
+      }
+    },
+    {
+      "api": "calculate_a_batch_payout",
+      "module": "payouts/batch-payouts",
+      "service": "BatchPayoutService",
+      "method": "calculateBatchPayout",
+      "endpoint": "/api/open/v1/batchPayouts/calculate",
+      "requestClass": "CalculateBatchPayoutRequest",
+      "responseClass": "CalculateBatchPayoutResponse",
+      "request": {
+        "id": "20260808BATCH00001"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultStatus": "S",
+          "resultMessage": "success"
+        },
+        "id": "20260808BATCH00001",
+        "status": "INIT",
+        "createdAt": "2026-08-08T09:15:00+08:00",
+        "updatedAt": "2026-08-08T11:00:00+08:00",
+        "requestId": "req_batch_20260808_0001",
+        "batchName": "Aug 8 supplier payouts",
+        "totalItemCount": 2,
+        "validItemCount": 2,
+        "calculationSummary": {
+          "lastCalculatedAt": "2026-08-08T11:00:00+08:00",
+          "currencyPairs": [
+            {
+              "currencyPair": "USD/USD",
+              "clientRate": 1.0,
+              "sourceAmount": {
+                "currency": "USD",
+                "value": 500000
+              },
+              "payoutAmount": {
+                "currency": "USD",
+                "value": 500000
+              },
+              "feeRate": "0.001",
+              "feeAmount": {
+                "currency": "USD",
+                "value": 500
+              },
+              "feeItemList": [
+                {
+                  "feeItemType": "PAYOUT_SERVICE_FEE",
+                  "feeItemAmount": {
+                    "currency": "USD",
+                    "value": 500
+                  }
+                }
+              ]
+            },
+            {
+              "currencyPair": "USD/EUR",
+              "clientRate": 0.9234,
+              "sourceAmount": {
+                "currency": "USD",
+                "value": 300000
+              },
+              "payoutAmount": {
+                "currency": "EUR",
+                "value": 277020
+              },
+              "feeRate": "0.0005",
+              "feeAmount": {
+                "currency": "USD",
+                "value": 150
+              },
+              "feeItemList": [
+                {
+                  "feeItemType": "PAYOUT_SERVICE_FEE",
+                  "feeItemAmount": {
+                    "currency": "USD",
+                    "value": 150
+                  }
+                }
+              ],
+              "originalFeeRate": "0.001",
+              "originalFeeAmount": {
+                "currency": "USD",
+                "value": 300
+              },
+              "promotionList": [
+                {
+                  "promotionName": "August Fee Discount",
+                  "promotionType": "FEE_DISCOUNT",
+                  "activeTime": "2026-08-01T00:00:00+08:00",
+                  "expiredTime": "2026-08-31T23:59:59+08:00"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "api": "submit_a_batch_payout",
+      "module": "payouts/batch-payouts",
+      "service": "BatchPayoutService",
+      "method": "submitBatchPayout",
+      "endpoint": "/api/open/v1/batchPayouts/submit",
+      "requestClass": "SubmitBatchPayoutRequest",
+      "responseClass": "SubmitBatchPayoutResponse",
+      "request": {
+        "id": "20260808BATCH00001"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultStatus": "S",
+          "resultMessage": "success"
+        },
+        "id": "20260808BATCH00001",
+        "status": "PENDING_APPROVAL",
+        "createdAt": "2026-08-08T09:15:00+08:00",
+        "updatedAt": "2026-08-08T14:00:00+08:00",
+        "submittedAt": "2026-08-08T14:00:00+08:00",
+        "requestId": "req_batch_20260808_0001",
+        "batchName": "Aug 8 supplier payouts",
+        "totalItemCount": 2,
+        "validItemCount": 2,
+        "calculationSummary": {
+          "lastCalculatedAt": "2026-08-08T13:55:00+08:00",
+          "currencyPairs": [
+            {
+              "currencyPair": "USD/USD",
+              "clientRate": 1.0,
+              "sourceAmount": {
+                "currency": "USD",
+                "value": 500000
+              },
+              "payoutAmount": {
+                "currency": "USD",
+                "value": 500000
+              },
+              "feeRate": "0.001",
+              "feeAmount": {
+                "currency": "USD",
+                "value": 500
+              },
+              "feeItemList": [
+                {
+                  "feeItemType": "PAYOUT_SERVICE_FEE",
+                  "feeItemAmount": {
+                    "currency": "USD",
+                    "value": 500
+                  }
+                }
+              ]
+            },
+            {
+              "currencyPair": "USD/EUR",
+              "clientRate": 0.9234,
+              "sourceAmount": {
+                "currency": "USD",
+                "value": 300000
+              },
+              "payoutAmount": {
+                "currency": "EUR",
+                "value": 277020
+              },
+              "feeRate": "0.0005",
+              "feeAmount": {
+                "currency": "USD",
+                "value": 150
+              },
+              "feeItemList": [
+                {
+                  "feeItemType": "PAYOUT_SERVICE_FEE",
+                  "feeItemAmount": {
+                    "currency": "USD",
+                    "value": 150
+                  }
+                }
+              ],
+              "originalFeeRate": "0.001",
+              "originalFeeAmount": {
+                "currency": "USD",
+                "value": 300
+              },
+              "promotionList": [
+                {
+                  "promotionName": "August Fee Discount",
+                  "promotionType": "FEE_DISCOUNT",
+                  "activeTime": "2026-08-01T00:00:00+08:00",
+                  "expiredTime": "2026-08-31T23:59:59+08:00"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "api": "query_a_batch_payout",
+      "module": "payouts/batch-payouts",
+      "service": "BatchPayoutService",
+      "method": "queryBatchPayout",
+      "endpoint": "/api/open/v1/batchPayouts/query",
+      "requestClass": "QueryBatchPayoutRequest",
+      "responseClass": "QueryBatchPayoutResponse",
+      "request": {
+        "id": "20260808BATCH00001"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultStatus": "S",
+          "resultMessage": "success"
+        },
+        "id": "20260808BATCH00001",
+        "status": "COMPLETED",
+        "createdAt": "2026-08-08T09:15:00+08:00",
+        "updatedAt": "2026-08-09T10:30:00+08:00",
+        "submittedAt": "2026-08-08T14:00:00+08:00",
+        "completedAt": "2026-08-09T10:30:00+08:00",
+        "requestId": "req_batch_20260808_0001",
+        "batchName": "Aug 8 supplier payouts",
+        "totalItemCount": 3,
+        "validItemCount": 2,
+        "calculationSummary": {
+          "lastCalculatedAt": "2026-08-08T13:55:00+08:00",
+          "currencyPairs": [
+            {
+              "currencyPair": "USD/USD",
+              "clientRate": 1.0,
+              "sourceAmount": {
+                "currency": "USD",
+                "value": 500000
+              },
+              "payoutAmount": {
+                "currency": "USD",
+                "value": 500000
+              },
+              "feeRate": "0.001",
+              "feeAmount": {
+                "currency": "USD",
+                "value": 500
+              },
+              "feeItemList": [
+                {
+                  "feeItemType": "PAYOUT_SERVICE_FEE",
+                  "feeItemAmount": {
+                    "currency": "USD",
+                    "value": 500
+                  }
+                }
+              ]
+            },
+            {
+              "currencyPair": "USD/EUR",
+              "clientRate": 0.9234,
+              "sourceAmount": {
+                "currency": "USD",
+                "value": 300000
+              },
+              "payoutAmount": {
+                "currency": "EUR",
+                "value": 277020
+              },
+              "feeRate": "0.0005",
+              "feeAmount": {
+                "currency": "USD",
+                "value": 150
+              },
+              "feeItemList": [
+                {
+                  "feeItemType": "PAYOUT_SERVICE_FEE",
+                  "feeItemAmount": {
+                    "currency": "USD",
+                    "value": 150
+                  }
+                }
+              ],
+              "originalFeeRate": "0.001",
+              "originalFeeAmount": {
+                "currency": "USD",
+                "value": 300
+              },
+              "promotionList": [
+                {
+                  "promotionName": "August Fee Discount",
+                  "promotionType": "FEE_DISCOUNT",
+                  "activeTime": "2026-08-01T00:00:00+08:00",
+                  "expiredTime": "2026-08-31T23:59:59+08:00"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "api": "delete_a_batch_payout",
+      "module": "payouts/batch-payouts",
+      "service": "BatchPayoutService",
+      "method": "deleteBatchPayout",
+      "endpoint": "/api/open/v1/batchPayouts/delete",
+      "requestClass": "DeleteBatchPayoutRequest",
+      "responseClass": "DeleteBatchPayoutResponse",
+      "request": {
+        "id": "20260808BATCH00001"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultStatus": "S",
+          "resultMessage": "success"
+        }
+      }
+    },
+    {
+      "api": "cancel_a_batch_payout",
+      "module": "payouts/batch-payouts",
+      "service": "BatchPayoutService",
+      "method": "cancelBatchPayout",
+      "endpoint": "/api/open/v1/batchPayouts/cancel",
+      "requestClass": "CancelBatchPayoutRequest",
+      "responseClass": "CancelBatchPayoutResponse",
+      "request": {
+        "id": "20260808BATCH00001",
+        "memo": "Superseded by a corrected batch created on 2026-08-09."
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultStatus": "S",
+          "resultMessage": "success"
+        },
+        "id": "20260808BATCH00001",
+        "status": "CANCELLED",
+        "createdAt": "2026-08-08T09:15:00+08:00",
+        "updatedAt": "2026-08-08T18:00:00+08:00",
+        "requestId": "req_batch_20260808_0001",
+        "batchName": "Aug 8 supplier payouts",
+        "cancelledAt": "2026-08-08T18:00:00+08:00",
+        "memo": "Superseded by a corrected batch created on 2026-08-09.",
+        "totalItemCount": 3,
+        "validItemCount": 3
+      }
+    },
+    {
+      "api": "create_a_card",
+      "module": "issuing/cards-management",
+      "service": "CardsManagementService",
+      "method": "createCard",
+      "endpoint": "/api/open/v1/issuing/cards/create",
+      "requestClass": "CreateCardRequest",
+      "responseClass": "CreateCardResponse",
+      "request": {
+        "requestId": "req_card_create_001",
+        "cardBrand": "MASTERCARD",
+        "cardNickName": "Team Travel Card",
+        "note": "Marketing Q2 budget",
+        "email": "cardholder@example.com",
+        "mobilePhone": "+8613800138000",
+        "billingAddress": {
+          "address1": "No.1 Test Street",
+          "address2": "Suite 100",
+          "city": "Shanghai",
+          "state": "Shanghai",
+          "region": "CN",
+          "zipCode": "200000"
+        },
+        "transactionLimits": [
+          {
+            "currency": "USD",
+            "limits": [
+              {
+                "interval": "PER_TRANSACTION",
+                "rangeAmount": 1000
+              },
+              {
+                "interval": "DAILY",
+                "rangeAmount": 5000
+              },
+              {
+                "interval": "MONTHLY",
+                "rangeAmount": 50000
+              },
+              {
+                "interval": "ALL_TIME",
+                "rangeAmount": 200000
+              }
+            ]
+          }
+        ],
+        "authorizationControl": {
+          "allowedAuthTimes": 100,
+          "allowedCurrencies": [
+            "USD",
+            "EUR",
+            "GBP"
+          ],
+          "cardActiveAt": "2026-06-19T00:00:00Z",
+          "cardCancelAt": "2027-06-18T00:00:00Z"
+        },
+        "metadata": {
+          "purpose": "vendor-payment",
+          "department": "finance"
+        }
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "id": "CARD_20260618190272001208****",
+        "status": "PENDING",
+        "cardholderId": "CH_20260302290272001208****",
+        "mediaType": "VIRTUAL",
+        "createdAt": "2026-06-18T02:06:34Z",
+        "cardBrand": "MASTERCARD",
+        "cardNickName": "Team Travel Card",
+        "note": "Marketing Q2 budget",
+        "email": "cardholder@example.com",
+        "mobilePhone": "+86*******0881",
+        "billingAddress": {
+          "city": "Shanghai",
+          "region": "CN",
+          "zipCode": "200000"
+        },
+        "transactionLimits": [
+          {
+            "currency": "USD",
+            "limits": [
+              {
+                "interval": "PER_TRANSACTION",
+                "rangeAmount": 1000
+              },
+              {
+                "interval": "DAILY",
+                "rangeAmount": 5000
+              },
+              {
+                "interval": "MONTHLY",
+                "rangeAmount": 50000
+              },
+              {
+                "interval": "ALL_TIME",
+                "rangeAmount": 200000
+              }
+            ]
+          }
+        ],
+        "authorizationControl": {
+          "allowedAuthTimes": 100,
+          "allowedCurrencies": [
+            "USD",
+            "EUR",
+            "GBP"
+          ],
+          "cardActiveAt": "2026-06-19T00:00:00Z",
+          "cardCancelAt": "2027-06-18T00:00:00Z"
+        }
+      }
+    },
+    {
+      "api": "query_a_card",
+      "module": "issuing/cards-management",
+      "service": "CardsManagementService",
+      "method": "queryCard",
+      "endpoint": "/api/open/v1/issuing/cards/query",
+      "requestClass": "QueryCardRequest",
+      "responseClass": "QueryCardResponse",
+      "request": {
+        "id": "CARD_20260624290272001208****"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "id": "CARD_20260624290272001208****",
+        "status": "ACTIVE",
+        "cardholderId": "CH_20250625290272001208****",
+        "mediaType": "VIRTUAL",
+        "createdAt": "2026-06-24T06:45:35Z",
+        "cardBrand": "MASTERCARD",
+        "cardNumber": "****3226",
+        "expiryDate": "06/31",
+        "last4Digits": "3226",
+        "cardNickName": "Team Travel Card",
+        "note": "QA note",
+        "purpose": "LODGING",
+        "email": "cardholder@example.com",
+        "mobilePhone": "+86*******0881",
+        "billingAddress": {
+          "address1": "No.1 Test Street",
+          "city": "Shanghai",
+          "state": "Shanghai",
+          "region": "CN",
+          "zipCode": "000000"
+        },
+        "transactionLimits": [
+          {
+            "currency": "USD",
+            "limits": [
+              {
+                "interval": "PER_TRANSACTION",
+                "rangeAmount": 100000,
+                "usedAmount": 0,
+                "remainAmount": 100000
+              },
+              {
+                "interval": "DAILY",
+                "rangeAmount": 200000,
+                "usedAmount": 0,
+                "remainAmount": 200000
+              },
+              {
+                "interval": "MONTHLY",
+                "rangeAmount": 300000,
+                "usedAmount": 0,
+                "remainAmount": 300000
+              },
+              {
+                "interval": "ALL_TIME",
+                "rangeAmount": 400000,
+                "usedAmount": 0,
+                "remainAmount": 400000
+              }
+            ]
+          }
+        ],
+        "authorizationControl": {
+          "allowedAuthTimes": 5,
+          "allowedCurrencies": [
+            "USD"
+          ],
+          "cardActiveAt": "2026-06-24T09:29:59Z",
+          "cardCancelAt": "2026-06-27T07:30:00Z"
+        }
+      }
+    },
+    {
+      "api": "list_cards",
+      "module": "issuing/cards-management",
+      "service": "CardsManagementService",
+      "method": "listCards",
+      "endpoint": "/api/open/v1/issuing/cards/list",
+      "requestClass": "ListCardsRequest",
+      "responseClass": "ListCardsResponse",
+      "request": {
+        "limit": 3
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "items": [
+          {
+            "id": "2026062529027200120855200003801",
+            "status": "ACTIVE",
+            "createdAt": "2026-06-25T15:08:06Z",
+            "cardholderId": "2025062529027200120854400001454",
+            "mediaType": "VIRTUAL",
+            "cardBrand": "MASTERCARD",
+            "cardNumber": "****5427",
+            "last4Digits": "5427",
+            "cardNickName": "Example Card"
+          },
+          {
+            "id": "2026062529027200120855200003802",
+            "status": "ACTIVE",
+            "createdAt": "2026-06-25T15:09:12Z",
+            "cardholderId": "2025062529027200120854400001454",
+            "mediaType": "VIRTUAL",
+            "cardBrand": "MASTERCARD",
+            "cardNumber": "****7340",
+            "last4Digits": "7340",
+            "cardNickName": "Example Card"
+          }
+        ],
+        "nextCursor": "eyJpZCI6****"
+      }
+    },
+    {
+      "api": "query_card_sensitive_info",
+      "module": "issuing/cards-management",
+      "service": "CardsManagementService",
+      "method": "queryCardSensitiveInfo",
+      "endpoint": "/api/open/v1/issuing/cards/querySensitiveInfo",
+      "requestClass": "QueryCardSensitiveInfoRequest",
+      "responseClass": "QueryCardSensitiveInfoResponse",
+      "request": {
+        "id": "2026062229027200120603300003203"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "id": "2026062229027200120603300003203",
+        "accountId": "2120120018****",
+        "cardNumber": "5262********9419",
+        "cvv": "***",
+        "expiryDate": "06/31"
+      }
+    },
+    {
+      "api": "update_a_card",
+      "module": "issuing/cards-management",
+      "service": "CardsManagementService",
+      "method": "updateCard",
+      "endpoint": "/api/open/v1/issuing/cards/update",
+      "requestClass": "UpdateCardRequest",
+      "responseClass": "UpdateCardResponse",
+      "request": {
+        "requestId": "req_card_update_001",
+        "id": "2026061819027200120851600100****",
+        "status": "FROZEN"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "id": "2026061819027200120851600100****",
+        "status": "FROZEN"
+      }
+    },
+    {
+      "api": "list_card_transactions",
+      "module": "issuing/transactions",
+      "service": "CardTransactionService",
+      "method": "listCardTransactions",
+      "endpoint": "/api/open/v1/issuing/transactions/list",
+      "requestClass": "ListCardTransactionsRequest",
+      "responseClass": "ListCardTransactionsResponse",
+      "request": {
+        "limit": 10,
+        "fromCreatedAt": "2026-01-01T00:00:00+08:00",
+        "toCreatedAt": "2026-01-31T00:00:00+08:00",
+        "statuses": [
+          "SUCCESS"
+        ]
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "items": [
+          {
+            "id": "2026****",
+            "createdAt": "2026-01-01T12:01:01+08:00",
+            "status": "SUCCESS",
+            "transactedAt": "2026-01-15T12:01:01+08:00",
+            "maskedCardNo": "************9509",
+            "cardNickName": "My Travel Card",
+            "cardId": "2026****",
+            "merchantName": "AMAZON****",
+            "merchantCategoryCode": "5411",
+            "merchantRegion": "US",
+            "authCode": "123456",
+            "tradeRegion": "US",
+            "tradeAmount": {
+              "value": 10000,
+              "currency": "USD"
+            },
+            "inAmount": {
+              "value": 0,
+              "currency": "USD"
+            },
+            "outAmount": {
+              "value": 10000,
+              "currency": "USD"
+            },
+            "exchangeRate": "7.1234",
+            "billType": "CARD_PAYMENT",
+            "payerAccountNo": "2208****",
+            "payerBudgetId": "34589****",
+            "payerBalanceType": "NORMAL_BALANCE"
+          }
+        ],
+        "nextCursor": "eyJwYWdlIjoyfQ=="
+      }
+    },
+    {
+      "api": "create_a_report",
+      "module": "reporting/download-report",
+      "service": "DownloadReportService",
+      "method": "createReport",
+      "endpoint": "/api/open/v1/reports/create",
+      "requestClass": "CreateReportRequest",
+      "responseClass": "CreateReportResponse",
+      "request": {
+        "requestId": "f18d0117-095a-4782-a9f1-eeb16c3b0808",
+        "reportType": "ACCOUNT_STATEMENTS_REPORT",
+        "fileFormat": "CSV",
+        "fromDate": "2026-08-01T00:00:00+08:00",
+        "toDate": "2026-08-08T23:59:59+08:00"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "id": "RPT202608080000****",
+        "status": "PROCESSING",
+        "createdAt": "2026-08-08T12:08:56+08:00"
+      }
+    },
+    {
+      "api": "query_a_report",
+      "module": "reporting/download-report",
+      "service": "DownloadReportService",
+      "method": "queryReport",
+      "endpoint": "/api/open/v1/reports/query",
+      "requestClass": "QueryReportRequest",
+      "responseClass": "QueryReportResponse",
+      "request": {
+        "id": "RPT202608080000****"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "report": {
+          "id": "RPT202608080000****",
+          "status": "SUCCESS",
+          "reportType": "ACCOUNT_STATEMENTS_REPORT",
+          "fileFormat": "CSV",
+          "fileName": "STATEMENTS_2026-08-01_2026-08-08",
+          "fromDate": "2026-08-01",
+          "toDate": "2026-08-08",
+          "downloadUrl": "https://example.com/files/****1234.csv",
+          "downloadUrlExpiresAt": "2026-08-09T12:08:56+08:00",
+          "createdAt": "2026-08-08T12:08:56+08:00"
+        }
+      }
+    },
+    {
+      "api": "list_reports",
+      "module": "reporting/download-report",
+      "service": "DownloadReportService",
+      "method": "listReports",
+      "endpoint": "/api/open/v1/reports/list",
+      "requestClass": "ListReportsRequest",
+      "responseClass": "ListReportsResponse",
+      "request": {
+        "limit": 10,
+        "fromCreatedAt": "2026-08-01T00:00:00+08:00",
+        "toCreatedAt": "2026-08-08T23:59:59+08:00"
+      },
+      "response": {
+        "result": {
+          "resultCode": "SUCCESS",
+          "resultMessage": "success",
+          "resultStatus": "S"
+        },
+        "items": [
+          {
+            "id": "RPT202608080000****",
+            "status": "SUCCESS",
+            "reportType": "ACCOUNT_STATEMENTS_REPORT",
+            "fileFormat": "CSV",
+            "fileName": "STATEMENTS_2026-08-01_2026-08-08",
+            "fromDate": "2026-08-01",
+            "toDate": "2026-08-08",
+            "createdAt": "2026-08-08T12:08:56+08:00"
+          }
+        ],
+        "nextCursor": "eyJpZCI6IjQ1NiJ9"
+      }
+    },
+    {
+      "api": "retrieve_an_rfi",
+      "module": "supporting-service/request-for-information",
+      "service": "RfiService",
+      "method": "retrieveRfi",
+      "endpoint": "/api/open/v1/rfis/query",
+      "requestClass": "RetrieveRfiRequest",
+      "responseClass": "RetrieveRfiResponse",
+      "request": {
+        "id": "20260818191210001360300000****1"
+      },
+      "response": {
+        "result": {
+          "resultStatus": "S",
+          "resultCode": "SUCCESS",
+          "resultMessage": "success"
+        },
+        "id": "20260818191210001360300000****1",
+        "accountId": "21201203489****3",
+        "rfiType": "KYC_ONGOING_CDD_RFI",
+        "status": "CLOSED",
+        "instruction": "Please re-confirm your company name and upload the certificate of incorporation.",
+        "questions": [
+          {
+            "id": "20260818191210001370300000****1",
+            "auditKey": "basicInformation.companyName.value",
+            "description": "The document has expired",
+            "answerType": "TEXT",
+            "required": true
+          },
+          {
+            "id": "20260818191210001370300000****2",
+            "auditKey": "basicInformation.companyCertificateOfIncorporation",
+            "description": "The document is mismatched",
+            "answerType": "ATTACHMENT",
+            "required": true
+          }
+        ],
+        "createdAt": "2026-08-18T12:37:05Z",
+        "updatedAt": "2026-08-19T02:53:31Z"
+      }
+    },
+    {
+      "api": "response_to_an_rfi",
+      "module": "supporting-service/request-for-information",
+      "service": "RfiService",
+      "method": "respondToRfi",
+      "endpoint": "/api/open/v1/rfis/respond",
+      "requestClass": "RespondToRfiRequest",
+      "responseClass": "RespondToRfiResponse",
+      "request": {
+        "id": "20260818191210001360300000****1",
+        "answers": [
+          {
+            "questionId": "20260818191210001370300000****1",
+            "text": "Example Trading Ltd."
+          },
+          {
+            "questionId": "20260818191210001370300000****2",
+            "files": [
+              {
+                "fileId": "BIZ_ENTERPRISE_FILE_GENERAL_DOCUMENT_20260731191530000024978000****4",
+                "fileName": "certificate_of_incorporation.jpg"
+              }
+            ]
+          }
+        ]
+      },
+      "response": {
+        "result": {
+          "resultStatus": "S",
+          "resultCode": "SUCCESS",
+          "resultMessage": "success"
+        },
+        "id": "20260818191210001360300000****1",
+        "status": "ANSWERED",
+        "createdAt": "2026-08-18T12:37:05Z",
+        "updatedAt": "2026-08-18T12:44:36Z"
+      }
+    },
+    {
+      "api": "list_rfis",
+      "module": "supporting-service/request-for-information",
+      "service": "RfiService",
+      "method": "listRfis",
+      "endpoint": "/api/open/v1/rfis/list",
+      "requestClass": "ListRfisRequest",
+      "responseClass": "ListRfisResponse",
+      "request": {
+        "limit": 20,
+        "accountId": "21201203489****3",
+        "rfiType": "KYC_ONGOING_CDD_RFI"
+      },
+      "response": {
+        "result": {
+          "resultStatus": "S",
+          "resultCode": "SUCCESS",
+          "resultMessage": "success"
+        },
+        "nextCursor": null,
+        "prevCursor": null,
+        "items": [
+          {
+            "id": "20260818191210001360300000****1",
+            "accountId": "21201203489****3",
+            "rfiType": "KYC_ONGOING_CDD_RFI",
+            "status": "CLOSED",
+            "createdAt": "2026-08-18T12:37:05Z",
+            "updatedAt": "2026-08-19T02:53:31Z"
+          }
+        ]
+      }
+    }
+  ],
+  "models": {
+    "payouts/batch-payouts/java/model/request/CreateBatchPayoutRequest.java": {
+      "requestId": "String",
+      "batchName": "String",
+      "businessSceneCode": "String",
+      "fvtPreference": "String",
+      "oboPreference": "String",
+      "paymentType": "String",
+      "paymentNetwork": "String",
+      "transferMemo": "String"
+    },
+    "payouts/batch-payouts/java/model/response/CreateBatchPayoutResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "requestId": "String",
+      "batchName": "String",
+      "businessSceneCode": "String",
+      "fvtPreference": "String",
+      "oboPreference": "String",
+      "paymentNetwork": "String",
+      "paymentType": "String",
+      "transferMemo": "String",
+      "totalItemCount": "Integer",
+      "validItemCount": "Integer",
+      "createdAt": "String",
+      "updatedAt": "String"
+    },
+    "payouts/batch-payouts/java/model/request/AddItemsToBatchPayoutRequest.java": {
+      "id": "String",
+      "items": "List<BatchPayoutItemInput>"
+    },
+    "payouts/batch-payouts/java/model/response/AddItemsToBatchPayoutResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "createdAt": "String",
+      "updatedAt": "String",
+      "requestId": "String",
+      "batchName": "String",
+      "transferMemo": "String",
+      "businessSceneCode": "String",
+      "paymentNetwork": "String",
+      "paymentType": "String",
+      "fvtPreference": "String",
+      "oboPreference": "String",
+      "totalItemCount": "Integer",
+      "validItemCount": "Integer",
+      "calculationSummary": "BatchPayoutCalculationSummary",
+      "items": "List<BatchPayoutItem>"
+    },
+    "payouts/batch-payouts/java/model/request/RemoveItemsFromBatchPayoutRequest.java": {
+      "id": "String",
+      "itemIds": "List<String>"
+    },
+    "payouts/batch-payouts/java/model/response/RemoveItemsFromBatchPayoutResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "createdAt": "String",
+      "updatedAt": "String",
+      "requestId": "String",
+      "batchName": "String",
+      "transferMemo": "String",
+      "businessSceneCode": "String",
+      "paymentNetwork": "String",
+      "paymentType": "String",
+      "fvtPreference": "String",
+      "oboPreference": "String",
+      "totalItemCount": "Integer",
+      "validItemCount": "Integer",
+      "calculationSummary": "BatchPayoutCalculationSummary"
+    },
+    "payouts/batch-payouts/java/model/request/ListBatchPayoutItemsRequest.java": {
+      "id": "String",
+      "limit": "Integer",
+      "cursor": "String",
+      "status": "String"
+    },
+    "payouts/batch-payouts/java/model/response/ListBatchPayoutItemsResponse.java": {
+      "result": "Result",
+      "items": "List<BatchPayoutItem>",
+      "nextCursor": "String",
+      "prevCursor": "String"
+    },
+    "payouts/batch-payouts/java/model/request/CalculateBatchPayoutRequest.java": {
+      "id": "String"
+    },
+    "payouts/batch-payouts/java/model/response/CalculateBatchPayoutResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "createdAt": "String",
+      "updatedAt": "String",
+      "requestId": "String",
+      "batchName": "String",
+      "transferMemo": "String",
+      "businessSceneCode": "String",
+      "paymentNetwork": "String",
+      "paymentType": "String",
+      "fvtPreference": "String",
+      "oboPreference": "String",
+      "totalItemCount": "Integer",
+      "validItemCount": "Integer",
+      "calculationSummary": "BatchPayoutCalculationSummary"
+    },
+    "payouts/batch-payouts/java/model/request/SubmitBatchPayoutRequest.java": {
+      "id": "String"
+    },
+    "payouts/batch-payouts/java/model/response/SubmitBatchPayoutResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "createdAt": "String",
+      "updatedAt": "String",
+      "submittedAt": "String",
+      "requestId": "String",
+      "batchName": "String",
+      "transferMemo": "String",
+      "businessSceneCode": "String",
+      "paymentNetwork": "String",
+      "paymentType": "String",
+      "fvtPreference": "String",
+      "oboPreference": "String",
+      "totalItemCount": "Integer",
+      "validItemCount": "Integer",
+      "calculationSummary": "BatchPayoutCalculationSummary"
+    },
+    "payouts/batch-payouts/java/model/request/QueryBatchPayoutRequest.java": {
+      "id": "String"
+    },
+    "payouts/batch-payouts/java/model/response/QueryBatchPayoutResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "createdAt": "String",
+      "updatedAt": "String",
+      "submittedAt": "String",
+      "completedAt": "String",
+      "cancelledAt": "String",
+      "requestId": "String",
+      "batchName": "String",
+      "transferMemo": "String",
+      "businessSceneCode": "String",
+      "paymentNetwork": "String",
+      "paymentType": "String",
+      "fvtPreference": "String",
+      "oboPreference": "String",
+      "totalItemCount": "Integer",
+      "validItemCount": "Integer",
+      "calculationSummary": "BatchPayoutCalculationSummary",
+      "rejectionReason": "String"
+    },
+    "payouts/batch-payouts/java/model/request/DeleteBatchPayoutRequest.java": {
+      "id": "String"
+    },
+    "payouts/batch-payouts/java/model/response/DeleteBatchPayoutResponse.java": {
+      "result": "Result"
+    },
+    "payouts/batch-payouts/java/model/request/CancelBatchPayoutRequest.java": {
+      "id": "String",
+      "memo": "String"
+    },
+    "payouts/batch-payouts/java/model/response/CancelBatchPayoutResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "createdAt": "String",
+      "updatedAt": "String",
+      "requestId": "String",
+      "batchName": "String",
+      "paymentType": "String",
+      "cancelledAt": "String",
+      "memo": "String",
+      "totalItemCount": "Integer",
+      "validItemCount": "Integer",
+      "calculationSummary": "BatchPayoutCalculationSummary"
+    },
+    "issuing/cards-management/java/model/request/CreateCardRequest.java": {
+      "requestId": "String",
+      "cardBrand": "String",
+      "cardholderId": "String",
+      "mediaType": "String",
+      "budgetId": "String",
+      "cardNickName": "String",
+      "note": "String",
+      "purpose": "String",
+      "email": "String",
+      "mobilePhone": "String",
+      "billingAddress": "Address",
+      "transactionLimits": "List<CardTransactionLimitsInput>",
+      "authorizationControl": "CardAuthorizationControl",
+      "metadata": "Map<String, Object>",
+      "enableSyncActivation": "Boolean",
+      "threeDsFrictionless": "Boolean"
+    },
+    "issuing/cards-management/java/model/response/CreateCardResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "cardholderId": "String",
+      "mediaType": "String",
+      "createdAt": "String",
+      "cardBrand": "String",
+      "budgetId": "String",
+      "cardNumber": "String",
+      "expiryDate": "String",
+      "last4Digits": "String",
+      "cardNickName": "String",
+      "note": "String",
+      "purpose": "String",
+      "email": "String",
+      "mobilePhone": "String",
+      "billingAddress": "Address",
+      "transactionLimits": "List<CardTransactionLimits>",
+      "authorizationControl": "CardAuthorizationControl",
+      "metadata": "Map<String, Object>"
+    },
+    "issuing/cards-management/java/model/request/QueryCardRequest.java": {
+      "id": "String"
+    },
+    "issuing/cards-management/java/model/response/QueryCardResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "cardholderId": "String",
+      "mediaType": "String",
+      "createdAt": "String",
+      "cardBrand": "String",
+      "budgetId": "String",
+      "cardNumber": "String",
+      "expiryDate": "String",
+      "last4Digits": "String",
+      "cardNickName": "String",
+      "note": "String",
+      "purpose": "String",
+      "email": "String",
+      "mobilePhone": "String",
+      "billingAddress": "Address",
+      "transactionLimits": "List<CardTransactionLimits>",
+      "authorizationControl": "CardAuthorizationControl",
+      "metadata": "Map<String, Object>"
+    },
+    "issuing/cards-management/java/model/request/ListCardsRequest.java": {
+      "limit": "Integer",
+      "cursor": "String",
+      "status": "String",
+      "last4Digits": "String",
+      "cardNickName": "String",
+      "budgetId": "String"
+    },
+    "issuing/cards-management/java/model/response/ListCardsResponse.java": {
+      "result": "Result",
+      "items": "List<CardSummary>",
+      "nextCursor": "String",
+      "prevCursor": "String"
+    },
+    "issuing/cards-management/java/model/request/QueryCardSensitiveInfoRequest.java": {
+      "id": "String"
+    },
+    "issuing/cards-management/java/model/response/QueryCardSensitiveInfoResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "accountId": "String",
+      "cardNumber": "String",
+      "cvv": "String",
+      "expiryDate": "String"
+    },
+    "issuing/cards-management/java/model/request/UpdateCardRequest.java": {
+      "requestId": "String",
+      "id": "String",
+      "status": "String",
+      "cardNickName": "String",
+      "note": "String",
+      "purpose": "String",
+      "email": "String",
+      "mobilePhone": "String",
+      "billingAddress": "Address",
+      "transactionLimits": "List<CardTransactionLimitsInput>",
+      "authorizationControl": "CardAuthorizationControl",
+      "metadata": "Map<String, Object>"
+    },
+    "issuing/cards-management/java/model/response/UpdateCardResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String"
+    },
+    "issuing/transactions/java/model/request/ListCardTransactionsRequest.java": {
+      "limit": "Integer",
+      "fromCreatedAt": "String",
+      "toCreatedAt": "String",
+      "cursor": "String",
+      "statuses": "List<String>",
+      "cardNo": "String",
+      "merchantName": "String",
+      "id": "String",
+      "cardNickName": "String",
+      "budgetAccountIds": "List<String>",
+      "cardId": "String"
+    },
+    "issuing/transactions/java/model/response/ListCardTransactionsResponse.java": {
+      "result": "Result",
+      "items": "List<CardTransaction>",
+      "nextCursor": "String",
+      "prevCursor": "String"
+    },
+    "reporting/download-report/java/model/request/CreateReportRequest.java": {
+      "requestId": "String",
+      "reportType": "String",
+      "fileFormat": "String",
+      "language": "String",
+      "fromDate": "String",
+      "toDate": "String",
+      "currencies": "List<String>",
+      "transactionTypes": "List<String>",
+      "balanceTypes": "List<String>",
+      "budgetAccountIds": "List<String>",
+      "needEsign": "Boolean",
+      "pdfFields": "List<String>",
+      "fileName": "String"
+    },
+    "reporting/download-report/java/model/response/CreateReportResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "createdAt": "String"
+    },
+    "reporting/download-report/java/model/request/QueryReportRequest.java": {
+      "id": "String"
+    },
+    "reporting/download-report/java/model/response/QueryReportResponse.java": {
+      "result": "Result",
+      "report": "DownloadReport"
+    },
+    "reporting/download-report/java/model/request/ListReportsRequest.java": {
+      "limit": "Integer",
+      "cursor": "String",
+      "fromCreatedAt": "String",
+      "toCreatedAt": "String"
+    },
+    "reporting/download-report/java/model/response/ListReportsResponse.java": {
+      "result": "Result",
+      "items": "List<DownloadReportSummary>",
+      "nextCursor": "String",
+      "prevCursor": "String"
+    },
+    "supporting-service/request-for-information/java/model/request/RetrieveRfiRequest.java": {
+      "id": "String"
+    },
+    "supporting-service/request-for-information/java/model/response/RetrieveRfiResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "accountId": "String",
+      "rfiType": "String",
+      "status": "String",
+      "instruction": "String",
+      "expiresAt": "String",
+      "questions": "List<RfiQuestion>",
+      "createdAt": "String",
+      "updatedAt": "String"
+    },
+    "supporting-service/request-for-information/java/model/request/RespondToRfiRequest.java": {
+      "id": "String",
+      "answers": "List<RfiAnswer>"
+    },
+    "supporting-service/request-for-information/java/model/response/RespondToRfiResponse.java": {
+      "result": "Result",
+      "id": "String",
+      "status": "String",
+      "createdAt": "String",
+      "updatedAt": "String"
+    },
+    "supporting-service/request-for-information/java/model/request/ListRfisRequest.java": {
+      "limit": "Integer",
+      "cursor": "String",
+      "fromCreatedAt": "String",
+      "toCreatedAt": "String",
+      "status": "String",
+      "rfiType": "String",
+      "accountId": "String"
+    },
+    "supporting-service/request-for-information/java/model/response/ListRfisResponse.java": {
+      "result": "Result",
+      "nextCursor": "String",
+      "prevCursor": "String",
+      "items": "List<RfiSummary>"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutBeneficiary.java": {
+      "accountType": "String",
+      "entityType": "String",
+      "relationType": "String",
+      "classificationCode": "String",
+      "region": "String",
+      "phone": "String",
+      "email": "String",
+      "city": "String",
+      "address": "String",
+      "referenceBeneficiaryId": "String",
+      "bankDetails": "BatchPayoutBankDetail",
+      "walletDetails": "BatchPayoutWalletDetail",
+      "beneficiaryId": "String"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutPayer.java": {
+      "balanceType": "String",
+      "accountNumber": "String",
+      "region": "String",
+      "phone": "String",
+      "email": "String",
+      "name": "UserName",
+      "address": "Address"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutAdditionalInfo.java": {
+      "needMigrateMaterial": "Boolean"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutQuotaPreference.java": {
+      "party": "String",
+      "tradeOrderType": "String"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutQuote.java": {
+      "quoteId": "String",
+      "currencyPair": "String",
+      "clientRate": "BigDecimal",
+      "effectiveAt": "String",
+      "expiresAt": "String"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutFeeItem.java": {
+      "feeItemType": "String",
+      "feeItemAmount": "Amount"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutPromotion.java": {
+      "promotionName": "String",
+      "promotionType": "String",
+      "activeTime": "String",
+      "expiredTime": "String"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutBankDetail.java": {
+      "accountHolderName": "UserName",
+      "accountNumber": "String",
+      "iban": "String",
+      "bankBIC": "String",
+      "routingNumber": "String",
+      "bankName": "String",
+      "bankLocalName": "String",
+      "branchBankName": "String",
+      "bankBranchCode": "String",
+      "bankAccountLocalName": "String",
+      "bankAddress": "String",
+      "beneficiaryDepositType": "String",
+      "cardClientCode": "String",
+      "cardClientId": "String",
+      "beneficiaryTIN": "String",
+      "beneficiaryAccountNumberType": "String",
+      "certificateNo": "String",
+      "bankCity": "String",
+      "bankState": "String",
+      "bankPostalCode": "String"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutWalletDetail.java": {
+      "accountHolderName": "UserName",
+      "walletBrandName": "String",
+      "accountNumber": "String",
+      "iban": "String",
+      "walletAccountType": "String",
+      "certificateNo": "String"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutItem.java": {
+      "itemId": "String",
+      "status": "String",
+      "failureCode": "String",
+      "failureMessage": "String",
+      "businessSceneCode": "String",
+      "purposeCode": "String",
+      "sourceAmount": "Amount",
+      "payoutAmount": "Amount",
+      "transferQuote": "BatchPayoutQuote",
+      "payer": "BatchPayoutPayer",
+      "beneficiary": "BatchPayoutBeneficiary",
+      "feeAmount": "Amount",
+      "feeItemList": "List<BatchPayoutFeeItem>",
+      "originalFeeRate": "String",
+      "feeRate": "String",
+      "originalFeeAmount": "Amount",
+      "discountFeeAmount": "Amount",
+      "returnedAmount": "Amount",
+      "returnedAt": "String",
+      "promotionList": "List<BatchPayoutPromotion>",
+      "fvtPreference": "String",
+      "oboPreference": "String",
+      "paymentType": "String",
+      "paymentNetwork": "String",
+      "reference": "String",
+      "transferMemo": "String",
+      "additionalInfo": "BatchPayoutAdditionalInfo",
+      "requestId": "String",
+      "quotaConsumptionPreference": "BatchPayoutQuotaPreference"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutItemInput.java": {
+      "requestId": "String",
+      "businessSceneCode": "String",
+      "purposeCode": "String",
+      "sourceAmount": "Amount",
+      "payoutAmount": "Amount",
+      "beneficiary": "BatchPayoutBeneficiary",
+      "payer": "BatchPayoutPayer",
+      "quotaConsumptionPreference": "BatchPayoutQuotaPreference",
+      "reference": "String",
+      "transferMemo": "String",
+      "additionalInfo": "BatchPayoutAdditionalInfo"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutCalculationSummary.java": {
+      "lastCalculatedAt": "String",
+      "currencyPairs": "List<BatchPayoutCurrencyPair>"
+    },
+    "issuing/cards-management/java/model/domain/CardTransactionLimitsInput.java": {
+      "currency": "String",
+      "limits": "List<CardTransactionLimitInput>"
+    },
+    "issuing/cards-management/java/model/domain/CardAuthorizationControl.java": {
+      "cardActiveAt": "String",
+      "cardCancelAt": "String",
+      "allowedMerchantCategories": "List<String>",
+      "blockedMerchantCategories": "List<String>",
+      "allowedAuthTimes": "Integer",
+      "allowedCurrencies": "List<String>"
+    },
+    "issuing/cards-management/java/model/domain/CardTransactionLimits.java": {
+      "currency": "String",
+      "limits": "List<CardTransactionLimit>"
+    },
+    "issuing/cards-management/java/model/domain/CardSummary.java": {
+      "id": "String",
+      "status": "String",
+      "createdAt": "String",
+      "cardholderId": "String",
+      "mediaType": "String",
+      "cardBrand": "String",
+      "cardNumber": "String",
+      "last4Digits": "String",
+      "cardNickName": "String",
+      "metadata": "Map<String, Object>"
+    },
+    "issuing/transactions/java/model/domain/CardTransaction.java": {
+      "id": "String",
+      "createdAt": "String",
+      "status": "String",
+      "transactedAt": "String",
+      "updatedAt": "String",
+      "maskedCardNo": "String",
+      "cardNickName": "String",
+      "cardId": "String",
+      "merchantName": "String",
+      "merchantCategoryCode": "String",
+      "merchantRegion": "String",
+      "authCode": "String",
+      "tradeRegion": "String",
+      "tradeAmount": "Amount",
+      "inAmount": "Amount",
+      "outAmount": "Amount",
+      "exchangeRate": "String",
+      "billType": "String",
+      "payerAccountNo": "String",
+      "payerBalanceType": "String",
+      "payerBudgetId": "String",
+      "failureCode": "String",
+      "failureMessage": "String"
+    },
+    "reporting/download-report/java/model/domain/DownloadReport.java": {
+      "id": "String",
+      "status": "String",
+      "failureCode": "String",
+      "failureMessage": "String",
+      "reportType": "String",
+      "fileFormat": "String",
+      "fileName": "String",
+      "fromDate": "String",
+      "toDate": "String",
+      "downloadUrl": "String",
+      "downloadUrlExpiresAt": "String",
+      "createdAt": "String"
+    },
+    "reporting/download-report/java/model/domain/DownloadReportSummary.java": {
+      "id": "String",
+      "status": "String",
+      "failureCode": "String",
+      "failureMessage": "String",
+      "reportType": "String",
+      "fileFormat": "String",
+      "fileName": "String",
+      "fromDate": "String",
+      "toDate": "String",
+      "createdAt": "String"
+    },
+    "supporting-service/request-for-information/java/model/domain/RfiQuestion.java": {
+      "id": "String",
+      "auditKey": "String",
+      "description": "String",
+      "answerType": "String",
+      "required": "Boolean"
+    },
+    "supporting-service/request-for-information/java/model/domain/RfiAnswer.java": {
+      "questionId": "String",
+      "files": "List<RfiFile>",
+      "text": "String",
+      "textList": "List<String>"
+    },
+    "supporting-service/request-for-information/java/model/domain/RfiSummary.java": {
+      "id": "String",
+      "accountId": "String",
+      "rfiType": "String",
+      "status": "String",
+      "instruction": "String",
+      "expiresAt": "String",
+      "createdAt": "String",
+      "updatedAt": "String"
+    },
+    "payouts/batch-payouts/java/model/domain/BatchPayoutCurrencyPair.java": {
+      "currencyPair": "String",
+      "clientRate": "BigDecimal",
+      "sourceAmount": "Amount",
+      "payoutAmount": "Amount",
+      "feeRate": "String",
+      "feeAmount": "Amount",
+      "feeItemList": "List<BatchPayoutFeeItem>",
+      "originalFeeRate": "String",
+      "originalFeeAmount": "Amount",
+      "promotionList": "List<BatchPayoutPromotion>"
+    },
+    "issuing/cards-management/java/model/domain/CardTransactionLimitInput.java": {
+      "interval": "String",
+      "rangeAmount": "Long"
+    },
+    "issuing/cards-management/java/model/domain/CardTransactionLimit.java": {
+      "interval": "String",
+      "rangeAmount": "Long",
+      "usedAmount": "Long",
+      "remainAmount": "Long"
+    },
+    "supporting-service/request-for-information/java/model/domain/RfiFile.java": {
+      "fileId": "String",
+      "fileName": "String"
+    }
+  }
+}

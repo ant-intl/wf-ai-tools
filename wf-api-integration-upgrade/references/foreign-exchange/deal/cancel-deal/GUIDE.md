@@ -2,7 +2,7 @@
 
 ## 接口说明
 
-取消尚未结算的交易。仅处于 PROCESSING 状态的交易可被取消。取消成功后交易状态变为 CANCELED，根据交易类型可能收取取消费用。响应返回更新后的交易详情，包括取消时间戳和适用费用。
+取消尚未结算的交易。仅处于 PROCESSING 状态的交易可被取消。取消成功后交易状态变为 CANCELLED，根据交易类型可能收取取消费用。响应返回更新后的交易详情，包括取消时间戳和适用费用。
 
 ## 官方文档
 
@@ -49,8 +49,8 @@
 | `settlementPeriod` | SettlementPeriod | 结算周期信息，UNFUNDED_SPOT 和 FORWARD 交易返回 |
 | `unSettleBuyAmount` | Amount | 未结算买入金额，取消后填充（UNFUNDED_SPOT 和 FORWARD） |
 | `unSettleSellAmount` | Amount | 未结算卖出金额，取消后填充（UNFUNDED_SPOT 和 FORWARD） |
-| `cancelFeeAmount` | Amount | 取消费用金额，当 `status` 为 CANCELED 时返回 |
-| `status` | string | 当前交易状态，取消成功后为 CANCELED |
+| `cancelFeeAmount` | Amount | 取消费用金额，当 `status` 为 CANCELLED 时返回 |
+| `status` | string | 当前交易状态，取消成功后为 CANCELLED |
 | `createdAt` | datetime | 交易创建时间（ISO 8601 格式） |
 | `settledAt` | datetime | 交易结算时间（ISO 8601 格式），仅结算后返回 |
 | `cancelledAt` | datetime | 交易取消时间（ISO 8601 格式），取消成功后填充 |
@@ -109,7 +109,7 @@
     "currency": "GBP",
     "value": 50
   },
-  "status": "CANCELED",
+  "status": "CANCELLED",
   "createdAt": "2026-04-02T04:09:35Z",
   "cancelledAt": "2026-04-02T04:20:00Z"
 }
@@ -218,7 +218,7 @@ if ("S".equals(queryResponse.getResult().getResultStatus())) {
         }
     } else if ("SUCCESS".equals(status)) {
         System.out.println("交易已结算，无法取消");
-    } else if ("CANCELED".equals(status)) {
+    } else if ("CANCELLED".equals(status)) {
         System.out.println("交易已被取消");
     } else if ("FAILED".equals(status)) {
         System.out.println("交易已失败，无需取消");

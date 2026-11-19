@@ -161,14 +161,14 @@ if ("S".equals(listMarginResponse.getResult().getResultStatus())) {
 - 响应字段根据交易类型和状态有条件返回：
   - `creditSupport`：仅 FORWARD 交易返回
   - `settlementPeriod`：仅 UNFUNDED_SPOT 和 FORWARD 交易返回
-  - `unSettleBuyAmount`/`unSettleSellAmount`：仅 UNFUNDED_SPOT/FORWARD 且状态为 PROCESSING/CANCELED 时返回
-  - `cancelFeeAmount`：仅状态为 CANCELED 时返回
+  - `unSettleBuyAmount`/`unSettleSellAmount`：仅 UNFUNDED_SPOT/FORWARD 且状态为 PROCESSING/CANCELLED 时返回
+  - `cancelFeeAmount`：仅状态为 CANCELLED 时返回
   - `settledAt`：仅结算后返回
   - `failedAt`/`failureCode`/`failureMessage`：仅状态为 FAILED 时返回
 
 ### cancel_a_deal
 - `id` 必填，交易必须处于 PROCESSING 状态且属于当前账户
-- 取消成功后状态变为 CANCELED，`cancelledAt` 填充取消时间戳
+- 取消成功后状态变为 CANCELLED，`cancelledAt` 填充取消时间戳
 - 根据交易类型可能收取取消费用（`cancelFeeAmount`）
 - UNFUNDED_SPOT 和 FORWARD 取消后会填充 `unSettleBuyAmount` 和 `unSettleSellAmount`
 - 已结算（SUCCESS）或已失败（FAILED）的交易不可取消

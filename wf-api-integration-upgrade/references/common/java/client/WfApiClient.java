@@ -88,6 +88,15 @@ public class WfApiClient {
         return execute("POST", endpoint, body, responseClass);
     }
 
+    /** 单次调用账户上下文；仅追加 account-id 或 access-token，保持原有 RSA 加验签。 */
+    public <T> WfApiResponse<T> post(String endpoint, String body, Class<T> responseClass,
+                                    WfRequestContext context) {
+        if (body == null) {
+            throw new IllegalArgumentException("POST 请求体不能为 null");
+        }
+        return execute("POST", endpoint, body, responseClass, context);
+    }
+
     /**
      * 发送 GET 请求。
      *
@@ -115,6 +124,11 @@ public class WfApiClient {
      */
     private <T> WfApiResponse<T> execute(String method, String endpoint, String body,
                                         Class<T> responseClass) {
+        return execute(method, endpoint, body, responseClass, null);
+    }
+
+    private <T> WfApiResponse<T> execute(String method, String endpoint, String body,
+                                        Class<T> responseClass, WfRequestContext context) {
         // 1. 生成请求时间（ISO 8601 格式）
         String requestTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
@@ -132,6 +146,14 @@ public class WfApiClient {
                 .header("Client-Id", config.getClientId())
                 .header("Request-Time", requestTime)
                 .header("Signature", signatureHeader);
+
+        if (context != null) {
+            if (context.getAccountId() != null) {
+                requestBuilder.header("account-id", context.getAccountId());
+            } else if (context.getAccessToken() != null) {
+                requestBuilder.header("access-token", context.getAccessToken());
+            }
+        }
 
         // POST 请求携带 body
         if ("POST".equalsIgnoreCase(method)) {

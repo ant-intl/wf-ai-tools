@@ -26,7 +26,7 @@
 | Field         | Type | Required | Description                                                                             |
 |---------------|------|----------|-----------------------------------------------------------------------------------------|
 | `fileContent` | string | Yes | Base64 编码的文件内容，原始文件大小不超过 7 MB                                                           |
-| `fileName`    | string | Yes | 原始文件名（含扩展名），允许扩展名：`pdf`、`jpg`、`jpeg`、`png`、`zip`，不允许字符：`, / : * ? " < > ｜` 长度不超过 256 字符 |
+| `fileName`    | string | Yes | 原始文件名（含扩展名），允许扩展名：`pdf`、`jpg`、`jpeg`、`png`，不允许字符：`, / : * ? " < > \|`（逗号和竖线均为半角） 长度不超过 256 字符 |
 
 ### 请求示例
 
@@ -68,8 +68,8 @@
 | `SUCCESS` | S | success | — |
 | `PARAM_ILLEGAL` | F | fileContent is not valid base64 encoding. | 检查 `fileContent` 是否为合法的 base64 编码 |
 | `PARAM_ILLEGAL` | F | fileName length exceeds 256 characters. | 缩短 `fileName` 后重试 |
-| `PARAM_ILLEGAL` | F | Unsupported file extension. | 使用以下扩展名之一：pdf、jpg、jpeg、png、zip |
-| `PARAM_ILLEGAL` | F | fileName contains illegal characters. | 移除文件名中的非法字符：`` ` / : * ? " < > `` |
+| `PARAM_ILLEGAL` | F | Unsupported file extension. | 使用以下扩展名之一：pdf、jpg、jpeg、png |
+| `PARAM_ILLEGAL` | F | fileName contains illegal characters. | 移除文件名中的非法字符：`, / : * ? " < > \|`（逗号和竖线均为半角） |
 | `FILE_SIZE_TOO_LARGE` | F | File size is too large. | 确保原始文件大小不超过 7 MB |
 | `SYSTEM_ERROR` | F | System error. | 使用相同参数重试 |
 | `AUTHORIZATION_NOT_EXIST` | F | oauth not exist. | 验证 `account-id` 属于当前平台商户 |

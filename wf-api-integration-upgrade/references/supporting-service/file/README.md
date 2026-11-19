@@ -92,8 +92,8 @@ if ("S".equals(response.getResult().getResultStatus())) {
 ### upload_a_file
 - `fileContent` 为 base64 编码的文件内容，原始文件大小不超过 **7 MB**
 - `fileName` 为原始文件名（含扩展名），长度不超过 256 字符
-- 支持的扩展名：`pdf`、`jpg`、`jpeg`、`png`、`zip`
-- 文件名不允许包含以下字符：`` ` / : * ? " < > | ``
+- 支持的扩展名：`pdf`、`jpg`、`jpeg`、`png`
+- 文件名不允许包含以下字符：`, / : * ? " < > |`（逗号和竖线均为半角）
 - 上传成功后返回 `id`，用于后续下载
 
 ### download_a_file

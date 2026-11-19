@@ -45,10 +45,10 @@ public class CancelDealResponse {
     /** 未结算卖出金额，取消后填充（UNFUNDED_SPOT 和 FORWARD） */
     private Amount unSettleSellAmount;
 
-    /** 取消费用金额，当 status 为 CANCELED 时返回 */
+    /** 取消费用金额，当 status 为 CANCELLED 时返回 */
     private Amount cancelFeeAmount;
 
-    /** 当前交易状态，取消成功后为 CANCELED */
+    /** 当前交易状态，取消成功后为 CANCELLED */
     private String status;
 
     /** 交易创建时间（ISO 8601 格式） */

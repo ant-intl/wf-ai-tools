@@ -19,8 +19,8 @@ public class UploadFileRequest {
 
     /**
      * 原始文件名（含扩展名）。
-     * <p>允许的扩展名：pdf、jpg、jpeg、png、zip。
-     * <p>不允许的字符：{ ，/ : * ? " < > |}。
+     * <p>允许的扩展名：pdf、jpg、jpeg、png。
+     * <p>不允许的字符：, / : * ? " &lt; &gt; |（逗号和竖线均为半角）。
      * <p>长度不超过 256 字符。
      */
     private String fileName;
